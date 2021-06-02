@@ -447,17 +447,19 @@ function htmlToCode(str){
  * @param {String} _str  字符串
  * @param {Object} that this 指针
  * @param {Array} argArray 实参
+ * @param {String} _opKey 插值关键文本 op
+ * @param {String} _edKey 插值关键文本 ed
  * @returns {{str:String,hit:Array<String>}}
  */
-function templateStringRender(str,that,argArray){
-    
+function templateStringRender(str,that,argArray,_opKey,_edKey){
+    var opKey=_opKey||templateStringRender.templateKeyStr.op,edKey=_edKey||templateStringRender.templateKeyStr.ed;
     if(Object.keys(that).length){
         var temp=[],tempstr="",hit=[];
         var q,p;// q是左
         var headFlag=0,footFlag=0;
         for(p=0,q=0;str[p];++p){
-            for(var i=0;i<templateStringRender.templateKeyStr.op.length;++i){
-                if(!(headFlag=str[p+i]==templateStringRender.templateKeyStr.op[i])){break;}
+            for(var i=0;i<opKey.length;++i){
+                if(!(headFlag=str[p+i]==opKey[i])){break;}
             }
             
             if(headFlag){ // 检测到头
@@ -465,8 +467,8 @@ function templateStringRender(str,that,argArray){
                 q=p+2;
                 while(1){
                     ++p;
-                    for(var i=0;i<templateStringRender.templateKeyStr.ed.length;++i){
-                        if(!(footFlag=str[p+i]==templateStringRender.templateKeyStr.ed[i])){break;}
+                    for(var i=0;i<edKey.length;++i){
+                        if(!(footFlag=str[p+i]==edKey[i])){break;}
                     }
                     if(footFlag){
                         tempstr=str.slice(q,p);
