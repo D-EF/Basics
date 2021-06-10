@@ -6,9 +6,13 @@
  */
 var thisEnvironment=this;
 
+// if(this.Element&&Element.prototype.attachEvent){
+//     Element.prototype.addEventListener=Element.prototype.attachEvent;
+// }
+
 /**
  * [judgeOs UA & 内核 判断]
- * @return {[type]} [description]
+ * @returns {{isTabvar:Boolean,isPhone:Boolean,isAndroid:Boolean,isPc:Boolean,isFireFox:Boolean,isWebkit:Boolean,isIE:Boolean,isMozilla:Boolean}} [description]
  */
 function judgeOs() {
     var ua = navigator.userAgent,
@@ -31,7 +35,8 @@ function judgeOs() {
         isPc: isPc,
         isFireFox: isFireFox,
         isWebkit: isWebkit,
-        isIE: isIE
+        isIE: isIE,
+        isMozilla: isMozilla
     };
 }
 
@@ -70,7 +75,16 @@ if (!Object.keys) {
     })()
 };
 
-/**贝塞尔曲线*/
+/** 用 rad 表示的 1deg */
+Math.DEG=Math.PI/180;
+
+/**
+ * 在 (0,0) 与 (1,1) 之间的三阶贝塞尔曲线
+ * @param {Number} p1x (0,0) 的 控制点 的 x 坐标
+ * @param {Number} p1y (0,0) 的 控制点 的 y 坐标
+ * @param {Number} p2x (1,1) 的 控制点 的 x 坐标
+ * @param {Number} p2y (1,1) 的 控制点 的 y 坐标
+ */
 //该贝塞尔曲线来自:https://www.cnblogs.com/yanan-boke/p/8875571.html
 function UnitBezier(p1x,p1y,p2x,p2y) {
     this.cx = 3.0 * p1x;
@@ -81,12 +95,25 @@ function UnitBezier(p1x,p1y,p2x,p2y) {
     this.ay = 1.0 - this.cy - this.by;
 }
 UnitBezier.prototype = {
+    /**
+     * 根据时间柄参数得到x坐标
+     * @param {Number} t 时间柄参数
+     * @returns {Number} x坐标
+     */
     sampleCurveX : function(t) {
         return ((this.ax * t + this.bx) * t + this.cx) * t;
     },
+    /**
+     * 根据时间柄参数得到y坐标
+     * @param {Number} t 时间柄参数
+     * @returns {Number} y坐标
+     */
     sampleCurveY : function(t) {  
         return ((this.ay * t + this.by) * t + this.cy) * t;
     },
+    /**
+     * 重置贝塞尔曲线
+     */
     ReBezier : function(p1x,p1y,p2x,p2y){
         this.cx = 3.0 * p1x;
         this.bx = 3.0 * (p2x - p1x) - this.cx;
@@ -143,30 +170,19 @@ function inputSupportsTypeF(){
     //要用再加
 }
 
-/**让控件仅接受数字
- * function(e){if(!inputNumber(e))return 0}
+/** 在 keydown 事件中使用 让控件仅接受数字
  * @param {Event} e 
+ * @return {Boolean} 返回是否是数字
  */
-function inputNumber(){
+function inputNumber(e){
     var event=event||e||window.event;
     if(!(event.keyCode>47&&event.keyCode<58)){
-        event.stopPropagation();
-        if (event&&event.preventDefault){event.preventDefault(); return 0;}//W3C
-        else{window.event.returnValue = false; return 0;} //IE
+       stopPE(e)
+       return false
     }
-    else return 1;
+    else return true;
 }
 
-/** 用 rad 表示的 1deg */
-var deg=Math.PI/180;
-
-//兼容open
-if(this.Element&&Element.prototype.attachEvent){
-    Element.prototype.addEventListener=Element.prototype.attachEvent;
-}
-//兼容end
-
-//功能open
 /**
  * 获取当前运行脚本的地址
  * @returns {String}
@@ -271,8 +287,8 @@ function nodeListToArray(nodelist){
  * @param {Array}   a1       要进行比较的数组
  * @param {Array}   a2       要进行比较的数组
  * @return {Boolean}    返回是否相同
- * 本来是给KeyNotbook用的 
-*/
+ */
+// 本来是给KeyNotbook用的 
 function arrayCmp(a1,a2){
     if(a1&&a2){
         if(a1.length!=a2.length)
@@ -294,7 +310,8 @@ function arrayCmp(a1,a2){
 }
 
 /** 重载函数类 */
-class OlFunction{
+class OlFunction extends Function{
+    // 写成类的语法纯粹是为了让编辑器认代码提示
     /** @type {Array<{parameterType:parameterType,fnc:fnc,codeComments:codeComments}>} 重载函数 */
     ols=[];
     /** @type {Function} */
@@ -309,11 +326,12 @@ class OlFunction{
      * 添加一个重载
      * @param {Array} parameterType   形参的类型
      * @param {Function}    fnc             执行的函数
-     * @param {String}      codeComments    函数的注释
+     * @param {String}      codeComments    没用的属性, 作为函数的注释
     */
     addOverload(parameterType,fnc,codeComments){
         this.ols.push({parameterType:parameterType,fnc:fnc,codeComments:codeComments});
     }
+    // 如果需要ie中使用，把 create 和 addOverload 拷贝走就行
     /**
      * 创建重载函数
      * @param   {Function} defaultFnc 当没有和实参对应的重载时默认执行的函数
@@ -377,14 +395,19 @@ class Delegate{
     addAct(tgt,act){
         this.actList.push({tgt:tgt,act:act});
     }
-    /**移除一个委托 */
+    /**移除一个委托
+     * 参数和加入相同
+     * @returns {Boolean} 返回是否移除成功
+     */
     removeAct(tgt,act){
         var i;
         for(i=this.actList.length-1;i>=0;--i){
             if(this.actList[i].tgt==tgt&&this.actList[i].act==act){
                 this.actList.splice(i,1);
+                return true;
             }
         }
+        return false;
     }
     /**
      * @returns {Delegate} 返回一个委托对象
@@ -411,72 +434,84 @@ class Delegate{
 }
 
 /**为了防止服务器出错对部分字符进行编码
- * @param {String} str <>"'{}[] to &#ascii
+ * @param {String} str <>"'{}[] to &#ascii;
+ * @returns {String} 转换后的字符串
  */
-function codeToHtml(str){
-    var regex=[],
-        rStrL=[],
-        enStr=str;
-    regex.push(/</g);   rStrL.push("&#60;");
-    regex.push(/>/g);   rStrL.push("&#62;");
-    regex.push(/"/g);   rStrL.push("&#34;");
-    regex.push(/'/g);   rStrL.push("&#39;");
-    regex.push(/\{/g);  rStrL.push("&#123;");
-    regex.push(/\}/g);  rStrL.push("&#125;");
-    regex.push(/\[/g);  rStrL.push("&#91;");
-    regex.push(/\]/g);  rStrL.push("&#93;");
-    for(var i=regex.length-1;i>=0;--i){
-        enStr=enStr.replace(regex[i],rStrL[i]);
+function encodeHTML(str){
+    var enStr=str;
+    for(var i=encodeHTML.regex.length-1;i>=0;--i){
+        enStr=enStr.replace(encodeHTML.regex[i],encodeHTML.rStrL[i]);
     }
     return enStr;
 }
-//对部分转义的字符反转义
-function htmlToCode(str){
-    var regex=[],
-        rStrL=[],
-        enStr=str;
-    regex.push(/&amp;/g);   rStrL.push("&");
+encodeHTML.regex=[];
+encodeHTML.rStrL=[];
+(function(){
+    encodeHTML.regex.push(/</g);   encodeHTML.rStrL.push("&#60;");
+    encodeHTML.regex.push(/>/g);   encodeHTML.rStrL.push("&#62;");
+    encodeHTML.regex.push(/"/g);   encodeHTML.rStrL.push("&#34;");
+    encodeHTML.regex.push(/'/g);   encodeHTML.rStrL.push("&#39;");
+    encodeHTML.regex.push(/\{/g);  encodeHTML.rStrL.push("&#123;");
+    encodeHTML.regex.push(/\}/g);  encodeHTML.rStrL.push("&#125;");
+    encodeHTML.regex.push(/\[/g);  encodeHTML.rStrL.push("&#91;");
+    encodeHTML.regex.push(/\]/g);  encodeHTML.rStrL.push("&#93;");
+})()
 
-    for(var i=regex.length-1;i>=0;--i){
-        enStr=enStr.replace(regex[i],rStrL[i]);
+//对部分转义的字符反转义
+function decodeHTML(str){
+    var enStr=str;
+    for(var i=decodeHTML.regex.length-1;i>=0;--i){
+        enStr=enStr.replace(decodeHTML.regex[i],decodeHTML.rStrL[i]);
     }
     return enStr;
 }
+decodeHTML.regex=[/&amp;/g  ];
+decodeHTML.rStrL=["&"       ];
+
 /**
- * 模版字符串
+ * 模版字符串 可以在原字符串中使用 '\' 屏蔽 插值关键文本
  * @param {String} _str  字符串
  * @param {Object} that this 指针
  * @param {Array} argArray 实参
- * @param {String} _opKey 插值关键文本 op
- * @param {String} _edKey 插值关键文本 ed
+ * @param {String} opKey 插值关键文本 op; 默认 "${"
+ * @param {String} edKey 插值关键文本 ed; 默认 "}"
+ * @param {char}   opKeyMask 插值关键文本 的屏蔽字符; 默认'\'
+ * @param {char}   edKeyMask 插值关键文本 的屏蔽字符; 默认'\'
  * @returns {{str:String,hit:Array<String>}}
  */
-function templateStringRender(str,that,argArray,_opKey,_edKey){
-    var opKey=_opKey||templateStringRender.templateKeyStr.op,edKey=_edKey||templateStringRender.templateKeyStr.ed;
+function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
     if(Object.keys(that).length){
         var temp=[],tempstr="",hit=[];
         var q,p;// q是左
         var headFlag=0,footFlag=0;
         for(p=0,q=0;str[p];++p){
-            for(var i=0;i<opKey.length;++i){
+            if((headFlag=((str[p]==opKey[0])&&(str[p-1]!=opKeyMask))))
+            for(var i=1;i<opKey.length;++i){
                 if(!(headFlag=str[p+i]==opKey[i])){break;}
             }
-            
             if(headFlag){ // 检测到头
                 temp.push(str.slice(q,p));
-                q=p+2;
-                while(1){
+                q=p+opKey.length;
+                tempstr="";
+                while(p<str.length){
                     ++p;
-                    for(var i=0;i<edKey.length;++i){
-                        if(!(footFlag=str[p+i]==edKey[i])){break;}
-                    }
-                    if(footFlag){
-                        tempstr=str.slice(q,p);
-                        oldL=temp.join("").length;
-                        temp.push((new Function(["tgt"],"return "+tempstr)).apply(that,argArray));
-                        hit.push({expression:tempstr,value:temp[temp.length-1]});
-                        q=p+1;
-                        break;
+                    if(footFlag=(str[p]==edKey[0])){
+                        
+                        if((str[p-1]!=edKeyMask)){
+                            for(var j=1;j<edKey.length;++j){
+                                if(!(footFlag=str[p+i]==edKey[i])){break;}
+                            }
+                            if(footFlag){
+                                tempstr+=str.slice(q,p);
+                                temp.push((new Function(["tgt"],"return "+tempstr)).apply(that,argArray));
+                                hit.push({expression:tempstr,value:temp[temp.length-1]});
+                                q=p+edKey.length;
+                                break;
+                            }
+                        }else{
+                            tempstr+=str.slice(q,p-1);
+                            q=p;
+                        }
                     }
                 }
             }
@@ -486,7 +521,6 @@ function templateStringRender(str,that,argArray,_opKey,_edKey){
     }
 }
 
-templateStringRender.templateKeyStr={op:"${",ed:"}"};
 
 /**
  * 将字符串转换成变量, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
