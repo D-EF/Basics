@@ -523,7 +523,7 @@ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='
 
 
 /**
- * 将字符串转换成变量, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
+ * 将字符串转换成js的类型, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
  * 参数和 JSON.parse 一样
  */
 function strToVar(str,reviver){
@@ -554,9 +554,11 @@ Element.prototype.getChildElement=function(){
     return chE;
 }
 
-/**按键记录器key notbook*/
-function KeyNotbook(){
-    this.FElement;
+/**按键记录器key notbook
+ * @param {Element} FElement 加入到的元素
+*/
+function KeyNotbook(FElement){
+    this.FElement=FElement;
     this.downingKeyCodes=[];
     this.keysdownF  =[];    //function
     this.keysdownFF =[];    //function flag
@@ -564,7 +566,11 @@ function KeyNotbook(){
 }
 KeyNotbook.prototype={
     constructor:KeyNotbook,
-    // 添加按键事件
+    /**
+     * 添加按键事件
+     * @param {Number||Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组
+     * @param {Function} func 触发后的回调函数
+     */
     setDKeyFunc:function(keycode,func){
         if(!keycode||!func){
             return -1;
@@ -577,8 +583,11 @@ KeyNotbook.prototype={
         }
         this.keysdownF.push(func);
     },
-
-    // 移除按键事件
+    /**
+     * 移除按键事件
+     * @param {Number||Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
+     * @param {Function} func 触发后的回调函数
+     */
     removeDKeyFunc:function(_keycode,func){
         var keycode;
         if(!_keycode||!func){
@@ -684,7 +693,7 @@ function addKeyEvent(_Element,_keepFlag,_keycode,_event,_type){
  * @param {Document} _Element 
  * @param {Number||Array} _keycode 
  * @param {Function} _event 
- * @param {} _type false=>down;true=>up
+ * @param {Boolean} _type false=>down;true=>up
  */
 function removeKeyEvent(_Element,_keycode,_event,_type){
     if(_Element.keyNotbook){
@@ -785,7 +794,13 @@ addResizeEvent.reResize=function(_element){
 function Stepper(max,min,now){
     this.max=max===undefined?Infinity:max;
     this.min=(min===undefined)?(0>this.max?this.max-1:0):(min);
+    if(this.max<this.min){
+        var temp=this.min;
+        this.min=this.max;
+        this.max=temp;
+    }
     this.i=now||0;
+    this.overflowHanding();
 }
 
 Stepper.prototype={
@@ -795,10 +810,12 @@ Stepper.prototype={
     /**
      * 设置当前值
      * @param {Number} _i 目标
+     * @returns {Number} 返回修改后的值
      */
     set:function(_i){
         this.i=_i;
         this.overflowHanding();
+        return this.i;
     },
     /**
      * 让步进器步进
@@ -817,22 +834,25 @@ Stepper.prototype={
      * 让步进器的溢出值回到范围内
      */
     overflowHanding:function(){
-        if(this.max==this.min) return this.i;
-        var temp;
+        if(this.max==this.min) return this.i=this.min;
+        var temp,l=this.max-this.min+1;
         if(this.i<this.min){
-            do{
-                temp=this.i-this.min;
-                this.i=this.max;
-                this.i+=temp+1;
-            }while(this.i<this.min);
+            // do{
+            //     temp=this.i-this.min;
+            //     this.i=this.max;
+            //     this.i+=temp+1;
+            // }while(this.i<this.min);
+            this.i=this.max-(this.min-this.i)%(l+1)+1
         }
         else if(this.i>this.max){
-            do{
-                temp=this.i-this.max;
-                this.i=this.min;
-                this.i+=temp-1;
-            }while(this.i>this.max);
+            this.i=this.min+(this.i-this.max)%(l+1)-1
+            // do{
+            //     temp=this.i-this.max;
+            //     this.i=this.min;
+            //     this.i+=temp-1;
+            // }while(this.i>this.max);
         }
+        // console.log(l);
         return this.i;
     }
 }
@@ -1179,6 +1199,7 @@ DEF_MediaObj.prototype.getDuration.addOverload([Function],
         }else{
             var d=this.ed-this.op;
             _callback(d);
+            console.log(d);
             return d;
         }
     }
@@ -1478,7 +1499,6 @@ class HashListener{
     }
 }
 var hashcaller=new Hashcaller();
-
 /**
  * 将时间类型转换成字符串
  */
@@ -1532,3 +1552,4 @@ Date.prototype.toString.addOverload([String],function(str){
     return rtn.join('');
 },"用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度; 例: %Y-%M2-%D -> 1970-01-1");
 })();
+
