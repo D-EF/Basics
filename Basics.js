@@ -1,6 +1,12 @@
 /*!
  * Basics.js 应该在所有脚本之前载入
  */
+/*
+ * @Author: Darth_Eternalfaith
+ * @LastEditTime: 2021-06-27 02:30:39
+ * @LastEditors: Darth_Eternalfaith
+ */
+
 /**
  * 当前运行环境 (可能是 window 或 worker)
  */
@@ -149,7 +155,7 @@ function inputSupportsTypeF(){
         if(!document.createElement) return false;
         var input = document.createElement('input');
         input.setAttribute('type',type);
-        return !(input.type=='text' && type!='text');
+        return !(input.type==='text' && type!='text');
     }
     return {
         number:selectInputSupportsType("number"),   //数字输入框
@@ -227,7 +233,7 @@ function rltToAbs(_fileURL,rootURL){
         var i;
         var tempUrl="";
         for(i=0;i<_fileURL.length;i+=3){
-            if(_fileURL[i]=='.'&&_fileURL[i+1]=='.'&&_fileURL[i+2]=='/'){
+            if(_fileURL[i]==='.'&&_fileURL[i+1]==='.'&&_fileURL[i+2]==='/'){
                 ++urlspc;
             }
             else{
@@ -242,9 +248,9 @@ function rltToAbs(_fileURL,rootURL){
         }
         // console.log(tempUrl);
         i=fileURL_Root.length-1;
-        // if(fileURL_Root[i]=='/')--i;
+        // if(fileURL_Root[i]==='/')--i;
         for(;(i>=0)&&(urlspc);--i){
-            if(fileURL_Root[i]=='/'){
+            if(fileURL_Root[i]==='/'){
                 --urlspc;
             }
         }
@@ -297,7 +303,7 @@ function arrayCmp(a1,a2){
         var flags=Array(ALength)
         for(var i=ALength-1;i>=0;--i){
             for(var j=ALength-1;j>=0;--j){
-                if(a1[i]==a2[j]){
+                if(a1[i]===a2[j]){
                     flags[i]=true;
                 }
             }
@@ -343,10 +349,10 @@ class OlFunction extends Function{
             return function(){
                 var i=arguments.length-1,j,flag=false;
                 for(i=OverloadFunction.ols.length-1;i>=0;--i){
-                    if(arguments.length==OverloadFunction.ols[i].parameterType.length){
+                    if(arguments.length===OverloadFunction.ols[i].parameterType.length){
                         flag=true;
                         for(j=arguments.length-1;flag&&j>=0;--j){
-                            flag=(arguments[j].constructor==OverloadFunction.ols[i].parameterType[j]||arguments[j] instanceof OverloadFunction.ols[i].parameterType[j]);
+                            flag=(arguments[j].constructor===OverloadFunction.ols[i].parameterType[j]||arguments[j] instanceof OverloadFunction.ols[i].parameterType[j]);
                         }
                         if(flag)break;
                     }
@@ -402,7 +408,7 @@ class Delegate{
     removeAct(tgt,act){
         var i;
         for(i=this.actList.length-1;i>=0;--i){
-            if(this.actList[i].tgt==tgt&&this.actList[i].act==act){
+            if(this.actList[i].tgt===tgt&&this.actList[i].act===act){
                 this.actList.splice(i,1);
                 return true;
             }
@@ -485,9 +491,9 @@ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='
         var q,p;// q是左
         var headFlag=0,footFlag=0;
         for(p=0,q=0;str[p];++p){
-            if((headFlag=((str[p]==opKey[0])&&(str[p-1]!=opKeyMask))))
+            if((headFlag=((str[p]===opKey[0])&&(str[p-1]!=opKeyMask))))
             for(var i=1;i<opKey.length;++i){
-                if(!(headFlag=str[p+i]==opKey[i])){break;}
+                if(!(headFlag=str[p+i]===opKey[i])){break;}
             }
             if(headFlag){ // 检测到头
                 temp.push(str.slice(q,p));
@@ -495,11 +501,11 @@ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='
                 tempstr="";
                 while(p<str.length){
                     ++p;
-                    if(footFlag=(str[p]==edKey[0])){
+                    if(footFlag=(str[p]===edKey[0])){
                         
                         if((str[p-1]!=edKeyMask)){
                             for(var j=1;j<edKey.length;++j){
-                                if(!(footFlag=str[p+i]==edKey[i])){break;}
+                                if(!(footFlag=str[p+i]===edKey[i])){break;}
                             }
                             if(footFlag){
                                 tempstr+=str.slice(q,p);
@@ -528,9 +534,9 @@ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='
  */
 function strToVar(str,reviver){
     var ed=str.length-1;
-    if(str[0]=='"'&&str[ed]=='"');
-    else if(str[0]=="{"&&str[0]=="}");
-    else if(str[0]=="["&&str[0]=="]");
+    if(str[0]==='"'&&str[ed]==='"');
+    else if(str[0]==="{"&&str[0]==="}");
+    else if(str[0]==="["&&str[0]==="]");
     else if(!isNaN(Number(str)));
     else{
         // 这个字符串是不符合格式的 直接输出字符串
@@ -575,10 +581,10 @@ KeyNotbook.prototype={
         if(!keycode||!func){
             return -1;
         }
-        if(keycode.constructor==Number){
+        if(keycode.constructor===Number){
             this.keysdownFF.push([keycode]);
         }
-        else if(keycode.constructor==Array){
+        else if(keycode.constructor===Array){
             this.keysdownFF.push(keycode);
         }
         this.keysdownF.push(func);
@@ -593,15 +599,15 @@ KeyNotbook.prototype={
         if(!_keycode||!func){
             return -1;
         }
-        if(_keycode.constructor==Number){
+        if(_keycode.constructor===Number){
             keycode=[_keycode];
         }
-        else if(_keycode.constructor==Array){
+        else if(_keycode.constructor===Array){
             keycode=_keycode;
         }
         for(var i=this.keysdownFF.length-1;i>=0;--i){
             if(arrayCmp(this.keysdownFF[i],keycode)){
-                if(this.keysdownF[i]==func){
+                if(this.keysdownF[i]===func){
                     this.keysdownF.splice(i,1);
                     this.keysdownFF.splice(i,1);
                     break;
@@ -618,7 +624,7 @@ KeyNotbook.prototype={
         if(downingKALength)
         for(var j=downingKALength-1;j>=0;--j){
             if(flag)break;
-            flag=e.keyCode==this.downingKeyCodes[j];
+            flag=e.keyCode===this.downingKeyCodes[j];
             i++;
         }
         if(!flag){
@@ -646,7 +652,7 @@ KeyNotbook.prototype={
         var downingKALength=this.downingKeyCodes.length;
         if(downingKALength)
         for(var i=downingKALength-1;i>=0;--i){
-            if(e.keyCode==this.downingKeyCodes[i]){
+            if(e.keyCode===this.downingKeyCodes[i]){
                 this.downingKeyCodes.splice(i,1);
                 if(this.keysupF[e.keyCode.toString()])this.keysupF[e.keyCode.toString()].call(this.FElement,e);
                 return 0;
@@ -834,7 +840,7 @@ Stepper.prototype={
      * 让步进器的溢出值回到范围内
      */
     overflowHanding:function(){
-        if(this.max==this.min) return this.i=this.min;
+        if(this.max===this.min) return this.i=this.min;
         var temp,l=this.max-this.min+1;
         if(this.i<this.min){
             // do{
@@ -895,12 +901,13 @@ DEF_CUEOBJ.prototype={
     selectRem:function(rem1){
         var rtn=[];
         for(var i=this.rem.length-1;i>=0;--i){
-            if(this.rem[i][1]&& this.rem[i][1]==rem1){
+            if(this.rem[i][1]&& this.rem[i][1]===rem1){
                 rtn.push(this.rem[i]);
             }
         }
         return rtn;
     },
+    /** 处理 rem 命令的集合 */
     setCommand:{
         // 在此处添加对cue格式的指令的处理
         // 由于我只需要处理音乐文件的 所以省略了很多指令
@@ -937,7 +944,7 @@ DEF_CUEOBJ.prototype={
             switch(indexNub){
                 case 1:
                     this.op=time;
-                    if(lastTrack&&(lastTrack.ed==undefined)){
+                    if(lastTrack&&(lastTrack.ed===undefined)){
                         lastTrack.ed=time;
                     }
                 break;
@@ -951,6 +958,12 @@ DEF_CUEOBJ.prototype={
         }
     }
 }
+/**
+ * cue 的一截轨道内容
+ * @param {String}      file        文件路径
+ * @param {DEF_CUEOBJ}  root        根 对象
+ * @param {Number}      trackIndex  轨道序号
+ */
 function DEF_CUEOBJTrack(file,root,trackIndex){
     this.performer="";
     this.songwriter="";
@@ -980,7 +993,10 @@ function cue_timeToSecond(timeStr){
     
     return parseInt(temp[0])*60+parseInt(temp[1])+parseInt(temp[2])/75;
 }
-
+/**
+ * 解析 cue 格式 的字符串
+ * @param {String} str 
+ */
 function loadCue(str){
     var p=0,q=0,isQuotes=false;
     var tempStr;
@@ -990,15 +1006,15 @@ function loadCue(str){
     for(;p<str.length;++p){
         if(str[p]!=' '){
             for(q=p;(p<=str.length);++p){
-                if(str[p]=='\"'){
+                if(str[p]==='\"'){
                     isQuotes=!isQuotes;
                     if(isQuotes){
                         q=p+1;
                     }
                 }
-                if((str[p]==' ')&&(!isQuotes)){
+                if((str[p]===' ')&&(!isQuotes)){
                     // 记录指令
-                    if(str[p-1]=='\"'){
+                    if(str[p-1]==='\"'){
                         tempStr=str.slice(q,p-1);
                     }else{
                         tempStr=str.slice(q,p);
@@ -1006,17 +1022,17 @@ function loadCue(str){
                     CommandList.push(tempStr);
                     q=p+1;
                 }
-                else if((str[p]=="\n")||(str[p]=="\r")||(str.length==p)){
+                else if((str[p]==="\n")||(str[p]==="\r")||(str.length===p)){
                     // 换行 进入下一条指令
-                    if(str[p-1]=='\"'){
+                    if(str[p-1]==='\"'){
                         tempStr=str.slice(q,p-1);
                     }else{
                         tempStr=str.slice(q,p);
                     }
                     CommandList.push(tempStr);
 
-                    if(CommandList[0].toLowerCase()=="track"){
-                        that=new DEF_CUEOBJTrack(rtn.file,rtn,rtn.track.length);
+                    if(CommandList[0].toLowerCase()==="track"){
+                        that=new DEF_CUEOBJTrack(rtn.file, rtn, rtn.track.length);
                         rtn.track.push(that);
                     }
                     else{
@@ -1028,7 +1044,7 @@ function loadCue(str){
                         }
                     }
 
-                    do{ ++p; } while((str[p+1]=="\n")||(str[p+1]=="\r"));
+                    do{ ++p; } while((str[p+1]==="\n")||(str[p+1]==="\r"));
                     CommandList=[];
                     break;
                 }
@@ -1086,6 +1102,10 @@ function selectImg(_rootUrl,_nameList,_afertList,callBack){
  * 给我的 audio 控制器 用的数据对象
  */
 class DEF_MediaObj{
+    /**
+     * @param {String}  scr     媒体文件的 url
+     * @param {String}  title   标题
+     */
     constructor(src,title){
         this.title="";
         this.cover=[];
@@ -1111,12 +1131,12 @@ class DEF_MediaObj{
     /**
      * 通过路径创建mediaObj, 并尝试读取 ID3
      * @param {String} src  媒体的链接
-     * @param {Function} callback 读取id3之后的回调 callback(rtn)
+     * @param {Function} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
      */
     static f(src,callback){
         var rtn=new DEF_MediaObj(src);
         var after=src.slice(src.lastIndexOf('.'));
-        if(after==".mp3"){
+        if(after===".mp3"){
             ID3.loadTags(src,function(){
                 var tags = ID3.getAllTags(src);
                 var image = tags.picture;
@@ -1226,6 +1246,7 @@ DEF_MediaObj.prototype.getDuration.addOverload([Audio,Function],
         return d;
     }
 );
+
 /**
  * 给媒体做标记的列表 因为浏览器的 updata 事件触发 大概每秒触发四次，所以会有误差
  */
@@ -1246,7 +1267,7 @@ class DEF_MediaObjMarkList{
         }
     }
     /**
-     * 根据时刻触发标记, 如果有两个会被触发 将会触发靠后的
+     * 根据时刻触发标记, 如果有两个会被触发 将会仅触发在 list 中靠后的
      * @param {Exctrl} mediaCtrl 媒体控件
      * @param {Number} time 时刻
      * @param {Number} afterTolerance 向后容差 在容差内的时刻也会触发
@@ -1261,13 +1282,10 @@ class DEF_MediaObjMarkList{
 }
 /**
  * 给 DEF_MediaObj 的时间轴 做标记
- * @param {String} command 遭遇标记指令的
- * @param {Number} time 时刻
- * @param {Number} maxTouch 最大触发次数
  */
 class DEF_MediaObjMark{
     /**
-     * @param {String} command 遭遇标记指令的
+     * @param {String} command 遭遇标记 的 指令
      * @param {Number} time 时刻
      * @param {Number} maxTouch 最大触发次数
      */
@@ -1322,7 +1340,7 @@ function cueObjToMediaObj(_cueobj,_url){
         }else{
             var afterL=urlList[0].length,
                 after=urlList[0][afterL-3]+urlList[0][afterL-2]+urlList[0][afterL-1];
-            if(after=="mp3"){
+            if(after==="mp3"){
                 ID3.loadTags(urlList[0],function(){
                     var tags = ID3.getAllTags(urlList[0]);
                     var image = tags.picture;
@@ -1388,11 +1406,11 @@ function linkClick(e,tgt){
     var tgt=tgt||this;
     var linkTarget=tgt.getAttribute("target");
     var tempStr;
-    if(tgt.host==window.location.host){
+    if(tgt.host===window.location.host){
         // var hostchar=this.pathname.slice(this.pathname.indexOf('/')+1,this.pathname.slice(this.pathname.indexOf('/')+1).indexOf('/')+1);
         switch (_event.button){
             case 0:
-                if((!linkTarget||linkTarget=='_self')&&(!e.ctrlKey)){
+                if((!linkTarget||linkTarget==='_self')&&(!e.ctrlKey)){
                     window.location.href='#/'+tgt.href.substr(tgt.href.indexOf(tgt.host)+(tgt.host.length)+1);
                     stopPE(e);
                     // if(tempStr=tgt.getAttribute("title")){
@@ -1417,7 +1435,7 @@ function setupLinkClick(){
     document.addEventListener("click",function(e){
         var tgt=e.target;
         while(tgt.tagName!="HTML"){
-            if(tgt.tagName=="A"){
+            if(tgt.tagName==="A"){
                 linkClick(e,tgt);
                 break;
             }
@@ -1489,7 +1507,7 @@ class HashListener{
      */
     exec(_string){
         var string;
-        if((this.filterFlag)&&(_string.indexOf("#/")==0)){
+        if((this.filterFlag)&&(_string.indexOf("#/")===0)){
             string=_string.slice(2);
         }
         else{
@@ -1521,7 +1539,7 @@ Date.prototype.toString.addOverload([String],function(str){
     }
     var i,rtn=[],tstr;
     for(i=0;i<str.length;++i){
-        if(str[i]=='%'){
+        if(str[i]==='%'){
             ++i;
             if(d[str[i]]!=undefined){
                 var ti=parseInt(str[i+1]),tempstr=[];
@@ -1539,7 +1557,7 @@ Date.prototype.toString.addOverload([String],function(str){
                     i+=ti.toString().length;
                     tstr=tempstr.join('');
                 }
-            // }else if(str[i]=='%'){
+            // }else if(str[i]==='%'){
             //     tstr='%'
             }else{
                 tstr='%'+str[i];
