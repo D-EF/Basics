@@ -485,7 +485,7 @@ decodeHTML.rStrL=["&"       ];
  * @param {char}   edKeyMask 插值关键文本 的屏蔽字符; 默认'\'
  * @returns {{str:String,hit:Array<String>}}
  */
-function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
+ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
     if(Object.keys(that).length){
         var temp=[],tempstr="",hit=[];
         var strkey="\"'`",strKP=0,strFlag=false;
@@ -502,19 +502,19 @@ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='
                 tempstr="";
                 while(p<str.length){
                     ++p;
-                    if(footFlag=(str[p]===edKey[0])){
-                        if((!strFlag)){
-                            for(strKP=strkey.length-1;strKP>=0;--strKP){
-                                if(strkey[strKP]===str[p]){
-                                    strFlag=true;
-                                    break;
-                                }
-                            }
-                        }else{
+                    if((!strFlag)){
+                        for(strKP=strkey.length-1;strKP>=0;--strKP){
                             if(strkey[strKP]===str[p]){
-                                strFlag=false;
+                                strFlag=true;
+                                break;
                             }
                         }
+                    }else{
+                        if(strkey[strKP]===str[p]){
+                            strFlag=false;
+                        }
+                    }
+                    if((footFlag=(str[p]===edKey[0]))&&!strFlag){
                         if((str[p-1]!=edKeyMask)){
                             for(var j=1;j<edKey.length;++j){
                                 if(!(footFlag=str[p+i]===edKey[i])){break;}
