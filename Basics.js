@@ -488,6 +488,7 @@ decodeHTML.rStrL=["&"       ];
 function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
     if(Object.keys(that).length){
         var temp=[],tempstr="",hit=[];
+        var strkey="\"'`",strKP=0,strFlag=false;
         var q,p;// q是左
         var headFlag=0,footFlag=0;
         for(p=0,q=0;str[p];++p){
@@ -502,7 +503,18 @@ function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='
                 while(p<str.length){
                     ++p;
                     if(footFlag=(str[p]===edKey[0])){
-                        
+                        if((!strFlag)){
+                            for(strKP=strkey.length-1;strKP>=0;--strKP){
+                                if(strkey[strKP]===str[p]){
+                                    strFlag=true;
+                                    break;
+                                }
+                            }
+                        }else{
+                            if(strkey[strKP]===str[p]){
+                                strFlag=false;
+                            }
+                        }
                         if((str[p-1]!=edKeyMask)){
                             for(var j=1;j<edKey.length;++j){
                                 if(!(footFlag=str[p+i]===edKey[i])){break;}
