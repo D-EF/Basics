@@ -510,7 +510,7 @@ decodeHTML.rStrL=["&"       ];
                             }
                         }
                     }else{
-                        if(strkey[strKP]===str[p]){
+                        if((strkey[strKP]===str[p])&&(str[p-1]!=='\\')){
                             strFlag=false;
                         }
                     }
