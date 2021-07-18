@@ -1,9 +1,10 @@
 /*!
  * Basics.js 应该在所有脚本之前载入
  */
+
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-06-27 02:30:39
+ * @LastEditTime: 2021-07-19 00:14:14
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -12,6 +13,7 @@
  */
 var thisEnvironment=this;
 
+function nullfnc(){}
 // if(this.Element&&Element.prototype.attachEvent){
 //     Element.prototype.addEventListener=Element.prototype.attachEvent;
 // }

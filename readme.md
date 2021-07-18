@@ -1,5 +1,5 @@
 <!--
- * @LastEditTime: 2021-06-27 02:46:04
+ * @LastEditTime: 2021-07-19 00:16:22
  * @LastEditors: Darth_Eternalfaith
 -->
 # 提供一些函数, 全局变量 和 一些类 的js文件
@@ -18,6 +18,10 @@
 ##
 
 # 函数
+## 什么都不做的空函数 bullFnc
+* 顾名思义
+---
+
 ## 让 dom 停止触发事件
 在 dom 事件 中运行
 * stopPropagation(e)   
