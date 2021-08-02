@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-07-19 00:14:14
+ * @LastEditTime: 2021-08-03 02:41:29
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -1173,32 +1173,59 @@ class DEF_MediaObj{
         return rtn;
     }
     /**
+     * 拷贝以创建一个 DEF_MediaObj
+     * @param {Object} baseObj
+     * @returns {DEF_MediaObj}
+     */
+    static copy(baseObj){
+        var rtn=new DEF_MediaObj();
+        Object.assign(rtn,baseObj);
+
+        rtn.urlList=new Array(i);
+        if(baseObj.urlList){
+            var i=baseObj.urlList.length;
+            rtn.urlList=new Array(i);
+            for(--i;i>=0;--i){
+                rtn.urlList[i]=this.urlList[i];
+            }
+        }
+        rtn.mark=new DEF_MediaObjMarkList();
+        if(baseObj.mark){
+            for(i=0;i<this.mark.list;++i){
+                rtn.mark.list[i]=this.mark.list[i].copy();
+            }
+        }
+        return rtn;
+    }
+    /**
+     * 克隆以创建一个 DEF_MediaObj
+     * @param {Object} baseObj
+     * @returns {DEF_MediaObj}
+     */
+    static clone(baseObj){
+        var rtn=new DEF_MediaObj();
+        Object.assign(rtn,baseObj);
+        return rtn;
+    }
+    /**
      * 获取 "Artist" 编曲者 and 演唱者
      */
     getArtist(){
         return this.performer + "/" + this.songwriter;
     }
     /**
-     * 克隆
+     * 克隆当前对象
+     * @returns {DEF_MediaObj}
      */
     clone(){
-        var rtn=new DEF_MediaObj();
-        Object.assign(rtn,this);
-        return rtn;
+        return DEF_MediaObj.clone(this);;
     }
+    /**
+     * 拷贝当前对象
+     * @returns {DEF_MediaObj}
+     */
     copy(){
-        var rtn=new DEF_MediaObj();
-        var i=this.urlList.length;
-        Object.assign(rtn,this);
-        rtn.urlList=new Array(i);
-        for(--i;i>=0;--i){
-            rtn.urlList[i]=this.urlList[i];
-        }
-        rtn.mark=new DEF_MediaObjMarkList();
-        for(i=0;i<this.mark.list;++i){
-            rtn.mark.list[i]=this.mark.list[i].copy();
-        }
-        return rtn;
+        return DEF_MediaObj.copy(this);
     }
 }
 
@@ -1347,7 +1374,7 @@ function cueObjToMediaObj(_cueobj,_url){
     var rtn=[],urlList=[rltToAbs(_cueobj.file,_url)];
     var tempObj;
     var cover=[];
-    selectImg(_url.slice(0,_url.lastIndexOf('/')+1),["cover","front"],[".jpg",".jpeg",".png",".gif"],
+    selectImg(_url.slice(0,_url.lastIndexOf('/')+1),["cover","front"],[".jpg",".jpeg",".png",".gif",".svg"],
     function(imgList){
         if(imgList.length>0){
             cover.push(...imgList);
