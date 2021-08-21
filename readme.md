@@ -1,5 +1,5 @@
 <!--
- * @LastEditTime: 2021-07-19 00:16:22
+ * @LastEditTime: 2021-08-21 11:40:48
  * @LastEditors: Darth_Eternalfaith
 -->
 # 提供一些函数, 全局变量 和 一些类 的js文件
@@ -161,7 +161,7 @@ addResizeEvent(_element,_listener)
 ---
 
 ## OlFunction 重载函数 
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*    
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*    
 没有构造函数, 写成类的语法纯粹是为了让编辑器认代码提示
 
 * 使用 OlFunction.create(defineFnc)创建一个重载函数   
@@ -185,7 +185,7 @@ addResizeEvent(_element,_listener)
 ---
 
 ## Delegate 委托 
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*   
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 没有构造函数, 写成类的语法纯粹是为了让编辑器认代码提示
 * 使用 Delegate.create()创建一个委托   
      
@@ -250,7 +250,7 @@ addResizeEvent(_element,_listener)
 ---
 
 ## DEF_CUEOBJ 存储 cue 格式为js的obj格式 
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*   
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数无参数   请使用 函数 loadCue(str) 创建
 ### 属性 
 * @type {String}                  performer     演出者/作者
@@ -269,7 +269,7 @@ addResizeEvent(_element,_listener)
 ---
 
 ## DEF_CUEOBJTrack 在 DEF_CUEOBJ 中的分轨道
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*   
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数 
 DEF_CUEOBJTrack(file,root,trackIndex)   
 @param {String}      file        文件路径   
@@ -295,7 +295,7 @@ DEF_CUEOBJTrack(file,root,trackIndex)
 ---
 
 ## DEF_MediaObj 给我的 audio 控制器 用的数据对象
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*   
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数 constructor(src,title) 
 
 ### 属性
@@ -330,7 +330,7 @@ DEF_CUEOBJTrack(file,root,trackIndex)
 ---
 
 ## DEF_MediaObjMarkList 给媒体做标记的列表 
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*      
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*      
 构造函数constructor(DEF_MediaObjMarkArray)   
 DEF_MediaObjMark 的列表   
 @param {Array<DEF_MediaObjMark>} DEF_MediaObjMarkArray DEF_MediaObjMark 的数组   
@@ -356,7 +356,7 @@ DEF_MediaObjMark 的列表
 @param {Number} maxTouch 最大触发次数   
 
 ## hash 监听者的发生器 Hashcaller
-*注意, 该类使用了 clss 语法，所以不能直接使用于ie*   
+*注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数constructor(onlyTouchOne=true)
 
 
