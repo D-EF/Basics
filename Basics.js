@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-08-03 02:41:29
+ * @LastEditTime: 2021-09-13 08:50:16
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -1611,4 +1611,3 @@ Date.prototype.toString.addOverload([String],function(str){
     return rtn.join('');
 },"用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度; 例: %Y-%M2-%D -> 1970-01-1");
 })();
-
