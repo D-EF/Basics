@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-09-13 08:50:16
+ * @LastEditTime: 2021-09-27 10:09:25
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -12,6 +12,7 @@
  * 当前运行环境 (可能是 window 或 worker)
  */
 var thisEnvironment=this;
+var zero=0;
 
 function nullfnc(){}
 // if(this.Element&&Element.prototype.attachEvent){
@@ -320,15 +321,16 @@ function arrayCmp(a1,a2){
 /** 重载函数类 */
 class OlFunction extends Function{
     // 写成类的语法纯粹是为了让编辑器认代码提示
-    /** @type {Array<{parameterType:parameterType,fnc:fnc,codeComments:codeComments}>} 重载函数 */
-    ols=[];
-    /** @type {Function} */
-    defaultFnc;
+    
     /**
      * 请使用 OlFunction.create 函数
      */
     constructor(){
         console.error("请使用 OlFunction.create()");
+        /** @type {Array<{parameterType:parameterType,fnc:fnc,codeComments:codeComments}>} 重载函数 */
+        this.ols=[];
+        /** @type {Function} */
+        this.defaultFnc=new Function();
     }
     /**
      * 添加一个重载
@@ -390,9 +392,9 @@ function inheritClass(_basics,_derived){
  * 委托
  */
 class Delegate{
-    actList=[];
     /** 请使用 Delegate.ctrate() */
     constructor(){
+        this.actList=[];
         console.error("请使用 Delegate.ctrate()");
     }
 
