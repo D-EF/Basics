@@ -3,7 +3,6 @@
  * @LastEditors: Darth_Eternalfaith
 -->
 # 提供一些函数, 全局变量 和 一些类 的js文件
-**使用请遵守 apache 2.0 协议, 在拷贝的代码中请注明代码来源**
 ---
 # 全局变量
 ## thisEnvironment   
