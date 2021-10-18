@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-09-27 10:09:25
+ * @LastEditTime: 2021-10-18 13:31:08
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -13,6 +13,10 @@
  */
 var thisEnvironment=this;
 var zero=0;
+
+Object.copy=function(tgt){
+    return Object.assign({},tgt);
+}
 
 function nullfnc(){}
 // if(this.Element&&Element.prototype.attachEvent){
