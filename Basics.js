@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-10-18 13:31:08
+ * @LastEditTime: 2021-11-08 17:31:50
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -825,13 +825,21 @@ function Stepper(max,min,now){
         this.min=this.max;
         this.max=temp;
     }
+    /**
+     * 用来添加监听的
+     * @type {Array<Function>}
+     */
+    this.regressionlinListener=[];
     this.i=now||0;
     this.overflowHanding();
 }
 
 Stepper.prototype={
-    toString:function(){
+    valueOf:function(){
         return this.i;
+    },
+    toString:function(){
+        return this.i.toString();
     },
     /**
      * 设置当前值
@@ -846,7 +854,7 @@ Stepper.prototype={
     /**
      * 让步进器步进
      * @param {Number} _l 步长
-     * @returns {Number} 返回步进后的值
+     * @returns {Number} 返回步进后的位置
      */
     next:function(_l){
         var l=_l===undefined?1:_l;
@@ -861,25 +869,21 @@ Stepper.prototype={
      */
     overflowHanding:function(){
         if(this.max===this.min) return this.i=this.min;
-        var temp,l=this.max-this.min+1;
+        var l=this.max-this.min+1;
         if(this.i<this.min){
-            // do{
-            //     temp=this.i-this.min;
-            //     this.i=this.max;
-            //     this.i+=temp+1;
-            // }while(this.i<this.min);
-            this.i=this.max-(this.min-this.i)%(l+1)+1
+            this.i=this.max-(this.min-this.i)%(l+1)+1;
+            this.regressionlin_call();
         }
         else if(this.i>this.max){
-            this.i=this.min+(this.i-this.max)%(l+1)-1
-            // do{
-            //     temp=this.i-this.max;
-            //     this.i=this.min;
-            //     this.i+=temp-1;
-            // }while(this.i>this.max);
+            this.i=this.min+(this.i-this.max)%(l+1)-1;
+            this.regressionlin_call();
         }
-        // console.log(l);
         return this.i;
+    },
+    regressionlin_call(){
+        for(var i=this.regressionlinListener.length-1;i>=0;--i){
+            this.regressionlinListener(this.i,this);
+        }
     }
 }
 
