@@ -547,7 +547,6 @@ decodeHTML.rStrL=["&"       ];
     }
 }
 
-
 /**
  * 将字符串转换成js的类型, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
  * 参数和 JSON.parse 一样
@@ -1121,7 +1120,6 @@ function selectImg(_rootUrl,_nameList,_afertList,callBack){
     // callBack(rtn);
 }
 
-
 /** 
  * 给我的 audio 控制器 用的数据对象
  */
@@ -1426,7 +1424,6 @@ function cueObjToMediaObj(_cueobj,_url){
 }
 
 // selectImg("./img/",["1","2","3","4","5"],[".jpg",".jpeg",".png",".gif"],function(e){console.log(e)});
-
 
 /**
  * 请求 api

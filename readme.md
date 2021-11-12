@@ -137,7 +137,6 @@ addResizeEvent(_element,_listener)
     @param {Function} _listener 触发的函数   
 ---
 
-
 # 类
 文件中部分的类有使用上面的函数, 它们不能直接拷贝走就使用; 部分类使用了 class 语法, 所以不能在 ie 中使用
 
@@ -357,8 +356,6 @@ DEF_MediaObjMark 的列表
 ## hash 监听者的发生器 Hashcaller
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数constructor(onlyTouchOne=true)
-
-
 
 ---
 
