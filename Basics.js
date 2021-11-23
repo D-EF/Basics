@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-11-08 17:31:50
+ * @LastEditTime: 2021-11-23 17:46:25
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -135,6 +135,17 @@ UnitBezier.prototype = {
         this.by = 3.0 * (p2y - p1y) - this.cy;
         this.ay = 1.0 - this.cy - this.by;
     }
+}
+function quadraticFunction0(a,b,c){
+    var discriminant=b*b-4*a*c;
+    if(discriminant<0){
+        return [];
+    }
+    if(discriminant===0){
+        return [-b/a*0.5];
+    }
+    discriminant = Math.sqrt(discriminant);
+    return [(-b - discriminant) / (2 * a),(-b + discriminant) / (2 * a)];
 }
 
 /** 阻止事件冒泡 */
