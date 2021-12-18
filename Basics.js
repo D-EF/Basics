@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-11-23 17:46:25
+ * @LastEditTime: 2021-12-05 18:46:47
  * @LastEditors: Darth_Eternalfaith
  */
 
@@ -98,8 +98,9 @@ Math.DEG=Math.PI/180;
  * @param {Number} p2x (1,1) 的 控制点 的 x 坐标
  * @param {Number} p2y (1,1) 的 控制点 的 y 坐标
  */
-//该贝塞尔曲线来自:https://www.cnblogs.com/yanan-boke/p/8875571.html
+//该贝塞尔曲线的a、b、c计算和获取坐标来自:https://www.cnblogs.com/yanan-boke/p/8875571.html
 function UnitBezier(p1x,p1y,p2x,p2y) {
+    
     this.cx = 3.0 * p1x;
     this.bx = 3.0 * (p2x - p1x) - this.cx;
     this.ax = 1.0 - this.cx -this.bx;    
@@ -134,9 +135,16 @@ UnitBezier.prototype = {
         this.cy = 3.0 * p1y;
         this.by = 3.0 * (p2y - p1y) - this.cy;
         this.ay = 1.0 - this.cy - this.by;
+    },
+    monotonicityOfX(){
+        return monotonicityOfCubic(this.ax,this.bx,this.cx);
+    },
+    monotonicityOfY(){
+        return monotonicityOfCubic(this.ay,this.by,this.cy);
     }
 }
-function quadraticFunction0(a,b,c){
+
+function zeroOfSquare(a,b,c){
     var discriminant=b*b-4*a*c;
     if(discriminant<0){
         return [];
@@ -145,9 +153,20 @@ function quadraticFunction0(a,b,c){
         return [-b/a*0.5];
     }
     discriminant = Math.sqrt(discriminant);
-    return [(-b - discriminant) / (2 * a),(-b + discriminant) / (2 * a)];
+    var k= 1 / (2 * a);
+    return [(-b - discriminant)*k,(-b + discriminant)*k];
 }
 
+function monotonicityOfCubic(a,b,c){
+    var d=zeroOfSquare(a,b,c);
+    if(d.length!==2){
+        return [];
+    }
+    return [
+        ((this.ay * d[0] + this.by) * d[0] + this.cy) * d[0],
+        ((this.ay * d[1] + this.by) * d[1] + this.cy) * d[1]
+    ]
+}
 /** 阻止事件冒泡 */
 function stopPropagation(e){e.stopPropagation();}
 
