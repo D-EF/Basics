@@ -6,7 +6,6 @@
  * @Author: Darth_Eternalfaith
  * @LastEditTime: 2021-12-05 18:46:47
  * @LastEditors: Darth_Eternalfaith
- * test
  */
 
 /**
@@ -101,7 +100,6 @@ Math.DEG=Math.PI/180;
  */
 //该贝塞尔曲线的a、b、c计算和获取坐标来自:https://www.cnblogs.com/yanan-boke/p/8875571.html
 function UnitBezier(p1x,p1y,p2x,p2y) {
-    
     this.cx = 3.0 * p1x;
     this.bx = 3.0 * (p2x - p1x) - this.cx;
     this.ax = 1.0 - this.cx -this.bx;    
@@ -142,6 +140,27 @@ UnitBezier.prototype = {
     },
     monotonicityOfY(){
         return monotonicityOfCubic(this.ay,this.by,this.cy);
+    }
+}
+/**
+ * 贝塞尔曲线求点
+ * @param {Array<{x:Number,y:Number}>} points 控制点集合
+ * @param {Number} t t参数
+ * @returns {{x:Number,y:Number}} 返回对应点
+ */
+function getBezierCurvePoint(points,t){
+    if(points.length>1){
+        var newPoints=new Array(points.length-1);
+        var x,y;
+        var td=1-t;
+        for(var i=newPoints.length-1;i>=0;--i){
+            x=td*points[i].x+t*points[i+1].x;
+            y=td*points[i].y+t*points[i+1].y;
+            newPoints[i]={x:x,y:y};
+        }
+        return getBezierCurvePoint(newPoints,t);
+    }else{
+        return points[0];
     }
 }
 
