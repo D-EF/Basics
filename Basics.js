@@ -98,8 +98,8 @@ Math.DEG=Math.PI/180;
  * @param {Number} p2x (1,1) 的 控制点 的 x 坐标
  * @param {Number} p2y (1,1) 的 控制点 的 y 坐标
  */
-//该贝塞尔曲线的a、b、c计算和获取坐标来自:https://www.cnblogs.com/yanan-boke/p/8875571.html
 function UnitBezier(p1x,p1y,p2x,p2y) {
+    //该贝塞尔曲线的a、b、c计算和获取坐标来自:https://www.cnblogs.com/yanan-boke/p/8875571.html
     this.cx = 3.0 * p1x;
     this.bx = 3.0 * (p2x - p1x) - this.cx;
     this.ax = 1.0 - this.cx -this.bx;    
@@ -143,7 +143,7 @@ UnitBezier.prototype = {
     }
 }
 /**
- * 贝塞尔曲线求pt点
+ * 贝塞尔曲线求pt点 算法来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
  * @param {Array<{x:Number,y:Number}>} points 控制点集合
  * @param {Number} t t参数
  * @returns {{x:Number,y:Number}} 返回对应点
@@ -165,7 +165,7 @@ function getBezierCurvePoint_deCasteljau(points,t){
 }
 
 /**
- * 分割3阶bezier曲线
+ * 分割3阶bezier曲线 计算方式来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
  * @param {Array<{x:Number,y:Number}>} points 控制点集合
  * @param {Number} z t 参数
  * @returns {Array<Array<{x:Number,y:Number}>>} 返回新的两组贝塞尔曲线的点
