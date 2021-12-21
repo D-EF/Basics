@@ -8,8 +8,6 @@ var tspLength=0.001;
 //此处修改数据长度
 var d_length=1000;
 
-
-
 var dde=new Array(d_length);
 for(var i =dde.length-1;i>=0;--i){
     dde[i]=[
@@ -36,7 +34,7 @@ for(var i =dde.length-1;i>=0;--i){
     for(t=0;t<=1;t+=tspLength){
         // ktp2.push
         (
-            getBezierCurvePoint(dde[i],t)
+            getBezierCurvePoint_deCasteljau(dde[i],t)
         )
     }
 }
@@ -69,6 +67,5 @@ for(var i =d3.length-1;i>=0;--i){
 }
 console.log(ktp1);
 console.log("三次函数 使用时间",performance.now()-nt);
-
-var i=1
+var i=1;
 console.log(ktp1[i],ktp2[i])

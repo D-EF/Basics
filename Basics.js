@@ -143,12 +143,12 @@ UnitBezier.prototype = {
     }
 }
 /**
- * 贝塞尔曲线求点
+ * 贝塞尔曲线求pt点
  * @param {Array<{x:Number,y:Number}>} points 控制点集合
  * @param {Number} t t参数
  * @returns {{x:Number,y:Number}} 返回对应点
  */
-function getBezierCurvePoint(points,t){
+function getBezierCurvePoint_deCasteljau(points,t){
     if(points.length>1){
         var newPoints=new Array(points.length-1);
         var x,y;
@@ -158,12 +158,97 @@ function getBezierCurvePoint(points,t){
             y=td*points[i].y+t*points[i+1].y;
             newPoints[i]={x:x,y:y};
         }
-        return getBezierCurvePoint(newPoints,t);
+        return getBezierCurvePoint_deCasteljau(newPoints,t);
     }else{
         return points[0];
     }
 }
 
+/**
+ * 分割3阶bezier曲线
+ * @param {Array<{x:Number,y:Number}>} points 控制点集合
+ * @param {Number} z t 参数
+ * @returns {Array<Array<{x:Number,y:Number}>>} 返回新的两组贝塞尔曲线的点
+ */
+function Bezier3Cut(points,z){
+    // var q1=[
+    //     [1,         0,          0,          0],
+    //     [td,        t,          0,          0],
+    //     [td*td,     -2*td*t,    tt,         0],
+    //     [-td*tdq,   3*tdq*t,    -3*td*tt,   tt*t]
+    // ];
+    
+    var z2=z*z,
+        z3=z2*z,
+        zd=z-1,
+        zdz=zd*z,
+        zd2=zd*zd,
+        zd3=zd2*zd,
+        zd2z=zd2*z,
+        zdz2=zdz*z;
+    var x1=points[0].x,
+        x2=points[1].x,
+        x3=points[2].x,
+        x4=points[3].x,
+        y1=points[0].y,
+        y2=points[1].y,
+        y3=points[2].y,
+        y4=points[3].y;
+    console.log(JSON.stringify(points));
+    return [
+        [
+            {x:x1,                                 y:y1                                 },
+            {x:x2*z-x1*zd,                         y:y2*z-y1*zd                         },
+            {x:x3*z2-2*x2*zdz+zd2*x1,              y:y3*z2-2*y2*zdz+zd2*y1              },
+            {x:x4*z3-3*x3*zdz2+3*x2*zd2z-x1*zd3,   y:y4*z3-3*y3*zdz2+3*y2*zd2z-y1*zd3   }
+        ],
+        [
+            {x:x4*z3-3*x3*zdz2+3*x2*zd2z-x1*zd3,   y:y4*z3-3*y3*zdz2+3*y2*zd2z-y1*zd3   },
+            {x:x4*z2-2*x3*zdz+zd2*x2,              y:y4*z2-2*y3*zdz+zd2*y2              },
+            {x:x4*z-x3*zd,                         y:y4*z-y3*zd                         },
+            {x:x4,                                 y:y4                                 },
+        ]
+    ]
+}
+
+/**
+ * 矩阵乘法
+ * @param {Array<Array<Number>>} m1 左侧矩阵
+ * @param {Array<Array<Number>>} m2 右侧矩阵
+ */
+function matrixMULT(m1,m2){
+    if(m1[0].length!=m2.length) throw new Error("矩阵乘法格式错误");
+
+    var rtn=new Array(m1.length);
+    for(var i=rtn.length-1;i>=0;--i){
+        rtn[i]=new Array(m2[0].length);
+    }
+
+    var i=0,j=0,k=0;
+    do{
+        j=0
+        do{
+            k=0;
+            var temp=0;
+            do{
+                temp+=m1[i][k]*m2[k][j];
+                ++k;
+            }while(k<m1[0].length);
+            rtn[i][j]=temp;
+            ++j;
+        }while(j<m2[0].length);
+        ++i;
+    }while(i<m1.length);
+    return rtn;
+}
+
+/**
+ * 求二次函数的根
+ * @param {Number} a 2次系数 
+ * @param {Number} b 1次系数 
+ * @param {Number} c 0次系数 
+ * @returns 
+ */
 function zeroOfSquare(a,b,c){
     var discriminant=b*b-4*a*c;
     if(discriminant<0){
@@ -176,17 +261,44 @@ function zeroOfSquare(a,b,c){
     var k= 1 / (2 * a);
     return [(-b - discriminant)*k,(-b + discriminant)*k];
 }
-
+/**
+ * 三次函数曲线求单调性(极点)
+ * @param {Number} a 3次系数
+ * @param {Number} b 2次系数
+ * @param {Number} c 1次系数
+ * @returns {Array<Number>} 
+ */
 function monotonicityOfCubic(a,b,c){
     var d=zeroOfSquare(a,b,c);
     if(d.length!==2){
         return [];
     }
     return [
-        ((this.ay * d[0] + this.by) * d[0] + this.cy) * d[0],
-        ((this.ay * d[1] + this.by) * d[1] + this.cy) * d[1]
+        ((a * d[0] + b) * d[0] + c) * d[0],
+        ((a * d[1] + b) * d[1] + c) * d[1]
     ]
 }
+/**
+ * 数组移位
+ * @param {Array}  arr  数组
+ * @param {Number} l    移动步长
+ * @returns {Array}
+ */
+function arrayMove(arr,l){
+    if(arr.length===0) return [];
+    var arr=[].concat(arr);
+    var ll=Math.abs(l)%arr.length;
+    if(ll===0)return arr;
+    var temp;
+    if(l<0){
+        temp=arr.splice(0,ll);
+        return arr.concat(temp);
+    }else{
+        temp=arr.splice(arr.length-ll,Infinity)
+        return temp.concat(arr);
+    }
+}
+
 /** 阻止事件冒泡 */
 function stopPropagation(e){e.stopPropagation();}
 
