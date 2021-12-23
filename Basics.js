@@ -279,6 +279,17 @@ function monotonicityOfCubic(a,b,c){
     ]
 }
 /**
+ * 解二元一次方程
+ * z1+o1*x=z2+o2*y;
+ * z3+o3*x=z4+o4*y;
+ * @returns {{x:Number,y:Number}} 
+ */
+function binaryLinearEquation(z1,o1,z2,o2,z3,o3,z4,o4){
+    var x=(z2*o4+o2*z3-z4*o2-z1*o4)/(o1*o4-o2*o3),
+        y=(z3+o3*x-z4)/o4;
+    return {x:x,y:y};
+}
+/**
  * 数组移位
  * @param {Array}  arr  数组
  * @param {Number} l    移动步长
