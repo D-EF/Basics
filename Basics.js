@@ -4,10 +4,10 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-12-05 18:46:47
+ * @LastEditTime: 2021-12-25 13:50:13
  * @LastEditors: Darth_Eternalfaith
  */
-
+ 
 /**
  * 当前运行环境 (可能是 window 或 worker)
  */
@@ -142,6 +142,7 @@ UnitBezier.prototype = {
         return monotonicityOfCubic(this.ay,this.by,this.cy);
     }
 }
+
 /**
  * 贝塞尔曲线求pt点 算法来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
  * @param {Array<{x:Number,y:Number}>} points 控制点集合
@@ -162,53 +163,6 @@ function getBezierCurvePoint_deCasteljau(points,t){
     }else{
         return points[0];
     }
-}
-
-/**
- * 分割3阶bezier曲线 计算方式来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
- * @param {Array<{x:Number,y:Number}>} points 控制点集合
- * @param {Number} z t 参数
- * @returns {Array<Array<{x:Number,y:Number}>>} 返回新的两组贝塞尔曲线的点
- */
-function Bezier3Cut(points,z){
-    // var q1=[
-    //     [1,         0,          0,          0],
-    //     [td,        t,          0,          0],
-    //     [td*td,     -2*td*t,    tt,         0],
-    //     [-td*tdq,   3*tdq*t,    -3*td*tt,   tt*t]
-    // ];
-    
-    var z2=z*z,
-        z3=z2*z,
-        zd=z-1,
-        zdz=zd*z,
-        zd2=zd*zd,
-        zd3=zd2*zd,
-        zd2z=zd2*z,
-        zdz2=zdz*z;
-    var x1=points[0].x,
-        x2=points[1].x,
-        x3=points[2].x,
-        x4=points[3].x,
-        y1=points[0].y,
-        y2=points[1].y,
-        y3=points[2].y,
-        y4=points[3].y;
-    console.log(JSON.stringify(points));
-    return [
-        [
-            {x:x1,                                 y:y1                                 },
-            {x:x2*z-x1*zd,                         y:y2*z-y1*zd                         },
-            {x:x3*z2-2*x2*zdz+zd2*x1,              y:y3*z2-2*y2*zdz+zd2*y1              },
-            {x:x4*z3-3*x3*zdz2+3*x2*zd2z-x1*zd3,   y:y4*z3-3*y3*zdz2+3*y2*zd2z-y1*zd3   }
-        ],
-        [
-            {x:x4*z3-3*x3*zdz2+3*x2*zd2z-x1*zd3,   y:y4*z3-3*y3*zdz2+3*y2*zd2z-y1*zd3   },
-            {x:x4*z2-2*x3*zdz+zd2*x2,              y:y4*z2-2*y3*zdz+zd2*y2              },
-            {x:x4*z-x3*zd,                         y:y4*z-y3*zd                         },
-            {x:x4,                                 y:y4                                 },
-        ]
-    ]
 }
 
 /**
@@ -309,6 +263,23 @@ function arrayMove(arr,l){
         return temp.concat(arr);
     }
 }
+
+
+/**
+ * 求贝塞尔曲线的导函数的控制点 (一维)
+ * @param {Array<Number>} points 原曲线的控制点集合 
+ * @returns {Array<Number>} 导函数的控制点
+ */
+function bezierDerivatives_a(points){
+    var n=points.length-2;
+    var rtn=new Array(n+1);
+    if(n<=0)return {x:0,y:0}
+    for(var i=n;i>=0;--i){
+        rtn[i]=n*(points[i+1]-points[i])
+    }
+    return rtn;
+}
+
 
 /** 阻止事件冒泡 */
 function stopPropagation(e){e.stopPropagation();}
