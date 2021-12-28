@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-12-25 13:50:13
+ * @LastEditTime: 2021-12-28 15:44:52
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -197,6 +197,85 @@ function matrixMULT(m1,m2){
 }
 
 /**
+ * @type {Array<Array<Number>>} 帕斯卡三角
+ */
+const Pascals_Triangle=[[1]];
+calc_Pascals_Triangle(3);
+/**
+ * 演算帕斯卡三角
+ * @param {Number} n 到多少阶停止
+ * @returns 返回帕斯卡三角 的 不规则二维数组, 别修改内容返回值的内容!
+ */
+function calc_Pascals_Triangle(n){
+    var i,j;
+    var rtn=Pascals_Triangle;
+    for(i=rtn.length;i<=n;++i){
+        rtn.push([]);
+        for(j=0;j<i+1;++j){
+            rtn[i].push((rtn[i-1][j]||0)+(rtn[i-1][j-1]||0));
+        }
+    }
+    return rtn;
+}
+
+const Bezier_Matrixs=[[1]];
+/**
+ * 贝塞尔曲线的矩阵 
+ * @param {Number} n n阶贝塞尔曲线
+ */
+function get_Bezier_Matrix(n){
+    if(Bezier_Matrixs[n])return Bezier_Matrixs[n];
+
+    if(Pascals_Triangle.length<=n)calc_Pascals_Triangle(n);
+    var i,j,f;
+    var m=new Array(n+1);
+    for(i=n;i>=0;--i){
+        m[i]=new Array(i+1);
+        for(j=i,f=1;j>=0;--j){
+            m[i][j]=Pascals_Triangle[i][j]*Pascals_Triangle[n][i]*f;
+            f*=-1;
+        }
+    }
+    Bezier_Matrixs.length=n+1;
+    Bezier_Matrixs[n]=m;
+    return m;
+}
+
+/**
+ * 用控制点得到各次幂的系数
+ * @param {Array<Number>} points 控制点集合
+ */
+function get_Bezier_Coefficient(points){
+    var n=points.length-1;
+    var m=get_Bezier_Matrix(n);
+    var rtn=new Array(points.length);
+    var i,j,temp;
+    for(i=n;i>=0;--i){
+        temp=0;
+        for(j=i;j>=0;--j){
+            temp+=m[i][j]*points[j];
+        }
+        rtn[i]=temp;
+    }
+    return rtn;
+}
+
+/**
+ * 求贝塞尔曲线的导函数的控制点 (一维)
+ * @param {Array<Number>} points 原曲线的控制点集合 
+ * @returns {Array<Number>} 导函数的控制点
+ */
+ function bezierDerivatives_a(points){
+    var n=points.length-2;
+    var rtn=new Array(n+1);
+    if(n<=0)return {x:0,y:0}
+    for(var i=n;i>=0;--i){
+        rtn[i]=n*(points[i+1]-points[i])
+    }
+    return rtn;
+}
+
+/**
  * 求二次函数的根
  * @param {Number} a 2次系数 
  * @param {Number} b 1次系数 
@@ -263,23 +342,6 @@ function arrayMove(arr,l){
         return temp.concat(arr);
     }
 }
-
-
-/**
- * 求贝塞尔曲线的导函数的控制点 (一维)
- * @param {Array<Number>} points 原曲线的控制点集合 
- * @returns {Array<Number>} 导函数的控制点
- */
-function bezierDerivatives_a(points){
-    var n=points.length-2;
-    var rtn=new Array(n+1);
-    if(n<=0)return {x:0,y:0}
-    for(var i=n;i>=0;--i){
-        rtn[i]=n*(points[i+1]-points[i])
-    }
-    return rtn;
-}
-
 
 /** 阻止事件冒泡 */
 function stopPropagation(e){e.stopPropagation();}
