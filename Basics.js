@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-12-28 15:44:52
+ * @LastEditTime: 2021-12-30 09:56:00
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -145,7 +145,7 @@ UnitBezier.prototype = {
 
 /**
  * 贝塞尔曲线求pt点 算法来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
- * @param {Array<{x:Number,y:Number}>} points 控制点集合
+ * @param {{x:Number,y:Number}[]} points 控制点集合
  * @param {Number} t t参数
  * @returns {{x:Number,y:Number}} 返回对应点
  */
@@ -167,8 +167,8 @@ function getBezierCurvePoint_deCasteljau(points,t){
 
 /**
  * 矩阵乘法
- * @param {Array<Array<Number>>} m1 左侧矩阵
- * @param {Array<Array<Number>>} m2 右侧矩阵
+ * @param {Number[][]} m1 左侧矩阵
+ * @param {Number[][]} m2 右侧矩阵
  */
 function matrixMULT(m1,m2){
     if(m1[0].length!=m2.length) throw new Error("矩阵乘法格式错误");
@@ -197,7 +197,7 @@ function matrixMULT(m1,m2){
 }
 
 /**
- * @type {Array<Array<Number>>} 帕斯卡三角
+ * @type {Number[][]} 帕斯卡三角
  */
 const Pascals_Triangle=[[1]];
 calc_Pascals_Triangle(3);
@@ -243,7 +243,7 @@ function get_Bezier_Matrix(n){
 
 /**
  * 用控制点得到各次幂的系数
- * @param {Array<Number>} points 控制点集合
+ * @param {Number[]} points 控制点集合
  */
 function get_Bezier_Coefficient(points){
     var n=points.length-1;
@@ -262,15 +262,81 @@ function get_Bezier_Coefficient(points){
 
 /**
  * 求贝塞尔曲线的导函数的控制点 (一维)
- * @param {Array<Number>} points 原曲线的控制点集合 
- * @returns {Array<Number>} 导函数的控制点
+ * @param {Number[]} points 原曲线的控制点集合 
+ * @returns {Number[]} 导函数的控制点
  */
- function bezierDerivatives_a(points){
+ function bezierDerivatives_points(points){
     var n=points.length-2;
     var rtn=new Array(n+1);
-    if(n<=0)return {x:0,y:0}
+    if(n<0)return {x:0,y:0}
     for(var i=n;i>=0;--i){
         rtn[i]=n*(points[i+1]-points[i])
+    }
+    return rtn;
+}
+
+/**
+ * 计算贝塞尔曲线分割时使用的 Q 矩阵 (不补零)
+ * @param {Number} n  n阶贝塞尔曲线
+ * @param {Number} t  t参数 0~1
+ */
+ function createBezierCutMatrix_Q(n,t){
+    if(Pascals_Triangle.length<=n){
+        calc_Pascals_Triangle(n);
+    }
+    var i,j,k;
+    var rtn=new Array(n+1);
+    for(i=n;i>=0;--i){
+        rtn[i]=Pascals_Triangle[i].concat();
+    }
+    var temp=t,
+        td=t-1;
+    // i 是行下标, j 是列下标
+    for(i=1;i<=n;++i,temp*=t){
+        for(j=i;j<=n;++j){
+            rtn[j][i]*=temp;
+        }
+    }
+    temp=-td;
+    for(i=n-1;i>=0;--i,temp*=-td){
+        for(j=i,k=n;j>=0;--j,--k){
+            rtn[k][j]*=temp;
+        }
+    }
+    return rtn;
+}
+
+/**
+ * 用矩阵分割贝塞尔曲线
+ * @param {Number[]} points        控制点集合
+ * @param {Number[][]} matrix 分割时使用的矩阵, 用 createBezierCutMatrix_Q 函数生成
+ * @param {Boolean} flag 前后两边 false(0)为p1起点, true(!0)为p4终点
+ */
+function bezierCut_By_Matrix(points,matrix,flag){
+    var n=points.length-1,
+        i,j,
+        rtn=new Array(points.length),
+        temp;
+
+    //j是行下标 i是列下标
+    if(flag){
+        // pt起点, p4终点
+        for(i=n;i>=0;--i){
+            temp=0;
+            for(j=i;j>=0;--j){
+                temp+=points[n-j]*matrix[i][j];
+            }
+            rtn[n-i]=temp;
+        }
+    }else{
+        // p1起点, pt终点
+        for(i=n;i>=0;--i){
+            temp=0;
+            for(j=i;j>=0;--j){
+                temp+=points[j]*matrix[i][j];
+            }
+            rtn[i]=temp;
+        }
     }
     return rtn;
 }
@@ -299,10 +365,10 @@ function zeroOfSquare(a,b,c){
  * @param {Number} a 3次系数
  * @param {Number} b 2次系数
  * @param {Number} c 1次系数
- * @returns {Array<Number>} 
+ * @returns {Number[]} 
  */
 function monotonicityOfCubic(a,b,c){
-    var d=zeroOfSquare(a,b,c);
+    var d=zeroOfSquare(3*a,2*b,c);
     if(d.length!==2){
         return [];
     }
@@ -487,7 +553,7 @@ function arrayEqual(a1,a2){
 /**
  * NodeList 转换为 Array
  * @param {NodeList} nodelist 
- * @returns {Array<Node>} 保留引用的链接
+ * @returns {Node[]} 保留引用的链接
  */
 function nodeListToArray(nodelist){
     var array=null;
@@ -537,7 +603,7 @@ class OlFunction extends Function{
      */
     constructor(){
         console.error("请使用 OlFunction.create()");
-        /** @type {Array<{parameterType:parameterType,fnc:fnc,codeComments:codeComments}>} 重载函数 */
+        /** @type {{parameterType:parameterType,fnc:fnc,codeComments:codeComments}[]} 重载函数 */
         this.ols=[];
         /** @type {Function} */
         this.defaultFnc=new Function();
@@ -697,7 +763,7 @@ decodeHTML.rStrL=["&"       ];
  * @param {String} edKey 插值关键文本 ed; 默认 "}"
  * @param {char}   opKeyMask 插值关键文本 的屏蔽字符; 默认'\'
  * @param {char}   edKeyMask 插值关键文本 的屏蔽字符; 默认'\'
- * @returns {{str:String,hit:Array<String>}}
+ * @returns {{str:String,hit:String[]}}
  */
  function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
     if(Object.keys(that).length){
@@ -1032,7 +1098,7 @@ function Stepper(max,min,now){
     }
     /**
      * 用来添加监听的
-     * @type {Array<Function>}
+     * @type {Function[]}
      */
     this.regressionlinListener=[];
     this.i=now||0;
@@ -1125,7 +1191,7 @@ DEF_CUEOBJ.prototype={
     /**
      * 查找rem指令
      * @param {String} rem1 rem 的 第一个指令
-     * @returns {Array<Array<String>>}
+     * @returns {String[][]}
      */
     selectRem:function(rem1){
         var rtn=[];
@@ -1141,7 +1207,7 @@ DEF_CUEOBJ.prototype={
         // 在此处添加对cue格式的指令的处理
         // 由于我只需要处理音乐文件的 所以省略了很多指令
         /**
-         * @param {Array<String>} _cl 指令的字符串数组
+         * @param {String[]} _cl 指令的字符串数组
          */
         rem:function(_cl){
             this.rem.push(_cl);
@@ -1286,9 +1352,9 @@ function loadCue(str){
 /** 
  * 查找图片文件
  * @param {String} _rootUrl 根目录
- * @param {Array<String>} _nameList 文件名列表
- * @param {Array<String>} _afertList 后缀名列表
- * @param {Function} callBack 搜索完成的回调函数 callBack({Array<String>}); 参数是搜索到的所有文件路径的列表
+ * @param {String[]} _nameList 文件名列表
+ * @param {String[]} _afertList 后缀名列表
+ * @param {Function} callBack 搜索完成的回调函数 callBack({String[]}); 参数是搜索到的所有文件路径的列表
  */
 function selectImg(_rootUrl,_nameList,_afertList,callBack){
     var temp=new Array(_afertList.length);
@@ -1508,7 +1574,7 @@ DEF_MediaObj.prototype.getDuration.addOverload([Audio,Function],
 class DEF_MediaObjMarkList{
     /**
      * DEF_MediaObjMark 的列表
-     * @param {Array<DEF_MediaObjMark>} DEF_MediaObjMarkArray DEF_MediaObjMark 的数组
+     * @param {DEF_MediaObjMark[]} DEF_MediaObjMarkArray DEF_MediaObjMark 的数组
      */
     constructor(DEF_MediaObjMarkArray){
         this.list=DEF_MediaObjMarkArray||[];
@@ -1582,7 +1648,7 @@ DEF_MediaObjMark.prototype.commandList={
 /**
  * @param {DEF_CUEOBJ} _cueobj
  * @param {String} _url 为了找到轨道文件, 需要提供 cue 的路径
- * @return {Array<DEF_MediaObj>} 返回 DEF_MediaObj 数组
+ * @return {DEF_MediaObj[]} 返回 DEF_MediaObj 数组
  */
 function cueObjToMediaObj(_cueobj,_url){
     var rtn=[],urlList=[rltToAbs(_cueobj.file,_url)];
@@ -1718,7 +1784,7 @@ class Hashcaller{
     }
     /**
      * 添加一个监听者对象数组
-     * @param {Array<HashListener>} listeners
+     * @param {HashListener[]} listeners
      */
     addList(listeners){
         for(var i=listeners.length-1;i>=0;--i){

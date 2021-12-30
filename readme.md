@@ -256,8 +256,8 @@ addResizeEvent(_element,_listener)
 * @type {String}                  title         标题
 * @type {String}                  file          文件路径
 * @type {String}                  fileType      文件类型
-* @type {Array<String>}           rem           额外指令/注释
-* @type {Array<DEF_CUEOBJTrack>}  track         分轨道
+* @type {String[]}           rem           额外指令/注释
+* @type {DEF_CUEOBJTrack[]}  track         分轨道
 
 ### 方法 
 * selectRem(rem1) 
@@ -279,7 +279,7 @@ DEF_CUEOBJTrack(file,root,trackIndex)
 * @type {String}          songwriter    歌唱者
 * @type {String}          title         标题
 * @type {Number}          ListIndex     在 列表 中的序号
-* @type {Array<String>}   rem           额外指令/注释
+* @type {String[]}   rem           额外指令/注释
 * @type {Number}          trackIndex    轨道序号
 * @type {DEF_CUEOBJ}      root          根
 * @type {String}          file          文件路径
@@ -298,7 +298,7 @@ DEF_CUEOBJTrack(file,root,trackIndex)
 
 ### 属性
 * @type {String}                title       标题
-* @type {Array<String>}         cover       封面 (url)
+* @type {String[]}         cover       封面 (url)
 * @type {String}                artist      艺术家
 * @type {String}                songwriter  歌唱者
 * @type {String}                performer   表演者
@@ -331,10 +331,10 @@ DEF_CUEOBJTrack(file,root,trackIndex)
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*      
 构造函数constructor(DEF_MediaObjMarkArray)   
 DEF_MediaObjMark 的列表   
-@param {Array<DEF_MediaObjMark>} DEF_MediaObjMarkArray DEF_MediaObjMark 的数组   
+@param {DEF_MediaObjMark[]} DEF_MediaObjMarkArray DEF_MediaObjMark 的数组   
 
 ### 属性
-* @type{Array<DEF_MediaObjMark>}    list    存储着 mark 的 数组
+* @type{DEF_MediaObjMark[]}    list    存储着 mark 的 数组
 
 ### 方法
 * reCount()
