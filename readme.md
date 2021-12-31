@@ -1,5 +1,5 @@
 <!--
- * @LastEditTime: 2021-08-21 11:40:48
+ * @LastEditTime: 2021-12-31 15:14:00
  * @LastEditors: Darth_Eternalfaith
 -->
 # 提供一些函数, 全局变量 和 一些类 的js文件
@@ -51,19 +51,31 @@
   // "http://127.0.0.1/img/logo.svg"
   ```
 ---
+## 数组移动位置 arrayMove
+```javascript
+// arrayMove(arr,l)
+arrayMove([1,2,3,4,5,6],2);  // >> [5,6,1,2,3,4]
+```
+    数组移位   
+    @param {Array}  arr  数组   
+    @param {Number} l    移动步长   
+    @returns {Array} 返回一个新数组   
+---
 
 ## 对比两个列表项是否相同 arrayEqual
 ``` javascript
-arrayEqual(a1,a2)   
+// arrayEqual(a1,a2)   
+    arrayEqual([1,2,3,4,5],[1,2,3,4,5])
+    arrayEqual([1,2,3,5,4],[1,2,3,4,5])
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
     @return {Boolean}    返回是否相同   
 ---
 
-## 对比两个列表项是否相同(不区分项的类型和顺序) arrayCmp
+## 对比两个列表项是否相同(不区分项的类型和顺序) arrayDiff
 ``` javascript
-arrayCmp(a1,a2)   
+arrayDiff(a1,a2)   
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
