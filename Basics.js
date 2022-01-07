@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2021-12-31 16:49:22
+ * @LastEditTime: 2022-01-05 14:44:11
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -1977,8 +1977,8 @@ function root_of_1_3(coefficient){
             crtr = root_of_1_3.cuberoot(r),
             t1 = 2 * crtr;
         root1 = t1 * Math.cos(phi / 3) - a / 3;
-        root2 = t1 * Math.cos((phi + 2 * pi) / 3) - a / 3;
-        root3 = t1 * Math.cos((phi + 4 * pi) / 3) - a / 3;
+        root2 = t1 * Math.cos((phi + 2 * Math.PI) / 3) - a / 3;
+        root3 = t1 * Math.cos((phi + 4 * Math.PI) / 3) - a / 3;
         return [root1, root2, root3];
     }
 
