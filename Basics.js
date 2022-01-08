@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-01-05 14:44:11
+ * @LastEditTime: 2022-01-08 10:00:30
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -1830,7 +1830,7 @@ function bezierCut_By_Matrix(points,matrix,flag){
         for(i=n;i>=0;--i){
             temp=0;
             for(j=i;j>=0;--j){
-                temp+=points[n-j]*matrix[i][j];
+                temp+=points[n-j]*matrix[i][i-j];
             }
             rtn[n-i]=temp;
         }
