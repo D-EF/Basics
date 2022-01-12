@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-11 18:37:50
+ * @LastEditTime: 2022-01-12 10:42:15
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -421,6 +421,7 @@ function coefficientToPoints(coefficient){
 const deg=Math.DEG;
 
 export {
+    get_Bezier_Matrix,
     getBezierCurvePoint_deCasteljau,
     matrixMULT,
     calc_Pascals_Triangle,
