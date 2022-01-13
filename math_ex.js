@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-12 10:42:15
+ * @LastEditTime: 2022-01-13 12:23:40
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -20,7 +20,8 @@
         this.max=temp;
     }
     /**
-     * 用来添加监听的
+     * 用来添加监听的 当发生返回时调用 this.regressionlinListener[i].call(this,this.i,val,this);
+     * val是表示往前走了还是往后走了 用不同正负的数字表示
      * @type {Function[]}
      */
     this.regressionlinListener=[];
@@ -66,17 +67,17 @@ Stepper.prototype={
         var l=this.max-this.min+1;
         if(this.i<this.min){
             this.i=this.max-(this.min-this.i)%(l+1)+1;
-            this.regressionlin_call();
+            this.regressionlin_call(-1);
         }
         else if(this.i>this.max){
             this.i=this.min+(this.i-this.max)%(l+1)-1;
-            this.regressionlin_call();
+            this.regressionlin_call(+1);
         }
         return this.i;
     },
-    regressionlin_call(){
+    regressionlin_call(val){
         for(var i=this.regressionlinListener.length-1;i>=0;--i){
-            this.regressionlinListener(this.i,this);
+            this.regressionlinListener[i].call(this,this.i,val,this);
         }
     }
 }
