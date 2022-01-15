@@ -1,9 +1,11 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-13 14:36:56
+ * @LastEditTime: 2022-01-15 11:59:49
  * @FilePath: \def-web\js\basics\math_ex.js
  */
+
+window.deg=Math.PI/180;
 
 /**
  * 步进器
