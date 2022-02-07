@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-01-11 18:27:24
+ * @LastEditTime: 2022-02-07 19:49:02
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -225,7 +225,10 @@ function arrayDiff(a1,a2){
     });
     return rtn.length;
 }
-/** 重载函数类 */
+/** 重载函数类
+ * 请使用 OlFunction.create 函数, 写成类的语法纯粹是为了让编辑器认代码提示
+ * 
+ */
 class OlFunction extends Function{
     /**
      * 请使用 OlFunction.create 函数, 写成类的语法纯粹是为了让编辑器认代码提示
@@ -257,10 +260,13 @@ class OlFunction extends Function{
         var OverloadFunction=(function(){
             return function(){
                 var i=arguments.length-1,j,flag=false;
+                var l=arguments.length;
+                j=arguments.length-1;
+                while(j>=0&&arguments[j]===undefined){--l;--j;};
                 for(i=OverloadFunction.ols.length-1;i>=0;--i){
-                    if(arguments.length===OverloadFunction.ols[i].parameterType.length){
+                    if(l===OverloadFunction.ols[i].parameterType.length){
                         flag=true;
-                        for(j=arguments.length-1;flag&&j>=0;--j){
+                        for(j=l-1;flag&&j>=0;--j){
                             flag=(arguments[j].constructor===OverloadFunction.ols[i].parameterType[j]||arguments[j] instanceof OverloadFunction.ols[i].parameterType[j]);
                         }
                         if(flag)break;
@@ -294,9 +300,9 @@ function inheritClass(_basics,_derived){
 }
 
 /**
- * 委托
+ * 委托 请使用 Delegate.ctrate() 而不是使用构造函数
  */
-class Delegate{
+class Delegate extends Function{
     /** 请使用 Delegate.ctrate() */
     constructor(){
         this.actList=[];
