@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-11 18:36:54
+ * @LastEditTime: 2022-02-09 16:35:37
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -165,7 +165,7 @@ KeyNotbook.prototype={
         }
     },
     reNB:function(){
-        this.downingKeyCodes=[];
+        this.downingKeyCodes.length=0;  
     }
 }
 
