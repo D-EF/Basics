@@ -8,8 +8,7 @@
  * @LastEditors: Darth_Eternalfaith
  */
  
-/**
- * 当前运行环境 (可能是 window 或 worker)
+/** 当前运行环境 (可能是 window 或 worker)
  */
 var thisEnvironment=window||worker||this;
 var zero=0;
@@ -27,8 +26,7 @@ thisEnvironment.nullfnc=nullfnc;
 //     Element.prototype.addEventListener=Element.prototype.attachEvent;
 // }
 
-/**
- * [judgeOs UA & 内核 判断]
+/** [judgeOs UA & 内核 判断]
  * @returns {{isTabvar:Boolean,isPhone:Boolean,isAndroid:Boolean,isPc:Boolean,isFireFox:Boolean,isWebkit:Boolean,isIE:Boolean,isMozilla:Boolean}} [description]
  */
 function judgeOs() {
@@ -95,8 +93,7 @@ if (!Object.keys) {
 /** 用 rad 表示的 1deg */
 Math.DEG=Math.PI/180;
 
-/**
- * 数组移位
+/** 数组移位
  * @param {Array}  arr  数组
  * @param {Number} l    移动步长
  * @returns {Array} 返回一个新数组
@@ -115,8 +112,7 @@ function arrayMove(arr,l){
         return temp.concat(arr);
     }
 }
-/**
- * 获取当前运行脚本的地址
+/** 获取当前运行脚本的地址
  * @returns {String}
  */
 function getCurrAbsPath(){
@@ -136,8 +132,7 @@ function getCurrAbsPath(){
         return absPath[0] || '';
     }
 }
-/**
- * 把相对地址转换成绝对地址
+/** 把相对地址转换成绝对地址
  * @param {String} _fileURL 相对路径
  * @param {String} rootURL  起始路径
  */
@@ -230,8 +225,7 @@ function arrayDiff(a1,a2){
  * 
  */
 class OlFunction extends Function{
-    /**
-     * 请使用 OlFunction.create 函数, 写成类的语法纯粹是为了让编辑器认代码提示
+    /** 请使用 OlFunction.create 函数, 写成类的语法纯粹是为了让编辑器认代码提示
      */
     constructor(){
         console.error("请使用 OlFunction.create()");
@@ -240,8 +234,7 @@ class OlFunction extends Function{
         /** @type {Function} */
         this.defaultFnc=new Function();
     }
-    /**
-     * 添加一个重载
+    /** 添加一个重载
      * @param {Array} parameterType   形参的类型
      * @param {Function}    fnc             执行的函数
      * @param {String}      codeComments    没用的属性, 作为函数的注释
@@ -250,8 +243,7 @@ class OlFunction extends Function{
         this.ols.push({parameterType:parameterType,fnc:fnc,codeComments:codeComments});
     }
     // 如果需要ie中使用，把 create 和 addOverload 拷贝走就行
-    /**
-     * 创建重载函数
+    /** 创建重载函数
      * @param   {Function} defaultFnc 当没有和实参对应的重载时默认执行的函数
      * @return  {OlFunction} 带重载的函数
      * 用 .addOverload 添加重载
@@ -299,8 +291,7 @@ function inheritClass(_basics,_derived){
     _derived.prototype = new Super();
 }
 
-/**
- * 委托 请使用 Delegate.ctrate() 而不是使用构造函数
+/** 委托 请使用 Delegate.ctrate() 而不是使用构造函数
  */
 class Delegate extends Function{
     /** 请使用 Delegate.ctrate() */
@@ -330,8 +321,7 @@ class Delegate extends Function{
         }
         return false;
     }
-    /**
-     * @returns {Delegate} 返回一个委托对象
+    /** @returns {Delegate} 返回一个委托对象
      */
     static ctrate(){
         var delegate=(function(){
@@ -389,8 +379,7 @@ function decodeHTML(str){
 decodeHTML.regex=[/&amp;/g  ];
 decodeHTML.rStrL=["&"       ];
 
-/**
- * 模版字符串 可以在原字符串中使用 '\\' 屏蔽 插值关键文本
+/** 模版字符串 可以在原字符串中使用 '\\' 屏蔽 插值关键文本
  * @param {String} _str  字符串
  * @param {Object} that this 指针
  * @param {Array} argArray 实参
@@ -454,8 +443,7 @@ decodeHTML.rStrL=["&"       ];
     }
 }
 
-/**
- * 将字符串转换成js的类型, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
+/** 将字符串转换成js的类型, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
  * 参数和 JSON.parse 一样
  */
 function strToVar(str,reviver){
@@ -472,8 +460,7 @@ function strToVar(str,reviver){
     JSON.parse(str,reviver);
 }
 
-/**
- * Hashcaller
+/** Hashcaller
  */
 class Hashcaller{
     constructor(onlyTouchOne=true){
@@ -484,15 +471,13 @@ class Hashcaller{
         var that=this;
         window.addEventListener("hashchange",function(){that.touchHashListener()});
     }
-    /**
-     * 添加一个监听者对象 后添加的会比前面的更优先
+    /** 添加一个监听者对象 后添加的会比前面的更优先
      * @param {HashListener} listener
      */
     add(listener){
         this.listeners.push(listener);
     }
-    /**
-     * 添加一个监听者对象数组
+    /** 添加一个监听者对象数组
      * @param {HashListener[]} listeners
      */
     addList(listeners){
@@ -500,8 +485,7 @@ class Hashcaller{
             this.add(listeners[i]);
         }
     }
-    /**
-     * 触发 location.hash
+    /** 触发 location.hash
      */
     touchHashListener(){
         if((typeof window.lowhash!='undefined')&&(window.lowhash!=location.hash)){
@@ -516,12 +500,10 @@ class Hashcaller{
         window.lowhash=location.hash;
     }
 }
-/**
- * HashListener obj
+/** HashListener obj
  */
 class HashListener{
-    /**
-     * @param {RegExp} regExp       hash的正则表达式
+    /** @param {RegExp} regExp       hash的正则表达式
      * @param {Function} listener   监听者 调用时会引用 regExp 的 regex
      * @param {Boolean} filterFlag  选择是否过滤 hash 中的 /^#\// 默认为过滤
      */
@@ -530,8 +512,7 @@ class HashListener{
         this.listener=listener;
         this.filterFlag=filterFlag;
     }
-    /**
-     * 测试表达式能否匹配字符串
+    /** 测试表达式能否匹配字符串
      * @param {String} _string  文本
      */
     exec(_string){
@@ -546,14 +527,12 @@ class HashListener{
     }
 }
 var hashcaller=new Hashcaller();
-/**
- * 将时间类型转换成字符串
+/** 将时间类型转换成字符串
  */
 (function(){
 var temp=Date.prototype.toString;
 Date.prototype.toString=OlFunction.create(temp);
-/**
- * @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
+/** @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
  */
 Date.prototype.toString.addOverload([String],function(str){
     var that=this,
@@ -601,8 +580,7 @@ Date.prototype.toString.addOverload([String],function(str){
 })();
 
 // temp
-/**
- * 请求 api
+/** 请求 api
  * @param {String} method 请求方式
  * @param {String} url 请求地址
  * @param {Function} callback 回调函数

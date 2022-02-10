@@ -1,6 +1,5 @@
 
-/**
- * 自己实现的 reduce
+/** 自己实现的 reduce
  * @param {Function} callback 
  * @param {any} initialValue 
  */

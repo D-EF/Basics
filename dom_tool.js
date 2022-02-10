@@ -31,8 +31,7 @@ function stopPE(e){
     return false;
 }
 
-/**
- * NodeList 转换为 Array
+/** NodeList 转换为 Array
  * @param {NodeList} nodelist 
  * @returns {Node[]} 保留引用的链接
  */
@@ -77,8 +76,7 @@ function KeyNotbook(FElement){
 }
 KeyNotbook.prototype={
     constructor:KeyNotbook,
-    /**
-     * 添加按键事件
+    /** 添加按键事件
      * @param {Number||Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组
      * @param {Function} func 触发后的回调函数
      */
@@ -94,8 +92,7 @@ KeyNotbook.prototype={
         }
         this.keysdownF.push(func);
     },
-    /**
-     * 移除按键事件
+    /** 移除按键事件
      * @param {Number||Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
      * @param {Function} func 触发后的回调函数
      */
@@ -169,8 +166,7 @@ KeyNotbook.prototype={
     }
 }
 
-/**
- * 给element添加按键事件
+/** 给element添加按键事件
  * @param {Document} _Element 添加事件的元素
  * @param {Boolean} _keepFlag 是否重复触发事件
  * @param {Number||Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
@@ -199,8 +195,7 @@ function addKeyEvent(_Element,_keepFlag,_keycode,_event,_type){
     }
 }
 
-/**
- * 移除 element 上的 keyNotBook 的事件
+/** 移除 element 上的 keyNotBook 的事件
  * @param {Document} _Element 
  * @param {Number||Array} _keycode 
  * @param {Function} _event 
@@ -218,8 +213,7 @@ function removeKeyEvent(_Element,_keycode,_event,_type){
     }
 }
 
-/**
- * 给element添加resize事件, 没有 e 事件参数
+/** 给element添加resize事件, 没有 e 事件参数
  * @param {Element} _element 绑定的元素
  * @param {Function} _listener 触发的函数
  */
@@ -281,8 +275,7 @@ function addResizeEvent(_element,_listener){
         _element.resizeMark2=mark2;
     }
 }
-/**
- * 用于复位 addResizeEvent 
+/** 用于复位 addResizeEvent 
  * 给使用过 addResizeEvent 的元素使用
  */
 addResizeEvent.reResize=function(_element){
@@ -298,8 +291,7 @@ addResizeEvent.reResize=function(_element){
     }
 }
 
-/**
- * 点击站内链接调用的函数, 另链接不跳转而是成为锚点链接
+/** 点击站内链接调用的函数, 另链接不跳转而是成为锚点链接
  */
  function linkClick(e,tgt){
     var _event=e||event;
@@ -328,8 +320,7 @@ addResizeEvent.reResize=function(_element){
             }
         }
 }
-/**
- * 让站内链接失效 链接不跳转而是成为锚点链接
+/** 让站内链接失效 链接不跳转而是成为锚点链接
  */
 function setupLinkClick(){
     document.addEventListener("click",function(e){
