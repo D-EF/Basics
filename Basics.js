@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-07 19:49:02
+ * @LastEditTime: 2022-02-11 10:24:16
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -321,7 +321,7 @@ class Delegate extends Function{
         }
         return false;
     }
-    /** @returns {Delegate} 返回一个委托对象
+    /** @returns {Delegate} 创建一个委托对象
      */
     static ctrate(){
         var delegate=(function(){
