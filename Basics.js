@@ -4,19 +4,17 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-11 10:24:16
+ * @LastEditTime: 2022-02-12 17:21:19
  * @LastEditors: Darth_Eternalfaith
  */
  
 /** 当前运行环境 (可能是 window 或 worker)
  */
 var thisEnvironment=window||worker||this;
-var zero=0;
+thisEnvironment.thisEnvironment=thisEnvironment;
+thisEnvironment.zero=0;
 
-Object.copy=function(tgt){
-    return Object.assign({},tgt);
-}
-Object.prototype.copy=function(){
+Object.copy=function(){
     Object.copy(this);
 }
 
@@ -127,9 +125,9 @@ function getCurrAbsPath(){
         catch(e){
             stack = e.stack || e.sourceURL || e.stacktrace; 
         }
-        var rExtractUri = /(?:http|https|file):\/\/.*?\/.+?.js/, 
+        var rExtractUri = /((?:http|https|file):\/\/.*?\/.+?.js):\d+:\d+$/, 
         absPath = rExtractUri.exec(stack);
-        return absPath[0] || '';
+        return absPath[1] || '';
     }
 }
 /** 把相对地址转换成绝对地址

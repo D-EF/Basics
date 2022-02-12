@@ -5,11 +5,11 @@
 /*
  * @Date        : 2022-01-11 14: 27: 30
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-11 18:35:34
+ * @LastEditTime: 2022-02-12 17:26:26
  * @FilePath: \def-web\js\basics\cue_media_obj.js
  */
 
-import {inheritClass,OlFunction} from "./Basics.js"
+import {rltToAbs,inheritClass,OlFunction} from "./Basics.js"
 /**
  * 存储 cue 格式为js的obj格式
  * 参考资料来自: https: //tieba.baidu.com/p/6160083867
@@ -532,13 +532,11 @@ function cueObjToMediaObj(_cueobj,_url){
     return rtn;
 }
 
-
-export default{
+export {
     cueObjToMediaObj,
     DEF_MediaObjMarkList,
     DEF_MediaObjMark,
     DEF_MediaObj,
-    DEF_CUEOBJTrack,
     DEF_CUEOBJTrack,
     cue_timeToSecond,
     loadCue,
