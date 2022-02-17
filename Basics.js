@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-12 17:21:19
+ * @LastEditTime: 2022-02-17 15:15:50
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -610,6 +610,49 @@ function download(url,name){
         tempA.setAttribute("href",dataurl);
         tempA.setAttribute("download",name===undefined?"":name);
         tempA.click();
+    }
+}
+
+// 测试 无递归前序遍历树
+function test_befrom_tree_ergodic(){
+    // 初始化树状结构 此处使用 js 的 Array
+    var k=[1,2,['K'],[3,[4,5,6],7,[8,[9,2,3]]]];
+
+    // 遍历树时需要的缓存   深度 和 路径记录
+    var d=0,od=0,gg=[k[0]],gi=[1];
+
+    // 获取上次使用的 d深度的 父级, 最多能追溯到 根
+    function getp(d){
+        return d?gg[d-1]:k;
+    }
+    /**迭代器函数 */
+    function fnc(){
+        gg[d]=getp(d)[gi[d]];
+        do{
+            if(gg[d]!=undefined){
+                od=d;
+                if(gg[d] instanceof Array &&gg[d].length){
+                    ++d;
+                    gi[d]=0;
+                    gg[d]=getp(d)[gi[d]];
+                }
+                else{
+                    gi[d]++;
+                    if(getp(d)[gi[d]]===undefined){
+                        break;
+                    }
+                }
+                return;
+            }
+        }while(0);
+        do{
+            --d;
+            ++gi[d];
+        }while(d>=0&&(gg[d]===undefined));
+    }
+    // 遍历使用
+    for(d=0;d>=0;fnc()){
+        console.log(gg[od],od);
     }
 }
 
