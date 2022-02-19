@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-15 11:59:49
+ * @LastEditTime: 2022-02-19 16:05:38
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -288,8 +288,8 @@ function bezierCut_By_Matrix(points,matrix,flag){
 
 /**
  * 解二元一次方程
- * z1+o1*x=z2+o2*y;
- * z3+o3*x=z4+o4*y;
+ * z1 + o1 \* x = z2 + o2 \* y;
+ * z3 + o3 \* x = z4 + o4 \* y;
  * @returns {{x:Number,y:Number}} 
  */
 function binaryLinearEquation(z1,o1,z2,o2,z3,o3,z4,o4){
