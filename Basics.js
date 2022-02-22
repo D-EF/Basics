@@ -289,13 +289,13 @@ function inheritClass(_basics,_derived){
     _derived.prototype = new Super();
 }
 
-/** 委托 请使用 Delegate.ctrate() 而不是使用构造函数
+/** 委托 请使用 Delegate.create() 而不是使用构造函数
  */
 class Delegate extends Function{
-    /** 请使用 Delegate.ctrate() */
+    /** 请使用 Delegate.create() */
     constructor(){
         this.actList=[];
-        console.error("请使用 Delegate.ctrate()");
+        console.error("请使用 Delegate.create()");
     }
 
     /**添加一个委托
@@ -321,7 +321,7 @@ class Delegate extends Function{
     }
     /** @returns {Delegate} 创建一个委托对象
      */
-    static ctrate(){
+    static create(){
         var delegate=(function(){
             return function(){
                 var i=delegate.actList.length;
