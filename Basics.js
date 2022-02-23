@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-18 20:00:40
+ * @LastEditTime: 2022-02-23 20:38:39
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -192,12 +192,12 @@ function arrayEqual(a1,a2){
     return true;
 }
 /**对比两个列表项是否相同 (无序)
- * @param {Array}   a1       要进行比较的数组
- * @param {Array}   a2       要进行比较的数组
- * @return {Boolean}    返回是否相同
+ * @param {Array}   arr1       要进行比较的数组
+ * @param {Array}   arr2       要进行比较的数组
+ * @return {Array}    返回差异的内容的数组
  */
 // 本来是给KeyNotbook用的 
-function arrayDiff(a1,a2){
+function arrayDiff(arr1,arr2){
     var hash=new Map();
     var rtn=[];
     var i;
@@ -216,7 +216,35 @@ function arrayDiff(a1,a2){
             rtn.push(key);
         }
     });
-    return rtn.length;
+    return rtn;
+}
+/**对比两个列表项是否有差异 (无序)
+ * @param {Array}   arr1       要进行比较的数组
+ * @param {Array}   arr2       要进行比较的数组
+ * @return {Boolean} 是否有差异
+ */
+function array_has_Diff(arr1,arr2){
+    if(arr1.length!=arr2.length)return true;
+    var hash=new Map();
+    var rtn=[];
+    var i;
+    for(i=arr1.length-1;i>=0;--i){
+        hash.set(arr1[i],false);
+    }
+    for(i=arr2.length-1;i>=0;--i){
+        if(hash.has(arr2[i])){
+            hash.set(arr2[i],true);
+        }else{
+            return true;
+        }
+    }
+    hash.forEach((value,key)=>{
+        if(!value){
+            return true;
+        }
+    });
+    return false;
+    
 }
 /** 重载函数类
  * 请使用 OlFunction.create 函数, 写成类的语法纯粹是为了让编辑器认代码提示
@@ -620,6 +648,7 @@ export {
     rltToAbs,
     arrayEqual,
     arrayDiff,
+    array_has_Diff,
     OlFunction,
     inheritClass,
     Delegate,

@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-19 16:05:38
+ * @LastEditTime: 2022-02-23 20:59:33
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -161,6 +161,13 @@ function calc_Pascals_Triangle(n){
         }
     }
     return rtn;
+}
+/** 获取帕斯卡三角的某一层
+ * @param {Number} n 第n层 从 0 开始数数
+ */
+function get_Pascals_Triangle(n){
+    if(Pascals_Triangle.length<=n)calc_Pascals_Triangle(n);
+    return Pascals_Triangle[n];
 }
 
 const Bezier_Matrixs=[[1]];
@@ -432,6 +439,7 @@ export {
     getBezierCurvePoint_deCasteljau,
     matrixMULT,
     calc_Pascals_Triangle,
+    get_Pascals_Triangle,
     get_Bezier_Coefficient,
     bezierDerivatives_points,
     createBezierCutMatrix_Q,
