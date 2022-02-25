@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-23 20:38:39
+ * @LastEditTime: 2022-02-25 15:32:29
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -640,6 +640,13 @@ function download(url,name){
         tempA.click();
     }
 }
+/** 某字符是否能作为数字的一元
+ * @param {char} _char 
+ * @return {Boolean}
+ */
+function canBeNumberChar(_char){
+    return ((_char>=1&&_char<=9)||_char==='0'||('+-.e'.indexOf(_char)!==-1));
+}
 
 export {
     judgeOs,
@@ -660,5 +667,6 @@ export {
     HashListener,
     hashcaller,
     requestAPI,
-    download
+    download,
+    canBeNumberChar
 };
