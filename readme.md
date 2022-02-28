@@ -1,5 +1,5 @@
 <!--
- * @LastEditTime: 2021-12-31 15:14:00
+ * @LastEditTime: 2022-02-28 14:49:35
  * @LastEditors: Darth_Eternalfaith
 -->
 # 提供一些函数, 全局变量 和 一些类 的js文件
@@ -267,7 +267,7 @@ addResizeEvent(_element,_listener)
 * @type {String}                  songwriter    歌唱者
 * @type {String}                  title         标题
 * @type {String}                  file          文件路径
-* @type {String}                  fileType      文件类型
+* @type {String}                  file_type     文件类型
 * @type {String[]}           rem           额外指令/注释
 * @type {DEF_CUEOBJTrack[]}  track         分轨道
 
@@ -281,23 +281,23 @@ addResizeEvent(_element,_listener)
 ## DEF_CUEOBJTrack 在 DEF_CUEOBJ 中的分轨道
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数 
-DEF_CUEOBJTrack(file,root,trackIndex)   
+DEF_CUEOBJTrack(file,root,track_index)   
 @param {String}      file        文件路径   
 @param {DEF_CUEOBJ}  root        根 对象   
-@param {Number}      trackIndex  轨道序号   
+@param {Number}      track_index  轨道序号   
 
 ### 属性
 * @type {String}          performer     演出者/作者
 * @type {String}          songwriter    歌唱者
 * @type {String}          title         标题
-* @type {Number}          ListIndex     在 列表 中的序号
+* @type {Number}          list_index     在 列表 中的序号
 * @type {String[]}   rem           额外指令/注释
-* @type {Number}          trackIndex    轨道序号
+* @type {Number}          track_index    轨道序号
 * @type {DEF_CUEOBJ}      root          根
 * @type {String}          file          文件路径
 * @type {Number}          op            在波形文件中的 开始时间(单位 秒)
 * @type {Number}          ed            在波形文件中的 结束时间(单位 秒)
-* @type {Object}          indexList     子 index 的列表
+* @type {Object}          index_list     子 index 的列表
 
 ### 方法
 * getDuration() 获取当前轨道的长度 单位(秒)

@@ -5,14 +5,14 @@
 /*
  * @Date: 2022-01-11 16:50:17
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-01-11 18:28:46
- * @FilePath: \def-web\js\basics\dump.js
+ * @LastEditTime: 2022-02-28 15:47:47
+ * @FilePath: \def-web\js\basics\test\dump.js
  */
 
 /**判断是否能支持某些input的type
 */
 function inputSupportsTypeF(){
-    function selectInputSupportsType(type){
+    var selectInputSupportsType=function (type){
         if(!document.createElement) return false;
         var input = document.createElement('input');
         input.setAttribute('type',type);

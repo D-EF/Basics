@@ -5,13 +5,13 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-23 20:45:31
+ * @LastEditTime: 2022-02-28 15:47:28
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
     arrayDiff,
     arrayEqual,
-    array_has_Diff,
+    arrayHasDiff,
     hashcaller,
 } from "./Basics.js"
 
@@ -70,12 +70,12 @@ Element.prototype.getChildElement=function(){
 */
 function KeyNotbook(){
     /**@type {Number[]} 记录中的按下的按键 */
-    this.downingKeyCodes=[];
+    this.downing_key_codes=[];
     /**@type {Function[]} 动作函数*/
-    this.keysdownF  =[];
+    this.keys_down_fuc  =[];
     /**@type {Number[][]} 组合键记录表*/
-    this.keysdownFF =[];
-    this.keysupF={};
+    this.keys_down_table =[];
+    this.keys_up_fnc={};
 }
 KeyNotbook.prototype={
     constructor:KeyNotbook,
@@ -88,12 +88,12 @@ KeyNotbook.prototype={
             return -1;
         }
         if(keycode.constructor===Number){
-            this.keysdownFF.push([keycode]);
+            this.keys_down_table.push([keycode]);
         }
         else if(keycode.constructor===Array){
-            this.keysdownFF.push(keycode);
+            this.keys_down_table.push(keycode);
         }
-        this.keysdownF.push(func);
+        this.keys_down_fuc.push(func);
     },
     /** 移除按键事件
      * @param {Number||Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
@@ -110,11 +110,11 @@ KeyNotbook.prototype={
         else if(_keycode.constructor===Array){
             keycode=_keycode;
         }
-        for(var i=this.keysdownFF.length-1;i>=0;--i){
-            if(arrayDiff(this.keysdownFF[i],keycode).length){
-                if(this.keysdownF[i]===func){
-                    this.keysdownF.splice(i,1);
-                    this.keysdownFF.splice(i,1);
+        for(var i=this.keys_down_table.length-1;i>=0;--i){
+            if(arrayDiff(this.keys_down_table[i],keycode).length){
+                if(this.keys_down_fuc[i]===func){
+                    this.keys_down_fuc.splice(i,1);
+                    this.keys_down_table.splice(i,1);
                     break;
                 }
             }
@@ -125,32 +125,32 @@ KeyNotbook.prototype={
     setKey:function(e,tgt){
         var flag=false;
         var i=0;
-        var downingKALength=this.downingKeyCodes.length;
+        var downingKALength=this.downing_key_codes.length;
         if(downingKALength)
         for(var j=downingKALength-1;j>=0;--j){
             if(flag)break;
-            flag=e.keyCode===this.downingKeyCodes[j];
+            flag=e.keyCode===this.downing_key_codes[j];
             i++;
         }
         if(!flag){
             // 有新的按键按下
-            this.downingKeyCodes[i]=e.keyCode;
-            for(i=this.keysdownFF.length-1;i>=0;--i){
-                if(this.keysdownF[i].orderFlag?
-                    arrayEqual(this.keysdownFF[i],this.downingKeyCodes):
-                    !array_has_Diff(this.keysdownFF[i],this.downingKeyCodes)
+            this.downing_key_codes[i]=e.keyCode;
+            for(i=this.keys_down_table.length-1;i>=0;--i){
+                if(this.keys_down_fuc[i].orderFlag?
+                    arrayEqual(this.keys_down_table[i],this.downing_key_codes):
+                    !arrayHasDiff(this.keys_down_table[i],this.downing_key_codes)
                     ){
-                    this.keysdownF[i].call(tgt,e);
+                    this.keys_down_fuc[i].call(tgt,e);
                     return;
                 }
             }
         }
         else{
-            for(i=this.keysdownFF.length-1;i>=0;--i){
-                if(!this.keysdownF[i].keepFlag&&
-                (this.keysdownF[i].orderFlag?arrayEqual(this.keysdownFF[i],this.downingKeyCodes):
-                !array_has_Diff(this.keysdownFF[i],this.downingKeyCodes))){
-                    this.keysdownF[i].call(tgt,e);
+            for(i=this.keys_down_table.length-1;i>=0;--i){
+                if(!this.keys_down_fuc[i].keepFlag&&
+                (this.keys_down_fuc[i].orderFlag?arrayEqual(this.keys_down_table[i],this.downing_key_codes):
+                !arrayHasDiff(this.keys_down_table[i],this.downing_key_codes))){
+                    this.keys_down_fuc[i].call(tgt,e);
                     return;
                 }
             }
@@ -159,18 +159,18 @@ KeyNotbook.prototype={
 
     /**抬起按键*/
     removeKey:function(e,tgt){
-        var downingKALength=this.downingKeyCodes.length;
+        var downingKALength=this.downing_key_codes.length;
         if(downingKALength)
         for(var i=downingKALength-1;i>=0;--i){
-            if(e.keyCode===this.downingKeyCodes[i]){
-                this.downingKeyCodes.splice(i,1);
-                if(this.keysupF[e.keyCode.toString()])this.keysupF[e.keyCode.toString()].call(tgt,e);
+            if(e.keyCode===this.downing_key_codes[i]){
+                this.downing_key_codes.splice(i,1);
+                if(this.keys_up_fnc[e.keyCode.toString()])this.keys_up_fnc[e.keyCode.toString()].call(tgt,e);
                 return 0;
             }
         }
     },
     reNB:function(){
-        this.downingKeyCodes.length=0;  
+        this.downing_key_codes.length=0;  
     }
 }
 
@@ -179,10 +179,10 @@ KeyNotbook.prototype={
  * @param {Boolean} _keepFlag 按住键盘是否重复触发事件
  * @param {Boolean} _orderFlag 组合键是否需要有序
  * @param {Number||Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
- * @param {Function} _event 触发的事件
- * @param {Boolean} _type false=>down;true=>up
+ * @param {Function} act_fnc 触发的动作函数
+ * @param {Boolean} _type false=>down;true=>up 注意up只能有一个按键
  */
-function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,_event,_type){
+function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,act_fnc,_type){
     var thisKeyNotbook,i;
     if(!_Element.keyNotbook){
         _Element.keyNotbook=new KeyNotbook();
@@ -195,29 +195,29 @@ function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,_event,_type){
         thisKeyNotbook=_Element.keyNotbook;
     }
     if(_type){
-        thisKeyNotbook.keysupF[_keycode.toString()]=_event;
+        thisKeyNotbook.keys_up_fnc[_keycode.toString()]=act_fnc;
     }
     else{
-        thisKeyNotbook.setDKeyFunc(_keycode,_event);
-        i=thisKeyNotbook.keysdownF.length-1;
-        thisKeyNotbook.keysdownF[i].keepFlag=_keepFlag;
-        thisKeyNotbook.keysdownF[i].orderFlag=_orderFlag;
+        thisKeyNotbook.setDKeyFunc(_keycode,act_fnc);
+        i=thisKeyNotbook.keys_down_fuc.length-1;
+        thisKeyNotbook.keys_down_fuc[i].keepFlag=_keepFlag;
+        thisKeyNotbook.keys_down_fuc[i].orderFlag=_orderFlag;
     }
 }
 /** 移除 element 上的 keyNotBook 的事件
  * @param {Document} _Element 
  * @param {Number||Array} _keycode 
- * @param {Function} _event 
+ * @param {Function} act_fnc 
  * @param {Boolean} _type false=>down;true=>up
  */
-function removeKeyEvent(_Element,_keycode,_event,_type){
+function removeKeyEvent(_Element,_keycode,act_fnc,_type){
     if(_Element.keyNotbook){
         var thisKeyNotbook=_Element.keyNotbook;
         if(_type){
-            delete thisKeyNotbook.keysupF[_keycode.toString()];
+            delete thisKeyNotbook.keys_up_fnc[_keycode.toString()];
         }
         else{
-            thisKeyNotbook.removeDKeyFunc(_keycode,_event);
+            thisKeyNotbook.removeDKeyFunc(_keycode,act_fnc);
         }
     }
 }
@@ -258,7 +258,7 @@ function addResizeEvent(_element,_listener){
         mark1.markBrother=mark2;
         mark2.markBrother=mark1;
 
-        function m_resize(){
+        var m_resize=function(){
             if(lowWidth!=_element.offsetWidth||lowHeight!=_element.offsetHeight){
                 // console.log(2);
                 lowWidth=_element.offsetWidth;
@@ -270,8 +270,8 @@ function addResizeEvent(_element,_listener){
                 maxWidth=lowWidth*9999,maxHeight=lowWidth*9999;
                 mark2C.style.cssText=`width:${maxWidth}px;height:${maxHeight}px;`;
             }
-        }
-        function m_scroll(e){
+        },
+        m_scroll=function(e){
             m_resize();
             mark1.scrollTop=maxHeight;
             mark1.scrollLeft=maxWidth;

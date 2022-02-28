@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-25 15:32:29
+ * @LastEditTime: 2022-02-28 14:38:56
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -223,7 +223,7 @@ function arrayDiff(arr1,arr2){
  * @param {Array}   arr2       要进行比较的数组
  * @return {Boolean} 是否有差异
  */
-function array_has_Diff(arr1,arr2){
+function arrayHasDiff(arr1,arr2){
     if(arr1.length!=arr2.length)return true;
     var hash=new Map();
     var rtn=[];
@@ -258,7 +258,7 @@ class OlFunction extends Function{
         /** @type {{parameterType:parameterType,fnc:fnc,codeComments:codeComments}[]} 重载函数 */
         this.ols=[];
         /** @type {Function} */
-        this.defaultFnc=new Function();
+        this.default_fnc=new Function();
     }
     /** 添加一个重载
      * @param {Array} parameterType   形参的类型
@@ -270,11 +270,11 @@ class OlFunction extends Function{
     }
     // 如果需要ie中使用，把 create 和 addOverload 拷贝走就行
     /** 创建重载函数
-     * @param   {Function} defaultFnc 当没有和实参对应的重载时默认执行的函数
+     * @param   {Function} default_fnc 当没有和实参对应的重载时默认执行的函数
      * @return  {OlFunction} 带重载的函数
      * 用 .addOverload 添加重载
      */
-    static create(defaultFnc){
+    static create(default_fnc){
         var OverloadFunction=(function(){
             return function(){
                 var i=arguments.length-1,j,flag=false;
@@ -294,12 +294,12 @@ class OlFunction extends Function{
                     return OverloadFunction.ols[i].fnc.apply(this,arguments);
                 }
                 else{
-                    return OverloadFunction.defaultFnc.apply(this,arguments);
+                    return OverloadFunction.default_fnc.apply(this,arguments);
                 }
             }
         })();
         OverloadFunction.ols=[];
-        OverloadFunction.defaultFnc=defaultFnc;
+        OverloadFunction.default_fnc=default_fnc;
         OverloadFunction.addOverload=OlFunction.prototype.addOverload;
         return OverloadFunction;
     }
@@ -322,7 +322,7 @@ function inheritClass(_basics,_derived){
 class Delegate extends Function{
     /** 请使用 Delegate.create() */
     constructor(){
-        this.actList=[];
+        this.act_list=[];
         console.error("请使用 Delegate.create()");
     }
 
@@ -331,7 +331,7 @@ class Delegate extends Function{
      * @param {Function} act 执行的动作
      */
     addAct(tgt,act){
-        this.actList.push({tgt:tgt,act:act});
+        this.act_list.push({tgt:tgt,act:act});
     }
     /**移除一个委托
      * 参数和加入相同
@@ -339,9 +339,9 @@ class Delegate extends Function{
      */
     removeAct(tgt,act){
         var i;
-        for(i=this.actList.length-1;i>=0;--i){
-            if(this.actList[i].tgt===tgt&&this.actList[i].act===act){
-                this.actList.splice(i,1);
+        for(i=this.act_list.length-1;i>=0;--i){
+            if(this.act_list[i].tgt===tgt&&this.act_list[i].act===act){
+                this.act_list.splice(i,1);
                 return true;
             }
         }
@@ -352,18 +352,18 @@ class Delegate extends Function{
     static create(){
         var delegate=(function(){
             return function(){
-                var i=delegate.actList.length;
+                var i=delegate.act_list.length;
                 var rtns=new Array(i);
                 for(--i;i>=0;--i){
                     rtns[i]={
-                        tgt:delegate.actList[i].tgt,
-                        rtn:delegate.actList[i].act.apply(delegate.actList[i].tgt,arguments)
+                        tgt:delegate.act_list[i].tgt,
+                        rtn:delegate.act_list[i].act.apply(delegate.act_list[i].tgt,arguments)
                     }
                 }
                 return rtns;
             }
         })();
-        delegate.actList=[];
+        delegate.act_list=[];
         delegate.addAct=Delegate.prototype.addAct;
         delegate.removeAct=Delegate.prototype.removeAct;
         return delegate;
@@ -489,11 +489,11 @@ function strToVar(str,reviver){
 /** Hashcaller
  */
 class Hashcaller{
-    constructor(onlyTouchOne=true){
+    constructor(flag_only_touch_one=true){
         this.listeners=[];
         /**如果冲突(有多个能够匹配到的表达式)仅取下标大的监听者触发 */
-        this.onlyTouchOne=onlyTouchOne;
-        this.lastListenerIndex=-1;
+        this.flag_only_touch_one=flag_only_touch_one;
+        this.last_listener_index=-1;
         var that=this;
         window.addEventListener("hashchange",function(){that.touchHashListener()});
     }
@@ -519,8 +519,8 @@ class Hashcaller{
             for(var i=this.listeners.length-1;i>=0;--i)
             if(regex=this.listeners[i].exec(location.hash)){
                 this.listeners[i].listener(regex);
-                this.lastListenerIndex=i;
-                if(this.onlyTouchOne)break;
+                this.last_listener_index=i;
+                if(this.flag_only_touch_one)break;
             }
         }
         window.lowhash=location.hash;
@@ -531,25 +531,25 @@ class Hashcaller{
 class HashListener{
     /** @param {RegExp} regExp       hash的正则表达式
      * @param {Function} listener   监听者 调用时会引用 regExp 的 regex
-     * @param {Boolean} filterFlag  选择是否过滤 hash 中的 /^#\// 默认为过滤
+     * @param {Boolean} filter_flag  选择是否过滤 hash 中的 /^#\// 默认为过滤
      */
-    constructor(regExp,listener,filterFlag=true){
-        this.hashSelector=regExp;
+    constructor(regExp,listener,filter_flag=true){
+        this.hash_selector=regExp;
         this.listener=listener;
-        this.filterFlag=filterFlag;
+        this.filter_flag=filter_flag;
     }
     /** 测试表达式能否匹配字符串
      * @param {String} _string  文本
      */
     exec(_string){
         var string;
-        if((this.filterFlag)&&(_string.indexOf("#/")===0)){
+        if((this.filter_flag)&&(_string.indexOf("#/")===0)){
             string=_string.slice(2);
         }
         else{
             string=_string;
         }
-        return this.hashSelector.exec(string);
+        return this.hash_selector.exec(string);
     }
 }
 var hashcaller=new Hashcaller();
@@ -568,7 +568,7 @@ Date.prototype.toString.addOverload([String],function(str){
         D:that.getDate().toString(),
         d:that.getDay().toString(),
         h:that.getHours().toString(),
-        m:that.getMinutes().toString(),
+        m:that.get_minutes().toString(),
         s:that.getSeconds().toString()
     }
     var i,rtn=[],tstr;
@@ -655,7 +655,7 @@ export {
     rltToAbs,
     arrayEqual,
     arrayDiff,
-    array_has_Diff,
+    arrayHasDiff,
     OlFunction,
     inheritClass,
     Delegate,

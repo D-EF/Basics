@@ -5,7 +5,7 @@
 /*
  * @Date        : 2022-01-11 14: 27: 30
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-12 17:26:26
+ * @LastEditTime: 2022-02-28 17:16:07
  * @FilePath: \def-web\js\basics\cue_media_obj.js
  */
 
@@ -14,12 +14,12 @@ import {rltToAbs,inheritClass,OlFunction} from "./Basics.js"
  * 存储 cue 格式为js的obj格式
  * 参考资料来自: https: //tieba.baidu.com/p/6160083867
  */
- function DEF_CUEOBJ(){
+function DEF_CUEOBJ(){
     this.performer  = "";
     this.songwriter = "";
     this.title      = "";
     this.file       = "";
-    this.fileType   = "";
+    this.file_type   = "";
     this.rem        = [];
     this.track      = [];
 }
@@ -50,7 +50,7 @@ DEF_CUEOBJ.prototype={
         },
         file:function(_cl){
             this.file     = _cl[1];
-            this.fileType = _cl[2];
+            this.file_type = _cl[2];
         },
         title:function(_cl){
             this.title = _cl[1];
@@ -67,7 +67,7 @@ DEF_CUEOBJ.prototype={
         
         index:function(_cl){
             var indexNub = parseInt(_cl[1]);
-            var time     = cue_timeToSecond(_cl[2]);
+            var time     = cueTimeToSecond(_cl[2]);
             var lastTrack;
             if(this.root.track.length-2>=0){
                 lastTrack = this.root.track[this.root.track.length-2];
@@ -83,7 +83,7 @@ DEF_CUEOBJ.prototype={
                     lastTrack.ed = time;
                 break;
                 default: 
-                    this.indexList.push(time);
+                    this.index_list.push(time);
                 break;
             }
         }
@@ -93,20 +93,20 @@ DEF_CUEOBJ.prototype={
  * cue 的一截轨道内容
  * @param {String}      file        文件路径
  * @param {DEF_CUEOBJ}  root        根 对象
- * @param {Number}      trackIndex  轨道序号
+ * @param {Number}      track_index  轨道序号
  */
-function DEF_CUEOBJTrack(file,root,trackIndex){
+function DEF_CUEOBJTrack(file,root,track_index){
     this.performer  = "";
     this.songwriter = "";
     this.title      = "";
-    this.ListIndex;
+    this.list_index;
     this.rem        = [];
-    this.trackIndex = trackIndex;
+    this.track_index = track_index;
     this.root       = root;
     this.file       = file;
     this.op;    //秒
     this.ed;
-    this.indexList = [];
+    this.index_list = [];
 }
 inheritClass(DEF_CUEOBJ,DEF_CUEOBJTrack);
 
@@ -119,7 +119,7 @@ DEF_CUEOBJTrack.prototype.getDuration=function(){
  * @param {String} timeStr mm: ss: ff
  * @returns {Number}
  */
-function cue_timeToSecond(timeStr){
+function cueTimeToSecond(timeStr){
     var temp = timeStr.split(':');
     
     return parseInt(temp[0])*60+parseInt(temp[1])+parseInt(temp[2])/75;
@@ -444,13 +444,13 @@ class DEF_MediaObjMark{
     /**
      * @param {String} command 遭遇标记 的 指令
      * @param {Number} time 时刻
-     * @param {Number} maxTouch 最大触发次数
+     * @param {Number} max_touch 最大触发次数
      */
-    constructor(command,time,maxTouch){
+    constructor(command,time,max_touch){
         this.command  = command;
         this.time     = time||0;
-        this.maxTouch = maxTouch||1;
-        this.count    = this.maxTouch;
+        this.max_touch = max_touch||1;
+        this.count    = this.max_touch;
     }
     copy(){
         var rtn = new DEF_MediaObjMark();
@@ -461,7 +461,7 @@ class DEF_MediaObjMark{
      * 重置计数器
      */
     reCount(){
-        this.count = this.maxTouch;
+        this.count = this.max_touch;
     }
     /**
      * 触发标记
@@ -538,6 +538,6 @@ export {
     DEF_MediaObjMark,
     DEF_MediaObj,
     DEF_CUEOBJTrack,
-    cue_timeToSecond,
+    cueTimeToSecond,
     loadCue,
 }

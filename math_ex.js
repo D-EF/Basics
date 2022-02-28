@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-23 20:59:33
+ * @LastEditTime: 2022-02-28 14:55:24
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -22,11 +22,11 @@ window.deg=Math.PI/180;
         this.max=temp;
     }
     /**
-     * 用来添加监听的 当发生返回时调用 this.regressionlinListener[i].call(this,this.i,val,this);
+     * 用来添加监听的 当发生返回时调用 this.regression_listener[i].call(this,this.i,val,this);
      * val是表示往前走了还是往后走了 用不同正负的数字表示
      * @type {Function[]}
      */
-    this.regressionlinListener=[];
+    this.regression_listener=[];
     this.i=now||0;
     this.overflowHanding();
 }
@@ -82,8 +82,8 @@ Stepper.prototype={
      * @param {Number} val 表示正向溢出了还是逆向溢出了 +1 -1
      */
     _regressionlin_call(val){
-        for(var i=this.regressionlinListener.length-1;i>=0;--i){
-            this.regressionlinListener[i].call(this,this.i,val,this);
+        for(var i=this.regression_listener.length-1;i>=0;--i){
+            this.regression_listener[i].call(this,this.i,val,this);
         }
     }
 }
@@ -144,16 +144,16 @@ function matrixMULT(m1,m2){
 /**
  * @type {Number[][]} 帕斯卡三角
  */
-const Pascals_Triangle=[[1]];
-calc_Pascals_Triangle(3);
+const g_Pascals_Triangle=[[1]];
+calcPascalsTriangle(3);
 /**
  * 演算帕斯卡三角
  * @param {Number} n 到多少阶停止
  * @returns 返回帕斯卡三角 的 不规则二维数组, 别修改内容返回值的内容!
  */
-function calc_Pascals_Triangle(n){
+function calcPascalsTriangle(n){
     var i,j;
-    var rtn=Pascals_Triangle;
+    var rtn=g_Pascals_Triangle;
     for(i=rtn.length;i<=n;++i){
         rtn.push([]);
         for(j=0;j<i+1;++j){
@@ -165,9 +165,9 @@ function calc_Pascals_Triangle(n){
 /** 获取帕斯卡三角的某一层
  * @param {Number} n 第n层 从 0 开始数数
  */
-function get_Pascals_Triangle(n){
-    if(Pascals_Triangle.length<=n)calc_Pascals_Triangle(n);
-    return Pascals_Triangle[n];
+function getPascalsTriangle(n){
+    if(g_Pascals_Triangle.length<=n)calcPascalsTriangle(n);
+    return g_Pascals_Triangle[n];
 }
 
 const Bezier_Matrixs=[[1]];
@@ -175,16 +175,16 @@ const Bezier_Matrixs=[[1]];
  * 贝塞尔曲线的矩阵 
  * @param {Number} n n阶贝塞尔曲线
  */
-function get_Bezier_Matrix(n){
+function getBezierMatrix(n){
     if(Bezier_Matrixs[n])return Bezier_Matrixs[n];
 
-    if(Pascals_Triangle.length<=n)calc_Pascals_Triangle(n);
+    if(g_Pascals_Triangle.length<=n)calcPascalsTriangle(n);
     var i,j,f;
     var m=new Array(n+1);
     for(i=n;i>=0;--i){
         m[i]=new Array(i+1);
         for(j=i,f=1;j>=0;--j){
-            m[i][j]=Pascals_Triangle[i][j]*Pascals_Triangle[n][i]*f;
+            m[i][j]=g_Pascals_Triangle[i][j]*g_Pascals_Triangle[n][i]*f;
             f*=-1;
         }
     }
@@ -197,9 +197,9 @@ function get_Bezier_Matrix(n){
  * 用控制点得到各次幂的系数
  * @param {Number[]} points 控制点集合
  */
-function get_Bezier_Coefficient(points){
+function getBezierCoefficient(points){
     var n=points.length-1;
-    var m=get_Bezier_Matrix(n);
+    var m=getBezierMatrix(n);
     var rtn=new Array(points.length);
     var i,j,temp;
     for(i=n;i>=0;--i){
@@ -217,7 +217,7 @@ function get_Bezier_Coefficient(points){
  * @param {Number[]} points 原曲线的控制点集合 
  * @returns {Number[]} 导函数的控制点
  */
-function bezierDerivatives_points(points){
+function get_bezierDerivativesPoints(points){
     var n=points.length-2;
     var rtn=new Array(n+1);
     if(n<0)return {x:0,y:0}
@@ -232,14 +232,14 @@ function bezierDerivatives_points(points){
  * @param {Number} n  n阶贝塞尔曲线
  * @param {Number} t  t参数 0~1
  */
-function createBezierCutMatrix_Q(n,t){
-    if(Pascals_Triangle.length<=n){
-        calc_Pascals_Triangle(n);
+function createCutBezierMatrixQ(n,t){
+    if(g_Pascals_Triangle.length<=n){
+        calcPascalsTriangle(n);
     }
     var i,j,k;
     var rtn=new Array(n+1);
     for(i=n;i>=0;--i){
-        rtn[i]=Pascals_Triangle[i].concat();
+        rtn[i]=g_Pascals_Triangle[i].concat();
     }
     var temp=t,
         td=t-1;
@@ -261,10 +261,10 @@ function createBezierCutMatrix_Q(n,t){
 /**
  * 用矩阵分割贝塞尔曲线
  * @param {Number[]} points        控制点集合
- * @param {Number[][]} matrix 分割时使用的矩阵, 用 createBezierCutMatrix_Q 函数生成
+ * @param {Number[][]} matrix 分割时使用的矩阵, 用 createCutBezierMatrixQ 函数生成
  * @param {Boolean} flag 前后两边 false(0)为p1起点, true(!0)为p4终点
  */
-function bezierCut_By_Matrix(points,matrix,flag){
+function cutBezierByMatrix(points,matrix,flag){
     var n=points.length-1,
         i,j,
         rtn=new Array(points.length),
@@ -334,7 +334,7 @@ function derivative(coefficients){
  * @param {Number[]} coefficient 系数集合从低次幂到高次幂 [ 1, x, x^2, x^3 ]
  * @returns {Number[]} 返回根的集合
  */
-function root_of_1_3(coefficient){
+function rootsOfCubic(coefficient){
     var a=coefficient[2]||0,
         b=coefficient[1]||0,
         c=coefficient[0]||0,
@@ -384,7 +384,7 @@ function root_of_1_3(coefficient){
             t = -q / (2 * r),
             cosphi = t < -1 ? -1 : t > 1 ? 1 : t,
             phi = Math.acos(cosphi),
-            crtr = root_of_1_3.cuberoot(r),
+            crtr = rootsOfCubic.cuberoot(r),
             t1 = 2 * crtr;
         root1 = t1 * Math.cos(phi / 3) - a / 3;
         root2 = t1 * Math.cos((phi + 2 * Math.PI) / 3) - a / 3;
@@ -394,7 +394,7 @@ function root_of_1_3(coefficient){
 
     // three real roots, but two of them are equal:
     if (discriminant === 0) {
-        u1 = q2 < 0 ? root_of_1_3.cuberoot(-q2) : -root_of_1_3.cuberoot(q2);
+        u1 = q2 < 0 ? rootsOfCubic.cuberoot(-q2) : -rootsOfCubic.cuberoot(q2);
         root1 = 2 * u1 - a / 3;
         root2 = -u1 - a / 3;
         return [root1, root2];
@@ -402,12 +402,12 @@ function root_of_1_3(coefficient){
 
     // one real root, two complex roots
     var sd = Math.sqrt(discriminant);
-    u1 = root_of_1_3.cuberoot(sd - q2);
-    v1 = root_of_1_3.cuberoot(sd + q2);
+    u1 = rootsOfCubic.cuberoot(sd - q2);
+    v1 = rootsOfCubic.cuberoot(sd + q2);
     root1 = u1 - v1 - a / 3;
     return [root1];
 }
-root_of_1_3.cuberoot=function(v){
+rootsOfCubic.cuberoot=function(v){
     return v < 0?-Math.pow(-v, 1 / 3) : Math.pow(v, 1 / 3);
 }
 
@@ -419,7 +419,7 @@ root_of_1_3.cuberoot=function(v){
 function coefficientToPoints(coefficient){
     var n=coefficient.length,
         rtn=new Array(n),
-        m=get_Bezier_Matrix(--n),
+        m=getBezierMatrix(--n),
         temp;
     
     for(var i=0;i<=n;++i){
@@ -435,19 +435,19 @@ function coefficientToPoints(coefficient){
 const deg=Math.DEG;
 
 export {
-    get_Bezier_Matrix,
+    getBezierMatrix,
     getBezierCurvePoint_deCasteljau,
     matrixMULT,
-    calc_Pascals_Triangle,
-    get_Pascals_Triangle,
-    get_Bezier_Coefficient,
-    bezierDerivatives_points,
-    createBezierCutMatrix_Q,
-    bezierCut_By_Matrix,
+    calcPascalsTriangle,
+    getPascalsTriangle,
+    getBezierCoefficient,
+    get_bezierDerivativesPoints,
+    createCutBezierMatrixQ,
+    cutBezierByMatrix,
     binaryLinearEquation,
     approximately,
     derivative,
-    root_of_1_3,
+    rootsOfCubic,
     coefficientToPoints,
     Stepper,
     deg
