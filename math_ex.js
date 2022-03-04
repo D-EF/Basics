@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-28 14:55:24
+ * @LastEditTime: 2022-03-04 15:28:53
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -433,6 +433,8 @@ function coefficientToPoints(coefficient){
 }
 
 const deg=Math.DEG;
+window.cycles=Math.PI*2;
+const cycles=window.cycles;
 
 export {
     getBezierMatrix,
@@ -450,5 +452,6 @@ export {
     rootsOfCubic,
     coefficientToPoints,
     Stepper,
-    deg
+    deg,
+    cycles
 }
