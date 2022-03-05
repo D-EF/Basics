@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-02-28 14:38:56
+ * @LastEditTime: 2022-03-05 18:24:00
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -646,6 +646,15 @@ function download(url,name){
  */
 function canBeNumberChar(_char){
     return ((_char>=1&&_char<=9)||_char==='0'||('+-.e'.indexOf(_char)!==-1));
+}
+
+class DataDrivenData_Handler__Array extends Array{
+    constructor(){
+        super(...arguments);
+    }
+}
+class DataDrivenData_Listener__Array extends Array{
+    
 }
 
 export {
