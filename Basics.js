@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-05 18:24:00
+ * @LastEditTime: 2022-03-07 21:56:13
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -87,6 +87,13 @@ if (!Object.keys) {
       }
     })()
 };
+
+Array.prototype.insertList=function(index,list){
+    var temp=Array.from(list);
+    temp.unshift(0);
+    temp.unshift(index);
+    Array.prototype.splice.apply(this,temp);
+}
 
 /** 用 rad 表示的 1deg */
 Math.DEG=Math.PI/180;
@@ -329,25 +336,41 @@ class Delegate extends Function{
     /**添加一个委托
      * @param {Object} tgt   执行动作的this指向
      * @param {Function} act 执行的动作
+     * @returns {Delegate} 返回当前
      */
     addAct(tgt,act){
         this.act_list.push({tgt:tgt,act:act});
+        return this;
     }
     /**移除一个委托
      * 参数和加入相同
-     * @returns {Boolean} 返回是否移除成功
+     * @returns {Delegate} 返回当前
      */
     removeAct(tgt,act){
         var i;
         for(i=this.act_list.length-1;i>=0;--i){
             if(this.act_list[i].tgt===tgt&&this.act_list[i].act===act){
                 this.act_list.splice(i,1);
-                return true;
+                return this;
             }
         }
-        return false;
+        return this;
     }
-    /** @returns {Delegate} 创建一个委托对象
+    /** 使用 TGT 移除委托 所有带有相同tgt的委托全部会被移除
+     * @param {*} tgt   用添加委托时的tgt属性标识
+     * @returns {Delegate} 返回当前
+     */
+    removeActs_byTGT(tgt){
+        var i=this.act_list.length-1;
+        for(;i>0;--i){
+            if(this.act_list[i].tgt===tgt){
+                this.act_list.splice(i,1);
+            }
+        }
+        return this;
+    }   
+    /** 创建一个委托对象
+     * @returns {Delegate} fnc.apply(delegate.act_list[i].tgt,arguments)
      */
     static create(){
         var delegate=(function(){
@@ -645,16 +668,109 @@ function download(url,name){
  * @return {Boolean}
  */
 function canBeNumberChar(_char){
-    return ((_char>=1&&_char<=9)||_char==='0'||('+-.e'.indexOf(_char)!==-1));
+    return ((_char>='1'&&_char<='9')||_char==='0'||('+-.eE'.indexOf(_char)!==-1));
 }
 
-class DataDrivenData_Handler__Array extends Array{
-    constructor(){
-        super(...arguments);
+/**
+ * def牌 广播员
+ */
+class DEF_Caller{
+    /**
+     * @param {*} Handler 
+     */
+    constructor(Handler){
+        this.handler=Handler;
+        this._listeners=[];
+        /** @type {Object<Delegate>} */
+        this._callbacks={};
     }
-}
-class DataDrivenData_Listener__Array extends Array{
-    
+    /** 创建监听者
+     * @param {{key:Function}} callbacks 回调函数集合 属性全为 Function 的对象
+     * @returns {Array} 返回一个数组
+     */
+    create_listener(callbacks){
+        var rtn=[];
+        this.add_listener(rtn,callbacks)
+        return rtn;
+    }
+    /** 增加 监听者(订阅者) 
+     * @param {*} tgt 监听者 给回调函数当this指向用的
+     * @param {{key:Function}} callbacks 回调函数集合 属性全为 Function 的对象
+     * @returns {DEF_Caller} 返回当前的对象
+     */
+    add_listener(tgt,callbacks){
+        var keys=Object.keys(callbacks),
+            i=keys.length-1,
+            key="";
+        
+        this._listeners.push(tgt);
+
+        for(;i>=0;--i){
+            key=keys[i];
+            if(!this._callbacks[key]){
+                this._callbacks[key]=Delegate.create();
+            }
+            this._callbacks[key].addAct(tgt,callbacks[key]);
+        }
+        return this;
+    }
+    /** 移除监听者
+     * @param {*} tgt 
+     * @returns {DEF_Caller}
+     */
+    remove_listener(tgt){
+        var keys=Object.keys(callbacks),
+            i=keys.length-1,
+            key="";
+        for(;i>=0;--i){
+            key=keys[i];
+            this._callbacks[key].removeActs_byTGT(tgt);
+        }
+        this._listeners.lastIndexOf(tgt);
+    }
+    call(key){
+        var _key=key;
+        var args=Array.from(arguments);
+        args.shift();
+        this._callbacks[_key].apply(this,args);
+    }
+
+
+
+    /** 预设的 移除 回调, 将对应的项移除
+     * @this  {Array}  this指向当前的监听者数据
+     * @param {Number} op 被修改的项的下标(起点)
+     * @param {Number} length 被修改的长度
+     */
+    static _remove_def(op,length){
+        this.splice(op,length);
+    }
+    /** 预设的 插入 回调, 在监听者中插入null
+     * @this  {Array}  this指向当前的监听者数据
+     * @param {Number} op 被修改的项的下标(起点)
+     * @param {Array} values 插入的内容集合
+     */
+    static _insert_def(op,values){
+        var l=values.length,
+            insp=new Array(l);
+        for(--l;l>=0;--l){
+            insp[l]=null;
+        }
+        insp.unshift(0);
+        insp.unshift(op);
+        Array.prototype.splice.apply(this,insp);
+    }
+    /** 预设的 修改 回调, 将监听者中的与修改的内容相同下标的item设为null
+     * @this  {Array}  this指向当前的监听者数据
+     * @param {Number} op 被修改的项的下标(起点)
+     * @param {Number} ed 被修改的项的下标(终点)
+     */
+    static _update_def(op,ed){
+        var i=op;
+        do{
+            this[i]=null;
+        }while(i<ed);
+    }
 }
 
 export {
@@ -677,5 +793,6 @@ export {
     hashcaller,
     requestAPI,
     download,
-    canBeNumberChar
+    canBeNumberChar,
+    DEF_Caller
 };
