@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-07 21:56:13
+ * @LastEditTime: 2022-03-11 21:18:58
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -313,8 +313,8 @@ class OlFunction extends Function{
 }
 
 /**继承
- * @param {*} _basics   基类
- * @param {*} _derived  子类
+ * @param {Function} _basics   基类
+ * @param {Function} _derived  子类
  */
 function inheritClass(_basics,_derived){
     // 创建一个没有实例方法的类
@@ -334,7 +334,7 @@ class Delegate extends Function{
     }
 
     /**添加一个委托
-     * @param {Object} tgt   执行动作的this指向
+     * @param {*} tgt   执行动作的this指向
      * @param {Function} act 执行的动作
      * @returns {Delegate} 返回当前
      */
@@ -670,16 +670,11 @@ function download(url,name){
 function canBeNumberChar(_char){
     return ((_char>='1'&&_char<='9')||_char==='0'||('+-.eE'.indexOf(_char)!==-1));
 }
-
 /**
  * def牌 广播员
  */
 class DEF_Caller{
-    /**
-     * @param {*} Handler 
-     */
-    constructor(Handler){
-        this.handler=Handler;
+    constructor(){
         this._listeners=[];
         /** @type {Object<Delegate>} */
         this._callbacks={};

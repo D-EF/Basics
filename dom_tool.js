@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-28 15:47:28
+ * @LastEditTime: 2022-03-11 21:13:31
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -80,7 +80,7 @@ function KeyNotbook(){
 KeyNotbook.prototype={
     constructor:KeyNotbook,
     /** 添加按键事件
-     * @param {Number||Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组
+     * @param {Number|Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组
      * @param {Function} func 触发后的回调函数
      */
     setDKeyFunc:function(keycode,func){
@@ -96,7 +96,7 @@ KeyNotbook.prototype={
         this.keys_down_fuc.push(func);
     },
     /** 移除按键事件
-     * @param {Number||Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
+     * @param {Number|Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
      * @param {Function} func 触发后的回调函数
      */
     removeDKeyFunc:function(_keycode,func){
@@ -178,7 +178,7 @@ KeyNotbook.prototype={
  * @param {Document} _Element 添加事件的元素
  * @param {Boolean} _keepFlag 按住键盘是否重复触发事件
  * @param {Boolean} _orderFlag 组合键是否需要有序
- * @param {Number||Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
+ * @param {Number|Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
  * @param {Function} act_fnc 触发的动作函数
  * @param {Boolean} _type false=>down;true=>up 注意up只能有一个按键
  */
@@ -206,7 +206,7 @@ function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,act_fnc,_type){
 }
 /** 移除 element 上的 keyNotBook 的事件
  * @param {Document} _Element 
- * @param {Number||Array} _keycode 
+ * @param {Number|Array} _keycode 
  * @param {Function} act_fnc 
  * @param {Boolean} _type false=>down;true=>up
  */

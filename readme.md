@@ -1,5 +1,5 @@
 <!--
- * @LastEditTime: 2022-02-28 14:49:35
+ * @LastEditTime: 2022-03-11 21:13:30
  * @LastEditors: Darth_Eternalfaith
 -->
 # 提供一些函数, 全局变量 和 一些类 的js文件
@@ -126,7 +126,7 @@ addKeyEvent(_Element,_keepFlag,_keycode,_event,_type)
 ``` 
     @param {Document} _Element 添加事件的元素   
     @param {Boolean} _keepFlag 是否重复触发事件   
-    @param {Number||Array} _keycode 按键的 keycode 如果是组合键 需要输入数组   
+    @param {Number|Array} _keycode 按键的 keycode 如果是组合键 需要输入数组   
     @param {Function} _event 触发的事件   
     @param {Boolean} _type false=>down;true=>up   
 
@@ -136,7 +136,7 @@ addKeyEvent(_Element,_keepFlag,_keycode,_event,_type)
 removeKeyEvent(_Element,_keycode,_event,_type)   
 ``` 
     @param {Document} _Element    
-    @param {Number||Array} _keycode    
+    @param {Number|Array} _keycode    
     @param {Function} _event    
     @param {Boolean} _type false=>down;true=>up.   
 ---
@@ -228,11 +228,11 @@ addResizeEvent(_element,_listener)
 ### 方法
 * setDKeyFunc(keycode,func)
     添加按键事件   
-    @param {Number||Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组   
+    @param {Number|Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组   
     @param {Function} func 触发后的回调函数   
 * removeDKeyFunc(_keycode,func)
     移除按键事件   
-    @param {Number||Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组   
+    @param {Number|Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组   
     @param {Function} func 触发后的回调函数   
 * setKey(e)
     按下按键需要触发事件
