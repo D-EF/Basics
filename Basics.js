@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-11 21:18:58
+ * @LastEditTime: 2022-03-16 23:14:33
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -768,6 +768,44 @@ class DEF_Caller{
     }
 }
 
+/** 二分法查找显式查找表
+ * @param {Number[]} lut 显式查找表 应为正序排序的 Number 类型数组
+ * @param {Number} val   值     
+ * @param {String} key   非必要参数 如果是对象数组, 使用属性作为查找表的关键字
+ * @return {Number} 返回对应下标    溢出将直接使用首或尾的值
+ */
+function select_lut__binary(lut,val,key){
+    var find = false,
+        low = 0,
+        high = lut.length-1,
+        i,
+        temp;
+    
+    while (!find&&low <= high){
+        i = parseInt((low+high)*0.5); 
+        temp=lut[i];
+        if(key){
+            temp=temp[key];
+        }
+
+        if (val > temp){
+            low = i + 1
+        }
+        else if(val<=temp&&((lut[i-1]===undefined)||(val>(key?lut[i-1][key]:lut[i-1][key])))){
+            if(i){
+                return i-1;
+            }
+            else{
+                return 0;
+            }
+        }
+        else{
+            high = i - 1
+        }
+    }
+    return i;
+}
+
 export {
     judgeOs,
     arrayMove,
@@ -789,5 +827,6 @@ export {
     requestAPI,
     download,
     canBeNumberChar,
-    DEF_Caller
+    DEF_Caller,
+    select_lut__binary
 };
