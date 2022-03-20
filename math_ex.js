@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-04 15:28:53
+ * @LastEditTime: 2022-03-21 02:48:56
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -433,8 +433,31 @@ function coefficientToPoints(coefficient){
 }
 
 const deg=Math.DEG;
+const deg_90=90*deg;
+const deg_180=180*deg;
 window.cycles=Math.PI*2;
 const cycles=window.cycles;
+
+
+// 二维平面贝塞尔曲线拟合圆弧公式
+// 单位圆且起点角度为0   示例
+// p1=(1,0)
+// p2=(1,k)     //p1 + (k*导向量)
+// p3=p4 + (-k*导向量)
+// p4=采样点
+
+
+const DIVISION_4_3=4/3;
+/** 计算 贝塞尔曲线拟合圆弧 的 k 值
+ * @param   {Number} angle 夹角
+ * @returns {Number} 返回 k 值
+ */
+function calc_k_bezierToCyles(angle){
+    return DIVISION_4_3*Math.tan(angle*0.25);
+}
+console.log(calc_k_bezierToCyles(90*deg));
+/**@type {Number} 贝塞尔曲线拟合四分之一圆 的 k 值 */
+const BEZIER_TO_CYCLES_K__1D4=0.551784777779014;
 
 export {
     getBezierMatrix,
@@ -453,5 +476,9 @@ export {
     coefficientToPoints,
     Stepper,
     deg,
-    cycles
+    deg_90,
+    deg_180,
+    cycles,
+    calc_k_bezierToCyles,
+    BEZIER_TO_CYCLES_K__1D4
 }
