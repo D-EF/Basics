@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-22 01:26:24
+ * @LastEditTime: 2022-03-23 17:36:38
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -455,7 +455,7 @@ const DIVISION_4_3=4/3;
 function calc_k_bezierToCyles(angle){
     return DIVISION_4_3*Math.tan(angle*0.25);
 }
-console.log(calc_k_bezierToCyles(20*deg));
+// console.log(calc_k_bezierToCyles(20*deg));
 /**@type {Number} 贝塞尔曲线拟合四分之一圆 的 k 值 */
 const BEZIER_TO_CYCLES_K__1D4=0.551784777779014;
 

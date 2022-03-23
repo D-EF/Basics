@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-17 19:07:32
+ * @LastEditTime: 2022-03-23 17:36:01
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -800,7 +800,7 @@ function select_lut__binary(lut,val,key){
     }
     return low;
 }
-console.log(select_lut__binary([0,100,200,300,400,500],150)) //want to 2
+// console.log(select_lut__binary([0,100,200,300,400,500],150)) //want to 2
 
 export {
     judgeOs,
