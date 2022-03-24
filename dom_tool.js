@@ -260,8 +260,7 @@ function addResizeEvent(_element,_listener){
 
         var m_resize=function(){
             if(lowWidth!=_element.offsetWidth||lowHeight!=_element.offsetHeight){
-                // console.log(2);
-                lowWidth=_element.offsetWidth;
+                                lowWidth=_element.offsetWidth;
                 lowHeight=_element.offsetHeight;
                 for(var i=_element.resizeListener.length-1;i>=0;--i){
                     _element.resizeListener[i].call(_element);

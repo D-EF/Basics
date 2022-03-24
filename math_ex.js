@@ -455,7 +455,6 @@ const DIVISION_4_3=4/3;
 function calc_k_bezierToCyles(angle){
     return DIVISION_4_3*Math.tan(angle*0.25);
 }
-// console.log(calc_k_bezierToCyles(20*deg));
 /**@type {Number} 贝塞尔曲线拟合四分之一圆 的 k 值 */
 const BEZIER_TO_CYCLES_K__1D4=0.551784777779014;
 

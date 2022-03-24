@@ -173,8 +173,7 @@ function rltToAbs(_fileURL,rootURL){
                 break;
             }
         }
-        // console.log(tempUrl);
-        i=fileURL_Root.length-1;
+                i=fileURL_Root.length-1;
         // if(fileURL_Root[i]==='/')--i;
         for(;(i>=0)&&(urlspc);--i){
             if(fileURL_Root[i]==='/'){
@@ -800,7 +799,6 @@ function select_lut__binary(lut,val,key){
     }
     return low;
 }
-// console.log(select_lut__binary([0,100,200,300,400,500],150)) //want to 2
 
 export {
     judgeOs,
