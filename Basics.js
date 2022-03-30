@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-30 14:54:36
+ * @LastEditTime: 2022-03-30 19:35:50
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -547,7 +547,8 @@ class Hashcaller{
 /** HashListener obj
  */
 class HashListener{
-    /** @param {RegExp} regExp       hash的正则表达式
+    /** 
+     * @param {RegExp} regExp       hash的正则表达式
      * @param {Function} listener   监听者 调用时会引用 regExp 的 regex
      * @param {Boolean} filter_flag  选择是否过滤 hash 中的 /^#\// 默认为过滤
      */

@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-30 17:35:02
+ * @LastEditTime: 2022-03-30 18:02:33
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -146,7 +146,11 @@ KeyNotbook.prototype={
         }
     },
 
-    /**按下新按键*/
+    /**按下新按键
+     * @param {KeyboardEvent} e 事件对象
+     * @param {Element} tgt 事件触发的元素
+     * @returns 
+     */
     setKey:function(e,tgt){
         var flag=false;
         var i=0;
