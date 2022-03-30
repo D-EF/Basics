@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-11 21:13:31
+ * @LastEditTime: 2022-03-30 17:35:02
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -66,32 +66,57 @@ Element.prototype.getChildElement=function(){
     return chE;
 }
 
+/** @type {*} keyCode to code的映射表 */
+KeyNotbook.mapping__keyCode_code={'27':'Escape','112':'F1','113':'F2','114':'F3','115':'F4','116':'F5','117':'F6','118':'F7','119':'F8','120':'F9','121':'F10','122':'F11','123':'F12','145':'ScrollLock','19':'Pause','192':'Backquote','49':'Digit1','50':'Digit2','51':'Digit3','52':'Digit4','53':'Digit5','54':'Digit6','55':'Digit7','56':'Digit8','57':'Digit9','48':'Digit0','189':'Minus','187':'Equal','8':'Backspace','45':'Insert','36':'Home','33':'PageUp','144':'NumLock','111':'NumpadDivide','106':'NumpadMultiply','109':'NumpadSubtract','9':'Tab','81':'KeyQ','87':'KeyW','69':'KeyE','82':'KeyR','84':'KeyT','89':'KeyY','85':'KeyU','73':'KeyI','79':'KeyO','80':'KeyP','219':'BracketLeft','221':'BracketRight','220':'Backslash','46':'Delete','35':'End','34':'PageDown','36':'Numpad7','38':'Numpad8','33':'Numpad9','107':'NumpadAdd','20':'CapsLock','65':'KeyA','83':'KeyS','68':'KeyD','70':'KeyF','71':'KeyG','72':'KeyH','74':'KeyJ','75':'KeyK','76':'KeyL','186':'Semicolon','222':'Quote','13':'Enter','37':'Numpad4','12':'Numpad5','39':'Numpad6','90':'KeyZ','88':'KeyX','67':'KeyC','86':'KeyV','66':'KeyB','78':'KeyN','77':'KeyM','188':'Comma','190':'Period','191':'Slash','16':'Shift','38':'ArrowUp','35':'Numpad1','40':'Numpad2','34':'Numpad3','13':'NumpadEnter','17':'Control','91':'MetaLeft','18':'Alt','32':'Space','93':'ContextMenu','37':'ArrowLeft','40':'ArrowDown','39':'ArrowRight','45':'Numpad0','46':'NumpadDecimal'};
+/** 
+ * @param {Number|String} val 
+ * @returns {String} 返回 code
+ */
+KeyNotbook.toCode=function(val){
+    if(val.constructor===Number||val instanceof Number){
+        return KeyNotbook.mapping__keyCode_code[val];
+    }else if(val.constructor===String||val instanceof String){
+        if(val.indexOf("Shift")!=-1){
+            return "Shift";
+        }
+        if(val.indexOf("Control")!=-1){
+            return "Control";
+        }
+        if(val.indexOf("Alt")!=-1){
+            return "Alt";
+        }
+        return val;
+    }
+}
+
 /**按键记录器key notbook
 */
 function KeyNotbook(){
-    /**@type {Number[]} 记录中的按下的按键 */
+    /**@type {String[]} 记录中的按下的按键 列表项为 KeyboardEvent.code */
     this.downing_key_codes=[];
     /**@type {Function[]} 动作函数*/
     this.keys_down_fuc  =[];
-    /**@type {Number[][]} 组合键记录表*/
+    /**@type {String[][]} 组合键记录表 列表项为 KeyboardEvent.code*/
     this.keys_down_table =[];
     this.keys_up_fnc={};
 }
 KeyNotbook.prototype={
     constructor:KeyNotbook,
     /** 添加按键事件
-     * @param {Number|Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组
+     * @param {Number|String|(Number|String)[]} keycode 触发回调的按键 keycode, 接受 数字(keyCode) or 字符串(code) or 数组
      * @param {Function} func 触发后的回调函数
      */
     setDKeyFunc:function(keycode,func){
         if(!keycode||!func){
             return -1;
-        }
-        if(keycode.constructor===Number){
-            this.keys_down_table.push([keycode]);
-        }
-        else if(keycode.constructor===Array){
-            this.keys_down_table.push(keycode);
+        }if(keycode.constructor===Array||keycode instanceof Array){
+            var i,temp=new Array(keycode.length);
+            for(i=keycode.length-1;i>=0;--i){
+                temp[i]=KeyNotbook.toCode(keycode[i]);
+            }
+            this.keys_down_table.push(temp);
+        }else{
+            this.keys_down_table.push([KeyNotbook.toCode(keycode)]);
         }
         this.keys_down_fuc.push(func);
     },
@@ -126,15 +151,16 @@ KeyNotbook.prototype={
         var flag=false;
         var i=0;
         var downingKALength=this.downing_key_codes.length;
+        var code=KeyNotbook.toCode(e.code||e.keyCode);
         if(downingKALength)
         for(var j=downingKALength-1;j>=0;--j){
             if(flag)break;
-            flag=e.keyCode===this.downing_key_codes[j];
+            flag=code===this.downing_key_codes[j];
             i++;
         }
         if(!flag){
             // 有新的按键按下
-            this.downing_key_codes[i]=e.keyCode;
+            this.downing_key_codes[i]=code;
             for(i=this.keys_down_table.length-1;i>=0;--i){
                 if(this.keys_down_fuc[i].orderFlag?
                     arrayEqual(this.keys_down_table[i],this.downing_key_codes):
@@ -157,14 +183,19 @@ KeyNotbook.prototype={
         }
     },
 
-    /**抬起按键*/
+    /**抬起按键
+     * @param {KeyboardEvent} e 事件对象
+     * @param {Element} tgt     事件触发的元素
+     * @returns 
+     */
     removeKey:function(e,tgt){
+        var code=KeyNotbook.toCode(e.code||e.keyCode);
         var downingKALength=this.downing_key_codes.length;
         if(downingKALength)
         for(var i=downingKALength-1;i>=0;--i){
-            if(e.keyCode===this.downing_key_codes[i]){
+            if(code===this.downing_key_codes[i]){
                 this.downing_key_codes.splice(i,1);
-                if(this.keys_up_fnc[e.keyCode.toString()])this.keys_up_fnc[e.keyCode.toString()].call(tgt,e);
+                if(this.keys_up_fnc[code])this.keys_up_fnc[code].call(tgt,e);
                 return 0;
             }
         }
