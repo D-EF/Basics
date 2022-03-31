@@ -5,13 +5,14 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-31 21:43:51
+ * @LastEditTime: 2022-04-01 00:54:31
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
     arrayDiff,
     arrayEqual,
     arrayHasDiff,
+    canBeNumberChar,
     hashcaller,
 } from "./Basics.js"
 
@@ -67,23 +68,28 @@ Element.prototype.getChildElement=function(){
 }
 
 /** @type {*} keyCode to code的映射表 */
-KeyNotbook.mapping__keyCode_code={'27':'Escape','112':'F1','113':'F2','114':'F3','115':'F4','116':'F5','117':'F6','118':'F7','119':'F8','120':'F9','121':'F10','122':'F11','123':'F12','145':'ScrollLock','19':'Pause','192':'Backquote','49':'Digit1','50':'Digit2','51':'Digit3','52':'Digit4','53':'Digit5','54':'Digit6','55':'Digit7','56':'Digit8','57':'Digit9','48':'Digit0','189':'Minus','187':'Equal','8':'Backspace','45':'Insert','36':'Home','33':'PageUp','144':'NumLock','111':'NumpadDivide','106':'NumpadMultiply','109':'NumpadSubtract','9':'Tab','81':'KeyQ','87':'KeyW','69':'KeyE','82':'KeyR','84':'KeyT','89':'KeyY','85':'KeyU','73':'KeyI','79':'KeyO','80':'KeyP','219':'BracketLeft','221':'BracketRight','220':'Backslash','46':'Delete','35':'End','34':'PageDown','36':'Numpad7','38':'Numpad8','33':'Numpad9','107':'NumpadAdd','20':'CapsLock','65':'KeyA','83':'KeyS','68':'KeyD','70':'KeyF','71':'KeyG','72':'KeyH','74':'KeyJ','75':'KeyK','76':'KeyL','186':'Semicolon','222':'Quote','13':'Enter','37':'Numpad4','12':'Numpad5','39':'Numpad6','90':'KeyZ','88':'KeyX','67':'KeyC','86':'KeyV','66':'KeyB','78':'KeyN','77':'KeyM','188':'Comma','190':'Period','191':'Slash','16':'Shift','38':'ArrowUp','35':'Numpad1','40':'Numpad2','34':'Numpad3','13':'NumpadEnter','17':'Control','91':'MetaLeft','18':'Alt','32':'Space','93':'ContextMenu','37':'ArrowLeft','40':'ArrowDown','39':'ArrowRight','45':'Numpad0','46':'NumpadDecimal'};
+KeyNotbook.mapping__keyCode_code={'27':'escape','112':'f1','113':'f2','114':'f3','115':'f4','116':'f5','117':'f6','118':'f7','119':'f8','120':'f9','121':'f10','122':'f11','123':'f12','145':'scrolllock','19':'pause','192':'backquote','49':'digit1','50':'digit2','51':'digit3','52':'digit4','53':'digit5','54':'digit6','55':'digit7','56':'digit8','57':'digit9','48':'digit0','189':'minus','187':'equal','8':'backspace','45':'insert','36':'home','33':'pageup','144':'numlock','111':'numpaddivide','106':'numpadmultiply','109':'numpadsubtract','9':'tab','81':'keyq','87':'keyw','69':'keye','82':'keyr','84':'keyt','89':'keyy','85':'keyu','73':'keyi','79':'keyo','80':'keyp','219':'bracketleft','221':'bracketright','220':'backslash','46':'delete','35':'end','34':'pagedown','36':'numpad7','38':'numpad8','33':'numpad9','107':'numpadadd','20':'capslock','65':'keya','83':'keys','68':'keyd','70':'keyf','71':'keyg','72':'keyh','74':'keyj','75':'keyk','76':'keyl','186':'semicolon','222':'quote','13':'enter','37':'numpad4','12':'numpad5','39':'numpad6','90':'keyz','88':'keyx','67':'keyc','86':'keyv','66':'keyb','78':'keyn','77':'keym','188':'comma','190':'period','191':'slash','16':'shift','38':'arrowup','35':'numpad1','40':'numpad2','34':'numpad3','13':'numpadenter','17':'control','91':'metaleft','18':'alt','32':'space','93':'contextmenu','37':'arrowleft','40':'arrowdown','39':'arrowright','45':'numpad0','46':'numpaddecimal'};
 /** 
- * @param {Number|String} val 
+ * @param {Number|String} _val 
  * @returns {String} 返回 code
  */
-KeyNotbook.toCode=function(val){
+KeyNotbook.toCode=function(_val){
+    var val=_val;
     if(val.constructor===Number||val instanceof Number){
         return KeyNotbook.mapping__keyCode_code[val];
     }else if(val.constructor===String||val instanceof String){
-        if(val.indexOf("Shift")!=-1){
-            return "Shift";
+        if(canBeNumberChar(val[0])&&((!val[1])||canBeNumberChar(val[1]))){
+            return KeyNotbook.mapping__keyCode_code[val];
         }
-        if(val.indexOf("Control")!=-1){
-            return "Control";
+        val=val.toLowerCase();
+        if(val.indexOf("shift")!=-1){
+            return "shift";
         }
-        if(val.indexOf("Alt")!=-1){
-            return "Alt";
+        if(val.indexOf("sontrol")!=-1){
+            return "control";
+        }
+        if(val.indexOf("alt")!=-1){
+            return "alt";
         }
         return val;
     }
@@ -412,25 +418,17 @@ HTMLElement.prototype.addEventListener=function(type,listener){
 
 addEventType("focuslose",function(tgt){
     tgt.addEventListener("focusout",function(e){
-        tgt._is_focusin_out=true;
-        // todo focus 丢失无反应
-    });
-    document.addEventListener("focusin",function(e){
-        if(tgt._is_focusin_out){
-            tgt._is_focusin_out=false;
-            var temp=e.target;
+        setTimeout(function(){
+            var temp=document.activeElement;
             while(temp&&(!(temp===tgt))){
                 temp=temp.parentElement;
             }
             if(!temp){
                 tgt.dispatchEvent(new CustomEvent("focuslose"));
             }
-        }
+        }, 0);
     });
-    window.addEventListener("blur",function(){
-        tgt._is_focusin_out=false;
-        tgt.dispatchEvent(new CustomEvent("focuslose"));
-    })
+    
 });
 
 export{
