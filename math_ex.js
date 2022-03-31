@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-23 17:36:38
+ * @LastEditTime: 2022-03-31 16:51:13
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -24,7 +24,7 @@ window.deg=Math.PI/180;
     /**
      * 用来添加监听的 当发生返回时调用 this.regression_listener[i].call(this,this.i,val,this);
      * val是表示往前走了还是往后走了 用不同正负的数字表示
-     * @type {Function[]}
+     * @type {function(this:Stepper,Number,Number,Stepper))[]}
      */
     this.regression_listener=[];
     this.i=now||0;

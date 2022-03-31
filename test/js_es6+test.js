@@ -1,6 +1,6 @@
 
 /** 自己实现的 reduce
- * @param {Function} callback 
+ * @param {function} callback 
  * @param {any} initialValue 
  */
 Array.prototype.myreduce=function(callback,initialValue){

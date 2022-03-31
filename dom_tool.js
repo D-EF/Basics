@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-30 18:02:33
+ * @LastEditTime: 2022-03-31 16:47:44
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -94,7 +94,7 @@ KeyNotbook.toCode=function(val){
 function KeyNotbook(){
     /**@type {String[]} 记录中的按下的按键 列表项为 KeyboardEvent.code */
     this.downing_key_codes=[];
-    /**@type {Function[]} 动作函数*/
+    /**@type {function(this:Element,KeyboardEvent)[]} 动作函数*/
     this.keys_down_fuc  =[];
     /**@type {String[][]} 组合键记录表 列表项为 KeyboardEvent.code*/
     this.keys_down_table =[];
@@ -104,7 +104,7 @@ KeyNotbook.prototype={
     constructor:KeyNotbook,
     /** 添加按键事件
      * @param {Number|String|(Number|String)[]} keycode 触发回调的按键 keycode, 接受 数字(keyCode) or 字符串(code) or 数组
-     * @param {Function} func 触发后的回调函数
+     * @param {function(this:Element,KeyboardEvent)} func 触发后的回调函数
      */
     setDKeyFunc:function(keycode,func){
         if(!keycode||!func){
@@ -122,7 +122,7 @@ KeyNotbook.prototype={
     },
     /** 移除按键事件
      * @param {Number|Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
-     * @param {Function} func 触发后的回调函数
+     * @param {function(this:Element,KeyboardEvent)} func 触发后的回调函数
      */
     removeDKeyFunc:function(_keycode,func){
         var keycode;
@@ -210,11 +210,11 @@ KeyNotbook.prototype={
 }
 
 /** 给element添加按键事件
- * @param {Document} _Element 添加事件的元素
+ * @param {Element} _Element 添加事件的元素
  * @param {Boolean} _keepFlag 按住键盘是否重复触发事件
  * @param {Boolean} _orderFlag 组合键是否需要有序
  * @param {Number|Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
- * @param {Function} act_fnc 触发的动作函数
+ * @param {function(this:Element,KeyboardEvent)} act_fnc 触发的动作函数
  * @param {Boolean} _type false=>down;true=>up 注意up只能有一个按键
  */
 function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,act_fnc,_type){
@@ -240,9 +240,9 @@ function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,act_fnc,_type){
     }
 }
 /** 移除 element 上的 keyNotBook 的事件
- * @param {Document} _Element 
+ * @param {Element} _Element 
  * @param {Number|Array} _keycode 
- * @param {Function} act_fnc 
+ * @param {function(this:Element,KeyboardEvent)} act_fnc 这个函数应该与 addKeyEvent 时使用的保持一致
  * @param {Boolean} _type false=>down;true=>up
  */
 function removeKeyEvent(_Element,_keycode,act_fnc,_type){
@@ -259,7 +259,7 @@ function removeKeyEvent(_Element,_keycode,act_fnc,_type){
 
 /** 给element添加resize事件, 没有 e 事件参数
  * @param {Element} _element 绑定的元素
- * @param {Function} _listener 触发的函数
+ * @param {function(this:Element)} _listener 触发的函数 没有 e 事件参数
  */
 function addResizeEvent(_element,_listener){   
     if(_element.resizeMarkFlag){
@@ -378,6 +378,23 @@ function setupLinkClick(){
     });
 }
 
+HTMLElement._event_type=[];
+HTMLElement._event_touch_fnc=[];
+
+var _addEventListener=HTMLElement.prototype.addEventListener;
+
+HTMLElement.prototype.addEventListener=function(type){
+    if(HTMLElement._event_touch_fnc[HTMLElement._event_type.indexOf(type)]){
+        HTMLElement._event_touch_fnc[HTMLElement._event_type.indexOf(type)]();
+    }
+
+    _addEventListener.apply(this,arguments);
+}
+
+
+function addEventType(type,touch_fnc){
+
+}
 
 export{
     stopPropagation,

@@ -127,7 +127,7 @@ addKeyEvent(_Element,_keepFlag,_keycode,_event,_type)
     @param {Document} _Element 添加事件的元素   
     @param {Boolean} _keepFlag 是否重复触发事件   
     @param {Number|Array} _keycode 按键的 keycode 如果是组合键 需要输入数组   
-    @param {Function} _event 触发的事件   
+    @param {function} _event 触发的事件   
     @param {Boolean} _type false=>down;true=>up   
 
 ---
@@ -137,7 +137,7 @@ removeKeyEvent(_Element,_keycode,_event,_type)
 ``` 
     @param {Document} _Element    
     @param {Number|Array} _keycode    
-    @param {Function} _event    
+    @param {function} _event    
     @param {Boolean} _type false=>down;true=>up.   
 ---
 ## 添加resize事件 addResizeEvent
@@ -146,7 +146,7 @@ addResizeEvent(_element,_listener)
 ```
     给element添加resize事件, 没有 e 事件参数   
     @param {Element} _element 绑定的元素   
-    @param {Function} _listener 触发的函数   
+    @param {function} _listener 触发的函数   
 ---
 
 # 类
@@ -175,11 +175,11 @@ addResizeEvent(_element,_listener)
 没有构造函数, 写成类的语法纯粹是为了让编辑器认代码提示
 
 * 使用 OlFunction.create(defineFnc)创建一个重载函数   
-    @param {Function} defaultFnc 当没有和实参对应的重载时默认执行的函数
+    @param {function} defaultFnc 当没有和实参对应的重载时默认执行的函数
   
 * 使用 addOverload(parameterType,fnc) 以添加重载   
     @param {Array} parameterType   形参的类型   
-    @param {Function}    fnc 执行的函数   
+    @param {function}    fnc 执行的函数   
     后加入的会先运行
     
 * 使用例 
@@ -201,7 +201,7 @@ addResizeEvent(_element,_listener)
      
 * 使用 addAct(tgt,fnc) 以添加委托   
     @param {Object} tgt   委托的对象   
-    @param {Function} fnc 执行的函数   
+    @param {function} fnc 执行的函数   
     后加入的会先运行
 * 移除一个委托 removeAct(tgt,fnc) 参数和加入的一样才能移除   
     @returns {Boolean} 返回是否移除成功   
@@ -229,11 +229,11 @@ addResizeEvent(_element,_listener)
 * setDKeyFunc(keycode,func)
     添加按键事件   
     @param {Number|Array} keycode 触发回调的按键 keycode, 接受 数字 或者 数组   
-    @param {Function} func 触发后的回调函数   
+    @param {function} func 触发后的回调函数   
 * removeDKeyFunc(_keycode,func)
     移除按键事件   
     @param {Number|Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组   
-    @param {Function} func 触发后的回调函数   
+    @param {function} func 触发后的回调函数   
 * setKey(e)
     按下按键需要触发事件
 * removeKey(e)
@@ -325,7 +325,7 @@ DEF_CUEOBJTrack(file,root,track_index)
 * 静态方法 f(src,callback)
     通过路径创建mediaObj, 并尝试读取 ID3
     @param {String} src  媒体的链接
-    @param {Function} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
+    @param {function} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
 * getArtist()
     获取 "Artist" 编曲者 and 演唱者
 * clone()
@@ -335,7 +335,7 @@ DEF_CUEOBJTrack(file,root,track_index)
 * getDuration()
   获取当前轨道的长度
     @param {Audio} audio 当前正在播放这个文件的 Audio 元素
-    @param {Function} _callback _callback({Number}Duration) 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
+    @param {function} _callback _callback({Number}Duration) 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
     3个重载 fnc(audio) 和 fnc(callback); 用 audio 的重载可以返回长度, 可以不用 callback
 ---
 

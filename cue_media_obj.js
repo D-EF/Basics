@@ -5,7 +5,7 @@
 /*
  * @Date        : 2022-01-11 14: 27: 30
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-02-28 17:16:07
+ * @LastEditTime: 2022-03-31 16:37:18
  * @FilePath: \def-web\js\basics\cue_media_obj.js
  */
 
@@ -190,7 +190,7 @@ function loadCue(str){
  * @param {String} _rootUrl 根目录
  * @param {String[]} _nameList 文件名列表
  * @param {String[]} _afertList 后缀名列表
- * @param {Function} callBack 搜索完成的回调函数 callBack({String[]}); 参数是搜索到的所有文件路径的列表
+ * @param {function(String[])} callBack 搜索完成的回调函数  参数是搜索到的所有文件路径的列表
  */
 function selectImg(_rootUrl,_nameList,_afertList,callBack){
     var temp = new Array(_afertList.length);
@@ -261,7 +261,7 @@ class DEF_MediaObj{
     /**
      * 通过路径创建mediaObj, 并尝试读取 ID3
      * @param {String} src  媒体的链接
-     * @param {Function} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
+     * @param {function(DEF_MediaObj)} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
      */
     static f(src,callback){
         var rtn   = new DEF_MediaObj(src);
@@ -348,7 +348,7 @@ class DEF_MediaObj{
 /**
  * 获取当前轨道的长度
  * @param {Audio} audio 当前正在播放这个文件的 Audio 元素
- * @param {Function} _callback _callback({Number}Duration) 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
+ * @param {function(Number)} _callback 获取长度的回调 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
  * 3个重载 fnc(audio) 和 fnc(callback); 用 audio 的重载可以返回长度, 可以不用 callback
  */
 DEF_MediaObj.prototype.getDuration = OlFunction.create();

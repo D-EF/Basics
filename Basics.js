@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-30 19:35:50
+ * @LastEditTime: 2022-03-31 17:21:06
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -259,12 +259,12 @@ class OlFunction extends Function{
         console.error("请使用 OlFunction.create()");
         /** @type {{parameterType:parameterType,fnc:fnc,codeComments:codeComments}[]} 重载函数 */
         this.ols=[];
-        /** @type {Function} */
+        /** @type {function} 默认动作*/
         this.default_fnc=new Function();
     }
     /** 添加一个重载
      * @param {Array} parameterType   形参的类型
-     * @param {Function}    fnc             执行的函数
+     * @param {function}    fnc             执行的函数
      * @param {String}      codeComments    没用的属性, 作为函数的注释
     */
     addOverload(parameterType,fnc,codeComments){
@@ -272,7 +272,7 @@ class OlFunction extends Function{
     }
     // 如果需要ie中使用，把 create 和 addOverload 拷贝走就行
     /** 创建重载函数
-     * @param   {Function} default_fnc 当没有和实参对应的重载时默认执行的函数
+     * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
      * @return  {OlFunction} 带重载的函数
      * 用 .addOverload 添加重载
      */
@@ -308,8 +308,8 @@ class OlFunction extends Function{
 }
 
 /**继承
- * @param {Function} _basics   基类
- * @param {Function} _derived  子类
+ * @param {function} _basics   基类
+ * @param {function} _derived  子类
  */
 function inheritClass(_basics,_derived){
     // 创建一个没有实例方法的类
@@ -330,7 +330,7 @@ class Delegate extends Function{
 
     /**添加一个委托
      * @param {*} tgt   执行动作的this指向
-     * @param {Function} act 执行的动作
+     * @param {function} act 执行的动作
      * @returns {Delegate} 返回当前
      */
     addAct(tgt,act){
@@ -508,6 +508,7 @@ function strToVar(str,reviver){
  */
 class Hashcaller{
     constructor(flag_only_touch_one=true){
+        /** @type {RegExp[]} */
         this.listeners=[];
         /**如果冲突(有多个能够匹配到的表达式)仅取下标大的监听者触发 */
         this.flag_only_touch_one=flag_only_touch_one;
@@ -549,7 +550,7 @@ class Hashcaller{
 class HashListener{
     /** 
      * @param {RegExp} regExp       hash的正则表达式
-     * @param {Function} listener   监听者 调用时会引用 regExp 的 regex
+     * @param {function(RegExpExecArray)} listener   监听者 调用时会引用 regExp 的 regex
      * @param {Boolean} filter_flag  选择是否过滤 hash 中的 /^#\// 默认为过滤
      */
     constructor(regExp,listener,filter_flag=true){
@@ -628,10 +629,11 @@ Date.prototype.toString.addOverload([String],function(str){
 /** 请求 api
  * @param {String} method 请求方式
  * @param {String} url 请求地址
- * @param {Function} callback 回调函数
+ * @param {function(this: XMLHttpRequest,ProgressEvent<EventTarget>)} callback 回调函数
  * @param {any} body 加在 send 里的实参
  */
  function requestAPI(method,url,callback,body){
+    /**@type {XMLHttpRequest} */
     var xmlHttp;
     if(thisEnvironment.XMLHttpRequest){
         xmlHttp=new XMLHttpRequest();
@@ -879,6 +881,28 @@ class CQRS_History{
         }
     }
 
+}
+
+/** 依赖映射 tgt[key] 会得到 relyOnTGT[key]
+ * @param {*} tgt           要操作的对象
+ * @param {*} relyOnTGT     数据来源
+ * @param {String[]} keys   tgt上的key
+ * @param {String[]} relyOnKeys 可选参数 relyOnTGT上的key, 下标和keys要对应
+ * @return {*} 返回 tgt 
+ */
+function dependencyMapping(tgt,relyOnTGT,keys,relyOnKeys){
+    for(let i=keys.length-1;i>=0;--i){
+        if(relyOnKeys&&relyOnKeys[i]){
+            Object.defineProperty(tgt,keys[i],{
+                get() { return relyOnTGT[relyOnKeys[i]]; },
+            });
+        }else{
+            Object.defineProperty(tgt,keys[i],{
+                get() { return relyOnTGT[keys[i]]; },
+            });
+        }
+    }
+    return tgt
 }
 
 export {
