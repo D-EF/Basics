@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-31 20:59:14
+ * @LastEditTime: 2022-03-31 21:43:51
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -224,7 +224,7 @@ function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,act_fnc,_type){
         thisKeyNotbook=_Element.keyNotbook;
         _Element.addEventListener("keydown" ,function(e){thisKeyNotbook.setKey(e,this)});
         _Element.addEventListener("keyup"   ,function(e){thisKeyNotbook.removeKey(e,this)});
-        _Element.addEventListener("focuslose",function(e){console.log(e);thisKeyNotbook.reNB()});
+        _Element.addEventListener("focuslose",function(e){thisKeyNotbook.reNB()});
     }
     else{
         thisKeyNotbook=_Element.keyNotbook;
@@ -378,8 +378,20 @@ function setupLinkClick(){
     });
 }
 
+/** @type {String[]} 自定义事件类型记录表 */
 HTMLElement._event_type=[];
+/** @type {function(this:Element,Element)[]} 注册触发自定义事件类型的函数 */
 HTMLElement._event_touch_fnc=[];
+
+/** 增加 dom 事件类型
+ * @param {String} type 事件类型名 
+ * @param {function(this:Element,Element)} func_for_registeCustomEvent  用于注册的触发事件的函数
+ * 要在函数中执行 this.dispatchEvent(e); e 为对应 type 的 事件对象 (建议使用 new CustomEvent())
+ */
+function addEventType(type,func_for_registeCustomEvent){
+    HTMLElement._event_type.push(type);
+    HTMLElement._event_touch_fnc.push(func_for_registeCustomEvent);
+}
 
 var _addEventListener=HTMLElement.prototype.addEventListener;
 HTMLElement.prototype.addEventListener=function(type,listener){
@@ -397,20 +409,11 @@ HTMLElement.prototype.addEventListener=function(type,listener){
     _addEventListener.apply(this,arguments);
 }
 
-/**
- * @param {String} type 事件类型名 
- * @param {function(this:Element,Element)} func_of_registeCustomEvent  用于注册的触发事件的函数
- * 要在函数中执行 this.dispatchEvent(e); e 为对应 type 的 事件对象 (建议使用 new CustomEvent())
- */
- function addEventType(type,func_of_registeCustomEvent){
-    HTMLElement._event_type.push(type);
-    HTMLElement._event_touch_fnc.push(func_of_registeCustomEvent);
-}
-
 
 addEventType("focuslose",function(tgt){
     tgt.addEventListener("focusout",function(e){
         tgt._is_focusin_out=true;
+        // todo focus 丢失无反应
     });
     document.addEventListener("focusin",function(e){
         if(tgt._is_focusin_out){
@@ -425,7 +428,7 @@ addEventType("focuslose",function(tgt){
         }
     });
     window.addEventListener("blur",function(){
-        console.log(tgt._is_focusin_out);
+        tgt._is_focusin_out=false;
         tgt.dispatchEvent(new CustomEvent("focuslose"));
     })
 });
