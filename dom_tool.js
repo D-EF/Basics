@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-31 16:47:44
+ * @LastEditTime: 2022-03-31 20:59:14
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -224,7 +224,7 @@ function addKeyEvent(_Element,_keepFlag,_orderFlag,_keycode,act_fnc,_type){
         thisKeyNotbook=_Element.keyNotbook;
         _Element.addEventListener("keydown" ,function(e){thisKeyNotbook.setKey(e,this)});
         _Element.addEventListener("keyup"   ,function(e){thisKeyNotbook.removeKey(e,this)});
-        _Element.addEventListener("blur"    ,function(e){thisKeyNotbook.reNB()});
+        _Element.addEventListener("focuslose",function(e){console.log(e);thisKeyNotbook.reNB()});
     }
     else{
         thisKeyNotbook=_Element.keyNotbook;
@@ -382,19 +382,53 @@ HTMLElement._event_type=[];
 HTMLElement._event_touch_fnc=[];
 
 var _addEventListener=HTMLElement.prototype.addEventListener;
-
-HTMLElement.prototype.addEventListener=function(type){
+HTMLElement.prototype.addEventListener=function(type,listener){
     if(HTMLElement._event_touch_fnc[HTMLElement._event_type.indexOf(type)]){
-        HTMLElement._event_touch_fnc[HTMLElement._event_type.indexOf(type)]();
+        if(!this._custom_Event_registry){
+            this._custom_Event_registry={};
+        }
+        if(!this._custom_Event_registry[type]){
+            this._custom_Event_registry[type]=[listener];
+            HTMLElement._event_touch_fnc[HTMLElement._event_type.lastIndexOf(type)].call(this,this);
+        }else{
+            this._custom_Event_registry[type].push(listener);
+        }
     }
-
     _addEventListener.apply(this,arguments);
 }
 
-
-function addEventType(type,touch_fnc){
-
+/**
+ * @param {String} type 事件类型名 
+ * @param {function(this:Element,Element)} func_of_registeCustomEvent  用于注册的触发事件的函数
+ * 要在函数中执行 this.dispatchEvent(e); e 为对应 type 的 事件对象 (建议使用 new CustomEvent())
+ */
+ function addEventType(type,func_of_registeCustomEvent){
+    HTMLElement._event_type.push(type);
+    HTMLElement._event_touch_fnc.push(func_of_registeCustomEvent);
 }
+
+
+addEventType("focuslose",function(tgt){
+    tgt.addEventListener("focusout",function(e){
+        tgt._is_focusin_out=true;
+    });
+    document.addEventListener("focusin",function(e){
+        if(tgt._is_focusin_out){
+            tgt._is_focusin_out=false;
+            var temp=e.target;
+            while(temp&&(!(temp===tgt))){
+                temp=temp.parentElement;
+            }
+            if(!temp){
+                tgt.dispatchEvent(new CustomEvent("focuslose"));
+            }
+        }
+    });
+    window.addEventListener("blur",function(){
+        console.log(tgt._is_focusin_out);
+        tgt.dispatchEvent(new CustomEvent("focuslose"));
+    })
+});
 
 export{
     stopPropagation,
@@ -406,5 +440,7 @@ export{
     removeKeyEvent,
     addResizeEvent,
     linkClick,
-    setupLinkClick
+    setupLinkClick,
+    addEventType
 }
+
