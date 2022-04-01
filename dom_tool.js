@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-01 00:54:31
+ * @LastEditTime: 2022-04-01 21:22:29
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -33,6 +33,9 @@ function stopPE(e){
     else window.event.returnValue = false; //IE中阻止函数器默认动作的方式
     return false;
 }
+window.stopPE=stopPE;
+window.stopEvent=stopEvent;
+window.stopPropagation=stopPropagation;
 
 /** NodeList 转换为 Array
  * @param {NodeList} nodelist 
@@ -85,7 +88,10 @@ KeyNotbook.toCode=function(_val){
         if(val.indexOf("shift")!=-1){
             return "shift";
         }
-        if(val.indexOf("sontrol")!=-1){
+        if(val.indexOf("control")!=-1){
+            return "control";
+        }
+        if(val.indexOf("ctrl")!=-1){
             return "control";
         }
         if(val.indexOf("alt")!=-1){
@@ -418,17 +424,22 @@ HTMLElement.prototype.addEventListener=function(type,listener){
 
 addEventType("focuslose",function(tgt){
     tgt.addEventListener("focusout",function(e){
+        tgt.focusloseFlag=true;
         setTimeout(function(){
             var temp=document.activeElement;
             while(temp&&(!(temp===tgt))){
                 temp=temp.parentElement;
             }
             if(!temp){
+                tgt.focusloseFlag=false;
                 tgt.dispatchEvent(new CustomEvent("focuslose"));
             }
         }, 0);
     });
-    
+    window.addEventListener("blur",function(){
+        tgt.focusloseFlag=false;
+        tgt.dispatchEvent(new CustomEvent("focuslose"));
+    });
 });
 
 export{

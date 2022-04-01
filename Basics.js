@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-03-31 17:21:06
+ * @LastEditTime: 2022-04-01 20:41:22
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -895,14 +895,16 @@ function dependencyMapping(tgt,relyOnTGT,keys,relyOnKeys){
         if(relyOnKeys&&relyOnKeys[i]){
             Object.defineProperty(tgt,keys[i],{
                 get() { return relyOnTGT[relyOnKeys[i]]; },
+                set(val){relyOnTGT[relyOnKeys[i]]=val;}
             });
         }else{
             Object.defineProperty(tgt,keys[i],{
                 get() { return relyOnTGT[keys[i]]; },
+                set(val){relyOnTGT[keys[i]]=val;}
             });
         }
     }
-    return tgt
+    return tgt;
 }
 
 export {
@@ -929,5 +931,6 @@ export {
     DEF_Caller,
     select_lut__binary,
     CQRS_Command,
-    CQRS_History
+    CQRS_History,
+    dependencyMapping
 };
