@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-01 20:41:22
+ * @LastEditTime: 2022-04-06 17:42:55
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -84,6 +84,9 @@ if (!Object.keys) {
     })()
 };
 
+Array.prototype.remove=function(item){
+    this.splice(this.indexOf(item),1);
+}
 Array.prototype.insertList=function(index,list){
     var temp=Array.from(list);
     temp.unshift(0);
