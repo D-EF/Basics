@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-06 17:42:55
+ * @LastEditTime: 2022-04-08 21:41:23
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -92,6 +92,12 @@ Array.prototype.insertList=function(index,list){
     temp.unshift(0);
     temp.unshift(index);
     Array.prototype.splice.apply(this,temp);
+}
+Array.prototype.get_lastItem=function(){
+    return this[this.length-1];
+}
+Array.prototype.set_lastItem=function(val){
+    return this[this.length-1]=val;
 }
 
 /** 用 rad 表示的 1deg */
@@ -910,6 +916,153 @@ function dependencyMapping(tgt,relyOnTGT,keys,relyOnKeys){
     return tgt;
 }
 
+
+class  Iterator__MyVirtual{
+    constructor(data){
+        this.data=data;
+    }
+    /** 初始化
+     * @virtual
+     */
+    init(){}
+    
+    /** 是否遍历完
+     * @virtual
+     */
+    judge_isEnd(){}
+
+    /** 下一个
+     * @virtual
+     */
+    next(){}
+    
+    /** 当前数据
+     * @virtual
+     * @return {*} 返回当前
+     */
+    get_now(){}
+}
+
+/**
+ * @typedef TreeNode 缺血模型的树节点
+ * @property {*} data
+ * @property {*[]} children
+ */
+
+class Iterator__Tree extends Iterator__MyVirtual{
+    /** 树结构迭代器器
+     * @param {TreeNode} data 
+     * @param {String} childrenKey 
+     */
+    constructor(data,childrenKey="children"){
+        super(data);
+        this.childrenKey=childrenKey;
+        this._gi=[];
+        this._gg=[];
+        this._path=[];
+    }
+    /** 获取子节点列表
+     * @param {TreeNode} item 
+     * @returns {Array}
+     */
+    _get_itemchildren(item){
+        if(this.childrenKey){
+            return item[this.childrenKey];
+        }else{
+            return item;
+        }
+    }
+    /** 获取目标深度的父节点
+     * @param {Number} depth 
+     * @returns {TreeNode}
+     */
+    _get_Parent(depth){
+        return (depth?this._gg[depth-1]:this.data);
+    }
+    init(){
+        this._depth=0;
+        this._t_depth=0;
+        this._gi.length=1;
+        this._gi[0]=0;
+        this._path.length=1
+        this._path[0]=0;
+        this._gg.length=1;
+        this._gg[0]=this.data;
+        this._di=0;
+        this.next();
+        if(!this._get_itemchildren(this.data).length){
+            this._depth=-1;
+        }
+    }
+    judge_isEnd(){
+        return this._depth>=0;
+    }
+    next(){
+        this._di++;
+        var gg=this._gg,
+        path=this._path,
+        gi=this._gi,
+        d=this._t_depth,
+        od=this._depth;
+        if(d<0){
+            this._depth=d;
+            return;
+        }
+        gg[d]=this._get_itemchildren(this._get_Parent(d))[gi[d]];
+        path.length=d+1;
+        path[d]=gi[d];
+        this._now_path=Array.from(path);
+        do{
+            if(gg[d]!=undefined){
+                od=d;
+                this._depth=od;
+                if(this._get_itemchildren(gg[d]).length){
+                    // 下潜
+                    ++d;
+                    gi[d]=0;
+                    gg[d]=this._get_itemchildren(this._get_Parent(d))[gi[d]];
+                }
+                else{
+                    // 上潜
+                    gi[d]++;
+                    if(this._get_itemchildren(this._get_Parent(d))[gi[d]]===undefined){
+                        break;
+                    }
+                }
+                this._t_depth=d;
+                return;
+            }
+        }while(0);
+        do{
+            --d;
+            ++gi[d];
+        }while(d>=0&&((gg[d]=this._get_itemchildren(this._get_Parent(d))[gi[d]])===undefined));
+        // this._depth=od;
+        this._t_depth=d;
+    }
+    get_now(){
+        return this._gg[this._depth];
+    }
+    /** 获取当前路径
+     * @returns {Number[]} 返回下标形式的路径
+     */
+    get_now__path(){
+        return this._now_path;
+    }
+    /** 获取当前迭代的次数
+     * @returns {Number} 当前是第几次迭代
+     */
+    get_now__di(){
+        return this._di;
+    }
+    /** 获取当前迭代的次数
+     * @returns {Number} 当前是第几次迭代
+     */
+    get_now__depth(){
+        return this._depth;
+    }
+}
+
 export {
     judgeOs,
     arrayMove,
@@ -935,5 +1088,7 @@ export {
     select_lut__binary,
     CQRS_Command,
     CQRS_History,
-    dependencyMapping
+    dependencyMapping,
+    Iterator__MyVirtual,
+    Iterator__Tree
 };
