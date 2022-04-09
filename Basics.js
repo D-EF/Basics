@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-09 15:19:30
+ * @LastEditTime: 2022-04-09 17:20:48
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -995,8 +995,8 @@ class  Iterator__MyVirtual{
 
 /**
  * @typedef TreeNode 缺血模型的树节点
- * @property {*} data
- * @property {*[]} children
+ * @property {*} data 
+ * @property {*[]} children 
  */
 
 class Iterator__Tree extends Iterator__MyVirtual{
@@ -1113,9 +1113,6 @@ class Iterator__Tree extends Iterator__MyVirtual{
     }
 }
 
-window.dependencyMapping=dependencyMapping;
-window.get_root__dependencyMapping=get_root__dependencyMapping;
-window.add_dependencyListener=add_dependencyListener;
 
 export {
     judgeOs,
@@ -1143,6 +1140,8 @@ export {
     CQRS_Command,
     CQRS_History,
     dependencyMapping,
+    get_root__dependencyMapping,
+    add_dependencyListener,
     Iterator__MyVirtual,
-    Iterator__Tree
+    Iterator__Tree,
 };
