@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-08 21:41:23
+ * @LastEditTime: 2022-04-09 15:19:30
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -334,7 +334,7 @@ class Delegate extends Function{
     /** 请使用 Delegate.create() */
     constructor(){
         this.act_list=[];
-        console.error("请使用 Delegate.create()");
+        throw new Error("请使用 Delegate.create()");
     }
 
     /**添加一个委托
@@ -892,30 +892,80 @@ class CQRS_History{
 
 }
 
-/** 依赖映射 tgt[key] 会得到 relyOnTGT[key]
- * @param {*} tgt           要操作的对象
- * @param {*} relyOnTGT     数据来源
- * @param {String[]} keys   tgt上的key
- * @param {String[]} relyOnKeys 可选参数 relyOnTGT上的key, 下标和keys要对应
- * @return {*} 返回 tgt 
+/**
+ * @typedef HadDependencyObject 使用依赖的对象
+ * @property {Map<String,Delegate>} _dependency_mapping_delegates   set时的委托集合
+ * @property {Map<String,DependencyMapping_Notbook>} _dependency_mapping_notbook 记录依赖的对象的集合
  */
-function dependencyMapping(tgt,relyOnTGT,keys,relyOnKeys){
+/**
+ * @typedef DependencyMapping_Notbook 记录依赖的item
+ * @property {HadDependencyObject} rely_on_TGT 依赖的对象
+ * @property {String} rely_on_key 依赖的key
+ */
+
+/** 依赖映射 tgt[key] 会得到 rely_on_TGT[key]
+ * @param {HadDependencyObject} tgt 要操作的对象
+ * @param {*} rely_on_TGT     数据来源
+ * @param {String[]} keys   tgt上的key
+ * @param {String[]} [_rely_on_keys] 可选参数 relyOnTGT上的key, 下标和keys要对应
+ * @return {HadDependencyObject} 返回 tgt 
+ */
+function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
+    var rely_on_keys=_rely_on_keys||keys;
+    var map=tgt._dependency_mapping_notbook;
+    if(!map){
+        map=tgt._dependency_mapping_notbook=new Map();
+    }
     for(let i=keys.length-1;i>=0;--i){
-        if(relyOnKeys&&relyOnKeys[i]){
-            Object.defineProperty(tgt,keys[i],{
-                get() { return relyOnTGT[relyOnKeys[i]]; },
-                set(val){relyOnTGT[relyOnKeys[i]]=val;}
-            });
-        }else{
-            Object.defineProperty(tgt,keys[i],{
-                get() { return relyOnTGT[keys[i]]; },
-                set(val){relyOnTGT[keys[i]]=val;}
-            });
-        }
+        Object.defineProperty(tgt,keys[i],{
+            get() { return rely_on_TGT[rely_on_keys[i]]; },
+            /** @this {HadDependencyObject} */
+            set(val){
+                var old=rely_on_TGT[rely_on_keys[i]];
+                rely_on_TGT[rely_on_keys[i]]=val;
+                this._dependency_mapping_delegates&&
+                this._dependency_mapping_delegates.has(keys[i])&&
+                this._dependency_mapping_delegates.get(keys[i])(old,val,rely_on_TGT,this);
+            }
+        });
+        map.set(keys[i],{rely_on_TGT:rely_on_TGT,rely_on_key:rely_on_keys[i]});
     }
     return tgt;
 }
-
+/** 寻找依赖的根部
+ * @param {*} tgt 使用了依赖的对象
+ * @param {String} key key
+ * @return {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
+ */
+function get_root__dependencyMapping(tgt,_key){
+    var root={rely_on_TGT:tgt ,rely_on_key:_key},
+        head={rely_on_TGT:root,rely_on_key:_key},
+        map=tgt._dependency_mapping_notbook,
+        key=_key;
+    while(map&&map.has(key)){
+        head=root;
+        root=map.get(key);
+        map=root.rely_on_TGT._dependency_mapping_notbook;
+        key=root.rely_on_key;
+    }
+    return {root:root,head:head};
+}
+/** 添加依赖的数据修改时的委托; 注意: 当直接使用root对象进行修改时 委托不会被执行
+ * @param {HadDependencyObject} tgt 使用了依赖的对象
+ * @param {String} key 对象上的key
+ * @param {function} callback 回调函数 callback(old_value,new_val,root_data,head_dependency) this 指向 tgt, 不能在这里再给属性赋值; 如果必要,直接修改root的内容
+ */
+function add_dependencyListener(tgt,key,callback){
+    var temp=get_root__dependencyMapping(tgt,key);
+    var handMain=temp.head;
+    if(!handMain.rely_on_TGT._dependency_mapping_delegates){
+        handMain.rely_on_TGT._dependency_mapping_delegates=new Map();
+    }
+    if(!handMain.rely_on_TGT._dependency_mapping_delegates.has(handMain.rely_on_key)){
+        handMain.rely_on_TGT._dependency_mapping_delegates.set(handMain.rely_on_key,Delegate.create());
+    }
+    handMain.rely_on_TGT._dependency_mapping_delegates.get(handMain.rely_on_key).addAct(tgt,callback);
+}
 
 class  Iterator__MyVirtual{
     constructor(data){
@@ -1062,6 +1112,10 @@ class Iterator__Tree extends Iterator__MyVirtual{
         return this._depth;
     }
 }
+
+window.dependencyMapping=dependencyMapping;
+window.get_root__dependencyMapping=get_root__dependencyMapping;
+window.add_dependencyListener=add_dependencyListener;
 
 export {
     judgeOs,
