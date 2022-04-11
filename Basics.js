@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-09 17:20:48
+ * @LastEditTime: 2022-04-11 11:45:24
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -736,8 +736,6 @@ class DEF_Caller{
         args.shift();
         this._callbacks[_key].apply(this,args);
     }
-
-
 
     /** 预设的 移除 回调, 将对应的项移除
      * @this  {Array}  this指向当前的监听者数据
