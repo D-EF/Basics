@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-31 16:51:13
+ * @LastEditTime: 2022-04-12 17:54:39
  * @FilePath: \def-web\js\basics\math_ex.js
  */
 
@@ -94,7 +94,7 @@ Stepper.prototype={
  * @param {Number} t t参数
  * @returns {{x:Number,y:Number}} 返回对应点
  */
- function getBezierCurvePoint_DeCasteljau(points,t){
+ function get_BezierCurvePoint__DeCasteljau(points,t){
     if(points.length>1){
         var newPoints=new Array(points.length-1);
         var x,y;
@@ -104,7 +104,7 @@ Stepper.prototype={
             y=td*points[i].y+t*points[i+1].y;
             newPoints[i]={x:x,y:y};
         }
-        return getBezierCurvePoint_DeCasteljau(newPoints,t);
+        return get_BezierCurvePoint__DeCasteljau(newPoints,t);
     }else{
         return points[0];
     }
@@ -452,7 +452,7 @@ const DIVISION_4_3=4/3;
  * @param   {Number} angle 夹角
  * @returns {Number} 返回 k 值
  */
-function calc_k_BezierToCyles(angle){
+function calc_k__BezierToCyles(angle){
     return DIVISION_4_3*Math.tan(angle*0.25);
 }
 /**@type {Number} 贝塞尔曲线拟合四分之一圆 的 k 值 */
@@ -460,12 +460,12 @@ const BEZIER_TO_CYCLES_K__1D4=0.551784777779014;
 
 export {
     getBezierMatrix,
-    getBezierCurvePoint_deCasteljau,
+    get_BezierCurvePoint__DeCasteljau,
     matrixMULT,
     calcPascalsTriangle,
     getPascalsTriangle,
     getBezierCoefficient,
-    get_bezierDerivativesPoints,
+    get_BezierDerivativesPoints,
     createCutBezierMatrixQ,
     cutBezierByMatrix,
     binaryLinearEquation,
@@ -478,6 +478,6 @@ export {
     deg_90,
     deg_180,
     cycles,
-    calc_k_bezierToCyles,
+    calc_k__BezierToCyles,
     BEZIER_TO_CYCLES_K__1D4
 }

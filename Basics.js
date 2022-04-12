@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-12 14:16:42
+ * @LastEditTime: 2022-04-12 17:52:57
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -779,7 +779,7 @@ class DEF_Caller{
  * @param {String} key   非必要参数 如果是对象数组, 使用属性作为查找表的关键字
  * @return {Number} 返回对应下标    溢出将直接使用首或尾的值
  */
-function select_lut__Binary(lut,val,key){
+function select_Lut__Binary(lut,val,key){
     var find = false,
         low = 0,
         high = lut.length-1,
@@ -935,7 +935,7 @@ function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
  * @param {String} key key
  * @return {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
  */
-function get_root__DependencyMapping(tgt,_key){
+function get_Root__DependencyMapping(tgt,_key){
     var root={rely_on_TGT:tgt ,rely_on_key:_key},
         head={rely_on_TGT:root,rely_on_key:_key},
         map=tgt._dependency_mapping_notbook,
@@ -954,7 +954,7 @@ function get_root__DependencyMapping(tgt,_key){
  * @param {function} callback 回调函数 callback(old_value,new_val,root_data,head_dependency) this 指向 tgt, 不能在这里再给属性赋值; 如果必要,直接修改root的内容
  */
 function add_DependencyListener(tgt,key,callback){
-    var temp=get_root__DependencyMapping(tgt,key);
+    var temp=get_Root__DependencyMapping(tgt,key);
     var handMain=temp.head;
     if(!handMain.rely_on_TGT._dependency_mapping_delegates){
         handMain.rely_on_TGT._dependency_mapping_delegates=new Map();
@@ -1094,19 +1094,19 @@ class Iterator__Tree extends Iterator__MyVirtual{
     /** 获取当前路径
      * @returns {Number[]} 返回下标形式的路径
      */
-    get_now__Path(){
+    get_Now__Path(){
         return this._now_path;
     }
     /** 获取当前迭代的次数
      * @returns {Number} 当前是第几次迭代
      */
-    get_now__Di(){
+    get_Now__Di(){
         return this._di;
     }
     /** 获取当前迭代的次数
      * @returns {Number} 当前是第几次迭代
      */
-    get_now__Depth(){
+    get_Now__Depth(){
         return this._depth;
     }
 }
@@ -1133,12 +1133,12 @@ export {
     download,
     canBeNumberChar,
     DEF_Caller,
-    select_lut__binary,
+    select_Lut__Binary,
     CQRS_Command,
     CQRS_History,
     dependencyMapping,
-    get_root__dependencyMapping,
-    add_dependencyListener,
+    get_Root__DependencyMapping,
+    add_DependencyListener,
     Iterator__MyVirtual,
     Iterator__Tree,
 };

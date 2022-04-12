@@ -34,7 +34,7 @@ for(var i =dde.length-1;i>=0;--i){
     for(t=0;t<=1;t+=tspLength){
         // ktp2.push
         (
-            getBezierCurvePoint_DeCasteljau(dde[i],t)
+            get_BezierCurvePoint__DeCasteljau(dde[i],t)
         )
     }
 }

@@ -305,7 +305,7 @@ function addResizeEvent(_element,_listener){
         mark1.markBrother=mark2;
         mark2.markBrother=mark1;
 
-        var m_resize=function(){
+        var m_Resize=function(){
             if(lowWidth!=_element.offsetWidth||lowHeight!=_element.offsetHeight){
                                 lowWidth=_element.offsetWidth;
                 lowHeight=_element.offsetHeight;
