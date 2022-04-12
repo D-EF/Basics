@@ -364,18 +364,18 @@ DEF_MediaObj.prototype.getDuration.addOverload([Function],
             if(!this.op){
                 tempAudio.abort=function(e){
                     var d = this.duration;
-                    _callBack(d);
+                    _CallBack(d);
                 }
             }else{
                 tempAudio.abort=function(e){
                     var d = this.duration-that.op;
-                    _callBack(d);
+                    _CallBack(d);
                 }
             }
             tempAudio.load();
         }else{
             var d = this.ed-this.op;
-            _callback(d);
+            _Callback(d);
             console.log(d);
             return d;
         }
@@ -399,7 +399,7 @@ DEF_MediaObj.prototype.getDuration.addOverload([Audio],
 DEF_MediaObj.prototype.getDuration.addOverload([Audio,Function],
     function(audio,_callback){
         var d = this.getDuration(audio);
-        _callback(d);
+        _Callback(d);
         return d;
     }
 );

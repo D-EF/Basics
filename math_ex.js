@@ -69,11 +69,11 @@ Stepper.prototype={
         var l=this.max-this.min+1;
         if(this.i<this.min){
             this.i=this.max-(this.min-this.i)%(l+1)+1;
-            this._regressionlin_call(-1);
+            this._regressionlin_Call(-1);
         }
         else if(this.i>this.max){
             this.i=this.min+(this.i-this.max)%(l+1)-1;
-            this._regressionlin_call(+1);
+            this._regressionlin_Call(+1);
         }
         return this.i;
     },
@@ -81,7 +81,7 @@ Stepper.prototype={
      * 触发溢出后的回调
      * @param {Number} val 表示正向溢出了还是逆向溢出了 +1 -1
      */
-    _regressionlin_call(val){
+    _regressionlin_Call(val){
         for(var i=this.regression_listener.length-1;i>=0;--i){
             this.regression_listener[i].call(this,this.i,val,this);
         }
@@ -94,7 +94,7 @@ Stepper.prototype={
  * @param {Number} t t参数
  * @returns {{x:Number,y:Number}} 返回对应点
  */
- function getBezierCurvePoint_deCasteljau(points,t){
+ function getBezierCurvePoint_DeCasteljau(points,t){
     if(points.length>1){
         var newPoints=new Array(points.length-1);
         var x,y;
@@ -104,7 +104,7 @@ Stepper.prototype={
             y=td*points[i].y+t*points[i+1].y;
             newPoints[i]={x:x,y:y};
         }
-        return getBezierCurvePoint_deCasteljau(newPoints,t);
+        return getBezierCurvePoint_DeCasteljau(newPoints,t);
     }else{
         return points[0];
     }
@@ -217,7 +217,7 @@ function getBezierCoefficient(points){
  * @param {Number[]} points 原曲线的控制点集合 
  * @returns {Number[]} 导函数的控制点
  */
-function get_bezierDerivativesPoints(points){
+function get_BezierDerivativesPoints(points){
     var n=points.length-2;
     var rtn=new Array(n+1);
     if(n<0)return {x:0,y:0}
@@ -452,7 +452,7 @@ const DIVISION_4_3=4/3;
  * @param   {Number} angle 夹角
  * @returns {Number} 返回 k 值
  */
-function calc_k_bezierToCyles(angle){
+function calc_k_BezierToCyles(angle){
     return DIVISION_4_3*Math.tan(angle*0.25);
 }
 /**@type {Number} 贝塞尔曲线拟合四分之一圆 的 k 值 */

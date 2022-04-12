@@ -318,7 +318,7 @@ function addResizeEvent(_element,_listener){
             }
         },
         m_scroll=function(e){
-            m_resize();
+            m_Resize();
             mark1.scrollTop=maxHeight;
             mark1.scrollLeft=maxWidth;
             mark2.scrollTop=maxHeight;

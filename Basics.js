@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-11 11:45:24
+ * @LastEditTime: 2022-04-12 14:16:42
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -364,7 +364,7 @@ class Delegate extends Function{
      * @param {*} tgt   用添加委托时的tgt属性标识
      * @returns {Delegate} 返回当前
      */
-    removeActs_byTGT(tgt){
+    removeActs_ByTGT(tgt){
         var i=this.act_list.length-1;
         for(;i>0;--i){
             if(this.act_list[i].tgt===tgt){
@@ -597,7 +597,7 @@ Date.prototype.toString.addOverload([String],function(str){
         D:that.getDate().toString(),
         d:that.getDay().toString(),
         h:that.getHours().toString(),
-        m:that.get_minutes().toString(),
+        m:that.get_Minutes().toString(),
         s:that.getSeconds().toString()
     }
     var i,rtn=[],tstr;
@@ -690,9 +690,9 @@ class DEF_Caller{
      * @param {{key:Function}} callbacks 回调函数集合 属性全为 Function 的对象
      * @returns {Array} 返回一个数组
      */
-    create_listener(callbacks){
+    create_Listener(callbacks){
         var rtn=[];
-        this.add_listener(rtn,callbacks)
+        this.add_Listener(rtn,callbacks)
         return rtn;
     }
     /** 增加 监听者(订阅者) 
@@ -700,7 +700,7 @@ class DEF_Caller{
      * @param {{key:Function}} callbacks 回调函数集合 属性全为 Function 的对象
      * @returns {DEF_Caller} 返回当前的对象
      */
-    add_listener(tgt,callbacks){
+    add_Listener(tgt,callbacks){
         var keys=Object.keys(callbacks),
             i=keys.length-1,
             key="";
@@ -720,13 +720,13 @@ class DEF_Caller{
      * @param {*} tgt 
      * @returns {DEF_Caller}
      */
-    remove_listener(tgt){
+    remove_Listener(tgt){
         var keys=Object.keys(callbacks),
             i=keys.length-1,
             key="";
         for(;i>=0;--i){
             key=keys[i];
-            this._callbacks[key].removeActs_byTGT(tgt);
+            this._callbacks[key].removeActs_ByTGT(tgt);
         }
         this._listeners.lastIndexOf(tgt);
     }
@@ -742,7 +742,7 @@ class DEF_Caller{
      * @param {Number} op 被修改的项的下标(起点)
      * @param {Number} length 被修改的长度
      */
-    static _remove_def(op,length){
+    static _remove_Def(op,length){
         this.splice(op,length);
     }
     /** 预设的 插入 回调, 在监听者中插入null
@@ -750,7 +750,7 @@ class DEF_Caller{
      * @param {Number} op 被修改的项的下标(起点)
      * @param {Array} values 插入的内容集合
      */
-    static _insert_def(op,values){
+    static _insert_Def(op,values){
         var l=values.length,
             insp=new Array(l);
         for(--l;l>=0;--l){
@@ -765,7 +765,7 @@ class DEF_Caller{
      * @param {Number} op 被修改的项的下标(起点)
      * @param {Number} ed 被修改的项的下标(终点)
      */
-    static _update_def(op,ed){
+    static _update_Def(op,ed){
         var i=op;
         do{
             this[i]=null;
@@ -779,7 +779,7 @@ class DEF_Caller{
  * @param {String} key   非必要参数 如果是对象数组, 使用属性作为查找表的关键字
  * @return {Number} 返回对应下标    溢出将直接使用首或尾的值
  */
-function select_lut__binary(lut,val,key){
+function select_lut__Binary(lut,val,key){
     var find = false,
         low = 0,
         high = lut.length-1,
@@ -864,9 +864,9 @@ class CQRS_History{
         /** @type {Number} lut查找表的缓存步长 */
         this._lut_cache_step_length=20;
 
-        this.derived_cache();
+        this.derived_Cache();
     }
-    derived_cache(){
+    derived_Cache(){
         var obj=this._now;
         if(obj&&obj.constructor.copy){
             this.lut_cache.push({index:this.command.length-1,cache:obj.constructor.copy(obj)});
@@ -880,11 +880,11 @@ class CQRS_History{
      * 
      * @param {CQRS_Command} command 
      */
-    add_command(command){
+    add_Command(command){
         this.command.push();
         command.do(this._now);
         if(this.lut_cache[this.lut_cache.length].index+this._lut_cache_step_length<=this.command.length){
-            this.derived_cache();
+            this.derived_Cache();
         }
     }
 
@@ -935,7 +935,7 @@ function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
  * @param {String} key key
  * @return {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
  */
-function get_root__dependencyMapping(tgt,_key){
+function get_root__DependencyMapping(tgt,_key){
     var root={rely_on_TGT:tgt ,rely_on_key:_key},
         head={rely_on_TGT:root,rely_on_key:_key},
         map=tgt._dependency_mapping_notbook,
@@ -953,8 +953,8 @@ function get_root__dependencyMapping(tgt,_key){
  * @param {String} key 对象上的key
  * @param {function} callback 回调函数 callback(old_value,new_val,root_data,head_dependency) this 指向 tgt, 不能在这里再给属性赋值; 如果必要,直接修改root的内容
  */
-function add_dependencyListener(tgt,key,callback){
-    var temp=get_root__dependencyMapping(tgt,key);
+function add_DependencyListener(tgt,key,callback){
+    var temp=get_root__DependencyMapping(tgt,key);
     var handMain=temp.head;
     if(!handMain.rely_on_TGT._dependency_mapping_delegates){
         handMain.rely_on_TGT._dependency_mapping_delegates=new Map();
@@ -977,7 +977,7 @@ class  Iterator__MyVirtual{
     /** 是否遍历完
      * @virtual
      */
-    judge_isEnd(){}
+    judge_IsNotEnd(){}
 
     /** 下一个
      * @virtual
@@ -988,7 +988,7 @@ class  Iterator__MyVirtual{
      * @virtual
      * @return {*} 返回当前
      */
-    get_now(){}
+    get_Now(){}
 }
 
 /**
@@ -1013,7 +1013,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
      * @param {TreeNode} item 
      * @returns {Array}
      */
-    _get_itemchildren(item){
+    _get_Itemchildren(item){
         if(this.childrenKey){
             return item[this.childrenKey];
         }else{
@@ -1038,11 +1038,11 @@ class Iterator__Tree extends Iterator__MyVirtual{
         this._gg[0]=this.data;
         this._di=0;
         this.next();
-        if(!this._get_itemchildren(this.data).length){
+        if(!this._get_Itemchildren(this.data).length){
             this._depth=-1;
         }
     }
-    judge_isEnd(){
+    judge_IsNotEnd(){
         return this._depth>=0;
     }
     next(){
@@ -1056,7 +1056,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
             this._depth=d;
             return;
         }
-        gg[d]=this._get_itemchildren(this._get_Parent(d))[gi[d]];
+        gg[d]=this._get_Itemchildren(this._get_Parent(d))[gi[d]];
         path.length=d+1;
         path[d]=gi[d];
         this._now_path=Array.from(path);
@@ -1064,16 +1064,16 @@ class Iterator__Tree extends Iterator__MyVirtual{
             if(gg[d]!=undefined){
                 od=d;
                 this._depth=od;
-                if(this._get_itemchildren(gg[d]).length){
+                if(this._get_Itemchildren(gg[d]).length){
                     // 下潜
                     ++d;
                     gi[d]=0;
-                    gg[d]=this._get_itemchildren(this._get_Parent(d))[gi[d]];
+                    gg[d]=this._get_Itemchildren(this._get_Parent(d))[gi[d]];
                 }
                 else{
                     // 上潜
                     gi[d]++;
-                    if(this._get_itemchildren(this._get_Parent(d))[gi[d]]===undefined){
+                    if(this._get_Itemchildren(this._get_Parent(d))[gi[d]]===undefined){
                         break;
                     }
                 }
@@ -1084,33 +1084,32 @@ class Iterator__Tree extends Iterator__MyVirtual{
         do{
             --d;
             ++gi[d];
-        }while(d>=0&&((gg[d]=this._get_itemchildren(this._get_Parent(d))[gi[d]])===undefined));
+        }while(d>=0&&((gg[d]=this._get_Itemchildren(this._get_Parent(d))[gi[d]])===undefined));
         // this._depth=od;
         this._t_depth=d;
     }
-    get_now(){
+    get_Now(){
         return this._gg[this._depth];
     }
     /** 获取当前路径
      * @returns {Number[]} 返回下标形式的路径
      */
-    get_now__path(){
+    get_now__Path(){
         return this._now_path;
     }
     /** 获取当前迭代的次数
      * @returns {Number} 当前是第几次迭代
      */
-    get_now__di(){
+    get_now__Di(){
         return this._di;
     }
     /** 获取当前迭代的次数
      * @returns {Number} 当前是第几次迭代
      */
-    get_now__depth(){
+    get_now__Depth(){
         return this._depth;
     }
 }
-
 
 export {
     judgeOs,

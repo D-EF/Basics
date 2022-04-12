@@ -335,7 +335,7 @@ DEF_CUEOBJTrack(file,root,track_index)
 * getDuration()
   获取当前轨道的长度
     @param {Audio} audio 当前正在播放这个文件的 Audio 元素
-    @param {function} _callback _callback({Number}Duration) 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
+    @param {function} _callback _Callback({Number}Duration) 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
     3个重载 fnc(audio) 和 fnc(callback); 用 audio 的重载可以返回长度, 可以不用 callback
 ---
 
