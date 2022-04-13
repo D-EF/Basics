@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-01 21:22:29
+ * @LastEditTime: 2022-04-13 20:04:25
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -111,8 +111,28 @@ function KeyNotbook(){
     /**@type {String[][]} 组合键记录表 列表项为 KeyboardEvent.code*/
     this.keys_down_table =[];
     this.keys_up_fnc={};
+    this.state={
+        base:{
+            keys_down_fuc:this.keys_down_fuc,
+            keys_down_table:this.keys_down_table
+        }
+    }
 }
 KeyNotbook.prototype={
+    /** 变更状态以替换key事件 
+     * @param {String} key 状态的key，初始状态为 base
+     */
+    derive_State:function(key){
+        if(!this.state[key]){
+            this.state[key]={
+                keys_down_fuc:[],
+                keys_down_table:[]
+            }
+        }
+        var state=this.state[key];
+        this.keys_down_fuc   =state.keys_down_fuc
+        this.keys_down_table =state.keys_down_table
+    },
     constructor:KeyNotbook,
     /** 添加按键事件
      * @param {Number|String|(Number|String)[]} keycode 触发回调的按键 keycode, 接受 数字(keyCode) or 字符串(code) or 数组
@@ -221,7 +241,7 @@ KeyNotbook.prototype={
     }
 }
 
-/** 给element添加按键事件
+/** 给element添加按键事件 当有冲突时，后添加的事件触发后不会再触发之前的
  * @param {Element} _Element 添加事件的元素
  * @param {Boolean} _keepFlag 按住键盘是否重复触发事件
  * @param {Boolean} _orderFlag 组合键是否需要有序
@@ -268,6 +288,8 @@ function removeKeyEvent(_Element,_keycode,act_fnc,_type){
         }
     }
 }
+
+
 
 /** 给element添加resize事件, 没有 e 事件参数
  * @param {Element} _element 绑定的元素
@@ -421,7 +443,7 @@ HTMLElement.prototype.addEventListener=function(type,listener){
     _addEventListener.apply(this,arguments);
 }
 
-
+// 增加焦点丢失事件
 addEventType("focuslose",function(tgt){
     tgt.addEventListener("focusout",function(e){
         tgt.focusloseFlag=true;

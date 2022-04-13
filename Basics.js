@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-12 17:52:57
+ * @LastEditTime: 2022-04-13 18:51:00
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -189,12 +189,17 @@ function rltToAbs(_fileURL,rootURL){
     }
     return fileURL;
 }
+/** @type {Symbol} If the function 'arrayEqual' has this object in arguments[0] or arguments[1]. It will return true! */
+const ArrayEqual_EqualObj=Symbol("If the function 'arrayEqual' has this object in arguments[0] or arguments[1]. It will return true!");
 /**对比两个列表项是否相同
  * @param {Array}   a1       要进行比较的数组
  * @param {Array}   a2       要进行比较的数组
  * @return {Boolean}    返回是否相同
 */
 function arrayEqual(a1,a2){
+    if(a1===evele_equal_arr||a2===evele_equal_arr){
+        return true
+    }
     if(a1.length!=a2.length)return false;
     var i=a1.length;
     for(--i;i>=0;--i){
@@ -237,7 +242,6 @@ function arrayDiff(arr1,arr2){
 function arrayHasDiff(arr1,arr2){
     if(arr1.length!=arr2.length)return true;
     var hash=new Map();
-    var rtn=[];
     var i;
     for(i=arr1.length-1;i>=0;--i){
         hash.set(arr1[i],false);
@@ -977,7 +981,7 @@ class  Iterator__MyVirtual{
     /** 是否遍历完
      * @virtual
      */
-    judge_IsNotEnd(){}
+    is_NotEnd(){}
 
     /** 下一个
      * @virtual
@@ -1042,7 +1046,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
             this._depth=-1;
         }
     }
-    judge_IsNotEnd(){
+    is_NotEnd(){
         return this._depth>=0;
     }
     next(){
@@ -1051,7 +1055,9 @@ class Iterator__Tree extends Iterator__MyVirtual{
         path=this._path,
         gi=this._gi,
         d=this._t_depth,
-        od=this._depth;
+        od=this._depth,
+        temp;
+        
         if(d<0){
             this._depth=d;
             return;
@@ -1064,7 +1070,8 @@ class Iterator__Tree extends Iterator__MyVirtual{
             if(gg[d]!=undefined){
                 od=d;
                 this._depth=od;
-                if(this._get_Itemchildren(gg[d]).length){
+                temp=this._get_Itemchildren(gg[d]);
+                if(temp&&temp.length){
                     // 下潜
                     ++d;
                     gi[d]=0;
@@ -1117,6 +1124,7 @@ export {
     getCurrAbsPath,
     rltToAbs,
     arrayEqual,
+    ArrayEqual_EqualObj,
     arrayDiff,
     arrayHasDiff,
     OlFunction,
