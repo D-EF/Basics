@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-13 18:51:00
+ * @LastEditTime: 2022-04-14 12:04:37
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -197,7 +197,7 @@ const ArrayEqual_EqualObj=Symbol("If the function 'arrayEqual' has this object i
  * @return {Boolean}    返回是否相同
 */
 function arrayEqual(a1,a2){
-    if(a1===evele_equal_arr||a2===evele_equal_arr){
+    if(a1===ArrayEqual_EqualObj||a2===ArrayEqual_EqualObj){
         return true
     }
     if(a1.length!=a2.length)return false;
@@ -1097,6 +1097,9 @@ class Iterator__Tree extends Iterator__MyVirtual{
     }
     get_Now(){
         return this._gg[this._depth];
+    }
+    get_Now__NodePath(){
+        return this._gg;
     }
     /** 获取当前路径
      * @returns {Number[]} 返回下标形式的路径

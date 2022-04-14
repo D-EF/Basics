@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-13 20:04:25
+ * @LastEditTime: 2022-04-14 11:08:55
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -122,7 +122,7 @@ KeyNotbook.prototype={
     /** 变更状态以替换key事件 
      * @param {String} key 状态的key，初始状态为 base
      */
-    derive_State:function(key){
+    change_State:function(key){
         if(!this.state[key]){
             this.state[key]={
                 keys_down_fuc:[],
