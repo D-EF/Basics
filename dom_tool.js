@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-14 11:08:55
+ * @LastEditTime: 2022-04-19 15:41:38
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -17,7 +17,7 @@ import {
 } from "./Basics.js"
 
 /** 阻止事件冒泡 */
-function stopPropagation(e){e.stopPropagation();}
+function stopPropagation(e){e.stopPropagation();window.event.cancelBubble=true;}
 
 /** 阻止默认事件发生 */
 function stopEvent(e){
