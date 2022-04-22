@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-14 12:04:37
+ * @LastEditTime: 2022-04-22 19:56:50
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -824,76 +824,6 @@ Map.copy=function(tgt){
     return new Map(tgt);
 }
 
-class CQRS_Command{
-    /** CQRS_History 的命令
-     * @param {Boolean} type false 赋值, true 运行成员函数
-     * @param {String[]} path 执行操作的路径
-     * @param {*[]} _arguments 执行命令时使用的参数
-     */
-    constructor(type,path,_arguments){
-        this.type=type;
-        this.path=path;
-        this.arguments=_arguments;
-    }
-    /** 执行动作
-     * @param {*} tgt 操作的对象的根
-     */
-    do(tgt){
-        var temp=tgt,
-            i=0,
-            l=this.path.length-1;
-        while(i<l){
-            temp=temp[this.path[i]];
-            ++i;
-        }
-        if(this.type){
-            temp[this.path[i]].apply(temp[this.path[i]],this.arguments);
-        }else{
-            temp[this.path[i]]=this.arguments;
-        }
-    }
-}
-
-class CQRS_History{
-    /** 
-     * @param {*}  
-     */
-    constructor(obj){
-        /** @type {*} 当前图元的根 */
-        this._now=obj;
-        /** @type {{index:Number,cache:*}[]} 缓存 lut 表 */
-        this.lut_cache=[];
-        /** @type {CQRS_command[]} 记录的历史指令 */
-        this.command=[];
-        /** @type {Number} lut查找表的缓存步长 */
-        this._lut_cache_step_length=20;
-
-        this.derived_Cache();
-    }
-    derived_Cache(){
-        var obj=this._now;
-        if(obj&&obj.constructor.copy){
-            this.lut_cache.push({index:this.command.length-1,cache:obj.constructor.copy(obj)});
-        }else if(obj&&obj.copy){
-            this.lut_cache.push({index:this.command.length-1,cache:obj.copy()});
-        }else{
-            throw new TypeError("obj must can copy!");
-        }
-    }
-    /**
-     * 
-     * @param {CQRS_Command} command 
-     */
-    add_Command(command){
-        this.command.push();
-        command.do(this._now);
-        if(this.lut_cache[this.lut_cache.length].index+this._lut_cache_step_length<=this.command.length){
-            this.derived_Cache();
-        }
-    }
-
-}
-
 /**
  * @typedef HadDependencyObject 使用依赖的对象
  * @property {Map<String,Delegate>} _dependency_mapping_delegates   set时的委托集合
@@ -969,6 +899,7 @@ function add_DependencyListener(tgt,key,callback){
     handMain.rely_on_TGT._dependency_mapping_delegates.get(handMain.rely_on_key).addAct(tgt,callback);
 }
 
+/** 迭代器抽象类 */
 class  Iterator__MyVirtual{
     constructor(data){
         this.data=data;
@@ -1120,6 +1051,9 @@ class Iterator__Tree extends Iterator__MyVirtual{
         return this._depth;
     }
 }
+
+
+
 
 export {
     judgeOs,
