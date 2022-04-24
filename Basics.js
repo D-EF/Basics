@@ -4,7 +4,7 @@
 
 /*
  * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-23 18:15:58
+ * @LastEditTime: 2022-04-24 14:12:38
  * @LastEditors: Darth_Eternalfaith
  */
  
@@ -1086,7 +1086,7 @@ class Act_History{
         /**@type {Number} 派生快照缓存的步长, 为0时不会派生快照 */
         this.snapshot_step=0;
         /** @type {Act_Command[]} 命令记录 */
-        this.act_command_history;
+        this.act_command_history=[];
 
         this.head_cache={
             index:-1,
@@ -1113,7 +1113,7 @@ class Act_History{
      * @return {Act_History_Cache} 返回缓存
      */
     find_Cache(index){
-        return select_Lut__Binary(this.snapshot_cache,index,"index");
+        return this.snapshot_cache[select_Lut__Binary(this.snapshot_cache,index,"index")-1];
     }
     /** 使用历史记录创建缓存
      * @param {Number} index 对应指令的下标
@@ -1130,10 +1130,11 @@ class Act_History{
             ++i;
             Act_History.run_Cmd(rtn.data,this.act_command_history[i]);
         }
+        return rtn;
     }
     /** 加入指令
      * @param {Act_Command} cmd 新指令
-     * @param {Boolean} want_overwrite 是否要覆盖操作
+     * @param {Boolean} [want_overwrite] 是否要覆盖操作 默认否
      * @return {*} 指令对应函数的返回
      */
     set_ActCommand(cmd,want_overwrite){
@@ -1174,7 +1175,9 @@ class Act_History{
         this.act_command_history[i]=cmd;
 
         this.tail_cache=this.now_cache;
+        var path=cmd.path;
         // 执行
+        this.now_cache.index=i;
         if(cmd.isfnc){
             return temp1[path[path.length-1]].apply(temp1,cmd.args);
         }else{
@@ -1188,6 +1191,7 @@ class Act_History{
      */
     static run_Cmd(tgt,cmd){
         var rtn=Act_History.into_CmdPointer(tgt,cmd);
+        var path=cmd.path;
         if(cmd.isfnc){
             return rtn[path[path.length-1]].apply(rtn,cmd.args);
         }else{
