@@ -1,13 +1,13 @@
 /*!
- * Basics.js 应该在所有脚本之前载入
- */
+* Basics.js 应该在所有脚本之前载入
+*/
 
 /*
- * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-24 14:12:38
+* @Author: Darth_Eternalfaith
+ * @LastEditTime: 2022-04-25 13:19:09
  * @LastEditors: Darth_Eternalfaith
- */
- 
+*/
+
 /** 当前运行环境 (可能是 window 或 worker)
  */
 var thisEnvironment=window||worker||this;
@@ -52,9 +52,9 @@ function judgeOs() {
 //旧版本浏览器兼容Object.keys函数   form https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
 if (!Object.keys) {
     Object.keys = (function () {
-      var hasOwnProperty = Object.prototype.hasOwnProperty,
-          hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
-          dontEnums = [
+    var hasOwnProperty = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
+        dontEnums = [
             'toString',
             'toLocaleString',
             'valueOf',
@@ -62,25 +62,25 @@ if (!Object.keys) {
             'isPrototypeOf',
             'propertyIsEnumerable',
             'constructor'
-          ],
-          dontEnumsLength = dontEnums.length;
-  
-      return function (obj) {
+        ],
+        dontEnumsLength = dontEnums.length;
+
+    return function (obj) {
         if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
-  
+
         var result = [];
-  
+
         for (var prop in obj) {
-          if (hasOwnProperty.call(obj, prop)) result.push(prop);
+        if (hasOwnProperty.call(obj, prop)) result.push(prop);
         }
-  
+
         if (hasDontEnumBug) {
-          for (var i=0; i < dontEnumsLength; i++) {
+        for (var i=0; i < dontEnumsLength; i++) {
             if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
-          }
+        }
         }
         return result;
-      }
+    }
     })()
 };
 
@@ -195,7 +195,7 @@ const ArrayEqual_EqualObj=Symbol("If the function 'arrayEqual' has this object i
  * @param {Array}   a1       要进行比较的数组
  * @param {Array}   a2       要进行比较的数组
  * @return {Boolean}    返回是否相同
-*/
+ */
 function arrayEqual(a1,a2){
     if(a1===ArrayEqual_EqualObj||a2===ArrayEqual_EqualObj){
         return true
@@ -279,7 +279,7 @@ class OlFunction extends Function{
      * @param {Array} parameterType   形参的类型
      * @param {function}    fnc             执行的函数
      * @param {String}      codeComments    没用的属性, 作为函数的注释
-    */
+ */
     addOverload(parameterType,fnc,codeComments){
         this.ols.push({parameterType:parameterType,fnc:fnc,codeComments:codeComments});
     }
@@ -446,7 +446,7 @@ decodeHTML.rStrL=["&"       ];
  * @param {char}   edKeyMask 插值关键文本 的屏蔽字符; 默认'\'
  * @returns {{str:String,hit:String[]}}
  */
- function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
+function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
     if(Object.keys(that).length){
         var temp=[],tempstr="",hit=[];
         var strkey="\"'`",strKP=0,strFlag=false;
@@ -645,7 +645,7 @@ Date.prototype.toString.addOverload([String],function(str){
  * @param {function(this: XMLHttpRequest,ProgressEvent<EventTarget>)} callback 回调函数
  * @param {any} body 加在 send 里的实参
  */
- function requestAPI(method,url,callback,body){
+function requestAPI(method,url,callback,body){
     /**@type {XMLHttpRequest} */
     var xmlHttp;
     if(thisEnvironment.XMLHttpRequest){
@@ -1062,6 +1062,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
  * @property {String}   message 命令的信息
  * @property {*[]}      path 路径
  * @property {*[]}      args 执行参数
+ * @property {Function[]}[f_copy_args] 执行参数的copy函数,与执行参数下标对应
  * @property {*[][]}    [args_path] 进入路径时的参数, 有效长度为path的长度-1; temp= !args_path[i]? temp[path[i]] : temp[path[i]].apply(temp,args_path[i]);
  * @property {Boolean}  [isfnc] 该操作是否为函数, 默认否( 默认为赋值操作: obj[path[0]]...[path[l]]=atgs[0] );
  * @property {Boolean}  [can_overwrite] 是否允许覆盖操作 默认否
@@ -1117,10 +1118,14 @@ class Act_History{
     }
     /** 使用历史记录创建缓存
      * @param {Number} index 对应指令的下标
+     * @param {Act_History_Cache} [cache] 使用某条缓存
      * @returns 
      */
-    create_Cache(index){
-        var temp=this.find_Cache(index);
+    create_Cache(index,cache){
+        var temp=cache;
+        if(temp&&(temp.index>index)){
+            temp=this.find_Cache(index);
+        }
         var i=temp.index;
         var rtn={
             index:index,
@@ -1139,14 +1144,14 @@ class Act_History{
      */
     set_ActCommand(cmd,want_overwrite){
         var i=this.now_cache.index,j;
-        var temp_cmd=this.act_command_history[i];
+        var temp_cmd=this.act_command_history[i],
+            args=Act_History.copy_CmdArgs(cmd);
         var temp1,temp2;
 
         temp1=Act_History.into_CmdPointer(this.now_cache.data,cmd);
         if(want_overwrite&&temp_cmd&&temp_cmd.can_overwrite){
             temp2=Act_History.into_CmdPointer(this.now_cache.data,temp_cmd);
         }
-        this.act_command_history[i]=cmd;
         if(this.act_command_history[i+1]){
             // 丢弃后面的指令
             this.act_command_history.splice(i,Infinity);
@@ -1168,7 +1173,6 @@ class Act_History{
                 });
             }
         }
-
         if(temp1!==temp2){
             ++i; //不覆盖
         }
@@ -1179,7 +1183,7 @@ class Act_History{
         // 执行
         this.now_cache.index=i;
         if(cmd.isfnc){
-            return temp1[path[path.length-1]].apply(temp1,cmd.args);
+            return temp1[path[path.length-1]].apply(temp1,args);
         }else{
             return temp1[path[path.length-1]]=args[0];
         }
@@ -1191,9 +1195,10 @@ class Act_History{
      */
     static run_Cmd(tgt,cmd){
         var rtn=Act_History.into_CmdPointer(tgt,cmd);
-        var path=cmd.path;
+        var path=cmd.path,
+            args=Act_History.copy_CmdArgs(cmd);
         if(cmd.isfnc){
-            return rtn[path[path.length-1]].apply(rtn,cmd.args);
+            return rtn[path[path.length-1]].apply(rtn,args);
         }else{
             return rtn[path[path.length-1]]=args[0];
         }
@@ -1214,6 +1219,25 @@ class Act_History{
             ++i;
         }
         return temp;
+    }
+    /** 复制运行时使用的参数
+     * @param {Act_Command} cmd 
+     * @returns 
+     */
+    static copy_CmdArgs(cmd){
+        if(cmd.f_copy_args){
+            var rtn=new Array(cmd.args.length)
+            for(var i=cmd.args.length-1;i>=0;--i){
+                if(cmd.f_copy_args[i]){
+                    rtn[i]=cmd.f_copy_args[i](cmd.args[i]);
+                }else{
+                    rtn[i]=cmd.args[i];
+                }
+            }
+            return rtn;
+        }else{
+            return cmd.args;
+        }
     }
 }
 // todo 待测试
