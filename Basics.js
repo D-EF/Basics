@@ -4,7 +4,7 @@
 
 /*
 * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-04-25 13:19:09
+ * @LastEditTime: 2022-04-26 11:30:45
  * @LastEditors: Darth_Eternalfaith
 */
 
@@ -882,10 +882,18 @@ function get_Root__DependencyMapping(tgt,_key){
     }
     return {root:root,head:head};
 }
+
+/**
+ * @callback DependencyListener_Callback
+ * @param {*} old_value           旧值
+ * @param {*} new_val             新值
+ * @param {Object} root_data      数据来源 (root)
+ * @param {Object} head_dependenc 第一个依赖者, 依赖注入 头部 
+ */
 /** 添加依赖的数据修改时的委托; 注意: 当直接使用root对象进行修改时 委托不会被执行
  * @param {HadDependencyObject} tgt 使用了依赖的对象
  * @param {String} key 对象上的key
- * @param {function} callback 回调函数 callback(old_value,new_val,root_data,head_dependency) this 指向 tgt, 不能在这里再给属性赋值; 如果必要,直接修改root的内容
+ * @param {DependencyListener_Callback} callback 回调函数  this 指向 tgt, 不能在这里再给属性赋值; 如果必要,直接修改root的内容
  */
 function add_DependencyListener(tgt,key,callback){
     var temp=get_Root__DependencyMapping(tgt,key);
