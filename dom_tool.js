@@ -5,7 +5,7 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-19 15:41:38
+ * @LastEditTime: 2022-04-27 14:33:23
  * @FilePath: \def-web\js\basics\dom_tool.js
  */
 import {
@@ -292,7 +292,7 @@ function removeKeyEvent(_Element,_keycode,act_fnc,_type){
 
 
 /** 给element添加resize事件, 没有 e 事件参数
- * @param {Element} _element 绑定的元素
+ * @param {HTMLElement} _element 绑定的元素
  * @param {function(this:Element)} _listener 触发的函数 没有 e 事件参数
  */
 function addResizeEvent(_element,_listener){   
@@ -351,6 +351,18 @@ function addResizeEvent(_element,_listener){
         _element.resizeMark1=mark1;
         _element.resizeMark2=mark2;
     }
+}
+/** 移除 addResizeEvent 给element添加resize事件
+ * @param {HTMLElement} _element 
+ * @param {function(this:Element)} _listener 
+ * @returns 
+ */
+function removeResizeEvent(_element,_listener){
+    if(_element.resizeMarkFlag){
+        element.resizeListener.splice(element.resizeListener.indexOf(_listener),1);
+        return 1;
+    }
+    return 0;
 }
 /** 用于复位 addResizeEvent 
  * 给使用过 addResizeEvent 的元素使用
@@ -473,8 +485,9 @@ export{
     addKeyEvent,
     removeKeyEvent,
     addResizeEvent,
+    removeResizeEvent,
     linkClick,
     setupLinkClick,
-    addEventType
+    addEventType,
 }
 
