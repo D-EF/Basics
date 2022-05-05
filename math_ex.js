@@ -1,8 +1,8 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-12 17:54:39
- * @FilePath: \def-web\js\basics\math_ex.js
+ * @LastEditTime: 2022-05-05 17:06:28
+ * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
 window.deg=Math.PI/180;
@@ -13,7 +13,7 @@ window.deg=Math.PI/180;
  * @param {Number} min 步进器的最小值
  * @param {Number} now 步进器的当前值
  */
- function Stepper(max,min,now){
+function Stepper(max,min,now){
     this.max=max===undefined?Infinity:max;
     this.min=(min===undefined)?(0>this.max?this.max-1:0):(min);
     if(this.max<this.min){

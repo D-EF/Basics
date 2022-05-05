@@ -4,7 +4,7 @@
 
 /*
 * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-05-04 20:07:12
+ * @LastEditTime: 2022-05-05 15:21:22
  * @LastEditors: Darth_Eternalfaith
 */
 
@@ -857,7 +857,7 @@ function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
                 rely_on_TGT[rely_on_keys[i]]=val;
                 this._dependency_mapping_delegates&&
                 this._dependency_mapping_delegates.has(keys[i])&&
-                this._dependency_mapping_delegates.get(keys[i])(old,val,rely_on_TGT,this);
+                this._dependency_mapping_delegates.get(keys[i])(val,old,rely_on_TGT,this);
             }
         });
         map.set(keys[i],{rely_on_TGT:rely_on_TGT,rely_on_key:rely_on_keys[i]});
@@ -885,8 +885,8 @@ function get_Root__DependencyMapping(tgt,_key){
 
 /**
  * @callback DependencyListener_Callback
- * @param {*} old_value           旧值
  * @param {*} new_val             新值
+ * @param {*} old_value           旧值
  * @param {Object} root_data      数据来源 (root)
  * @param {Object} head_dependenc 第一个依赖者, 依赖注入 头部 
  */
@@ -905,6 +905,20 @@ function add_DependencyListener(tgt,key,callback){
         handMain.rely_on_TGT._dependency_mapping_delegates.set(handMain.rely_on_key,Delegate.create());
     }
     handMain.rely_on_TGT._dependency_mapping_delegates.get(handMain.rely_on_key).addAct(tgt,callback);
+}
+function remove_DependencyListener(tgt,key,callback){
+    var temp=get_Root__DependencyMapping(tgt,key);
+    var handMain=temp.head;
+    if(handMain.rely_on_TGT._dependency_mapping_delegates.has(handMain.rely_on_key)){
+        handMain.rely_on_TGT._dependency_mapping_delegates.get(handMain.rely_on_key).removeAct(tgt,callback);
+    }
+}
+function remove_DependencyListener_all(tgt,key){
+    var temp=get_Root__DependencyMapping(tgt,key);
+    var handMain=temp.head;
+    if(handMain.rely_on_TGT._dependency_mapping_delegates.has(handMain.rely_on_key)){
+        handMain.rely_on_TGT._dependency_mapping_delegates.delete(handMain.rely_on_key);
+    }
 }
 
 /** 迭代器抽象类 */
@@ -1276,6 +1290,8 @@ export {
     dependencyMapping,
     get_Root__DependencyMapping,
     add_DependencyListener,
+    remove_DependencyListener,
+    remove_DependencyListener_all,
     Iterator__MyVirtual,
     Iterator__Tree,
     Act_History
