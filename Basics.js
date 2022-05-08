@@ -4,7 +4,7 @@
 
 /*
 * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-05-07 14:57:56
+ * @LastEditTime: 2022-05-08 17:34:12
  * @LastEditors: Darth_Eternalfaith
 */
 
@@ -965,6 +965,8 @@ class Iterator__Tree extends Iterator__MyVirtual{
         this._gi=[];
         this._gg=[];
         this._path=[];
+        this._now_path=[];
+        this._now_node_path=[];
     }
     /** 获取子节点列表
      * @param {TreeNode} item 
@@ -994,6 +996,8 @@ class Iterator__Tree extends Iterator__MyVirtual{
         this._gg.length=1;
         this._gg[0]=this.data;
         this._di=0;
+        this._now_path.length=0;
+        this._now_node_path.length=0;
         this.next();
         if(!this._get_Itemchildren(this.data).length){
             this._depth=-1;
@@ -1018,7 +1022,8 @@ class Iterator__Tree extends Iterator__MyVirtual{
         gg[d]=this._get_Itemchildren(this._get_Parent(d))[gi[d]];
         path.length=d+1;
         path[d]=gi[d];
-        this._now_path=Array.from(path);
+        this._now_path.splice(0,Infinity,...path);
+        this._now_node_path.splice(0,Infinity,...gg);
         do{
             if(gg[d]!=undefined){
                 od=d;
@@ -1052,7 +1057,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
         return this._gg[this._depth];
     }
     get_Now__NodePath(){
-        return this._gg;
+        return this._now_node_path;
     }
     /** 获取当前路径
      * @returns {Number[]} 返回下标形式的路径
