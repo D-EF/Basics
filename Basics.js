@@ -4,7 +4,7 @@
 
 /*
 * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-05-08 17:34:12
+ * @LastEditTime: 2022-05-09 16:06:59
  * @LastEditors: Darth_Eternalfaith
 */
 
@@ -1053,17 +1053,19 @@ class Iterator__Tree extends Iterator__MyVirtual{
         // this._depth=od;
         this._t_depth=d;
     }
+    /** 获取当前节点 */
     get_Now(){
         return this._gg[this._depth];
     }
+    /**获取当前路径 (node形式) */
     get_Now__NodePath(){
-        return this._now_node_path;
+        return Array.from(this._now_node_path);
     }
     /** 获取当前路径
      * @returns {Number[]} 返回下标形式的路径
      */
     get_Now__Path(){
-        return this._now_path;
+        return Array.from(this._now_path);
     }
     /** 获取当前迭代的次数
      * @returns {Number} 当前是第几次迭代
