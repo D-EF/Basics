@@ -5,8 +5,8 @@
 /*
  * @Date: 2022-01-11 16:43:21
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-04-27 14:33:23
- * @FilePath: \def-web\js\basics\dom_tool.js
+ * @LastEditTime: 2022-05-14 11:31:42
+ * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\dom_tool.js
  */
 import {
     arrayDiff,
@@ -473,6 +473,18 @@ addEventType("focuslose",function(tgt){
     window.addEventListener("blur",function(){
         tgt.focusloseFlag=false;
         tgt.dispatchEvent(new CustomEvent("focuslose"));
+    });
+});
+
+// 增加鼠标按键丢失事件
+addEventType("mousefree",function(tgt){
+    if(tgt._has_mousefree)return;
+    tgt._has_mousefree=true;
+    tgt.addEventListener("mouseleave",function(e){
+        tgt.dispatchEvent(new MouseEvent("mousefree",e));
+    });
+    tgt.addEventListener("mouseup",function(e){
+        tgt.dispatchEvent(new MouseEvent("mousefree",e));
     });
 });
 
