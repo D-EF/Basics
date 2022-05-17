@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-05-17 14:27:04
+ * @LastEditTime: 2022-05-17 18:12:51
  * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
@@ -15,36 +15,35 @@ function get_NumberLength(val){
     }
     return rtn;
 }
-
-class Number_Long{
-    /**
-     * @param {Number|Number[]|Number_Long} val 
-     */
-    constructor(val){
-        /** @type {Number[]} */
-        this.data;
-        this.f=true;
-        if(val instanceof Number_Long){
-            this.data=Array.from(val.data);
-            this.f=val.f;
-        }else if(Array.isArray(val)){
-            this.data=val.map(i=>{
-                if(i<0){
-                    this.f=!f;
-                }
-                return Math.abs(i);
-            });
-        }
-        else if(val!==undefined){
-            if(val<0){
+/** 大数运算使用的类
+ * @param {Number|Number[]|Number_Long} val 
+ */
+function Number_Long(val){
+    /** @type {Number[]} */
+    this.data;
+    this.f=true;
+    if(val instanceof Number_Long){
+        this.data=Array.from(val.data);
+        this.f=val.f;
+    }else if(Array.isArray(val)){
+        this.data=val.map(i=>{
+            if(i<0){
                 this.f=!f;
             }
-            this.data=[Math.abs(Number(val))];
-        }else{
-            this.data=[];
-        }
-        this.sp();
+            return Math.abs(i);
+        });
     }
+    else if(val!==undefined){
+        if(val<0){
+            this.f=!f;
+        }
+        this.data=[Math.abs(Number(val))];
+    }else{
+        this.data=[];
+    }
+    this.sp();
+}
+Number_Long.prototype={
     toString(){
         var rtn="",
             temp,temp_l;
@@ -58,7 +57,7 @@ class Number_Long{
             rtn+=temp;
         }
         return rtn;
-    }
+    },
     /** 进位 */
     sp(){
         var temp1=0,temp_f,
@@ -84,7 +83,7 @@ class Number_Long{
                 }
             }
         }
-    }
+    },
     /** 加法运算
      * @param {Number|Number[]|Number_Long} val 增加的值
      * @return {Number_Long} 返回一个新的 Number_Long
@@ -111,7 +110,7 @@ class Number_Long{
         }
         rtn.sp();
         return rtn;
-    }
+    },
     /** 乘法运算
      * @param {Number|Number[]|Number_Long} val 
      * @return {Number_Long} 返回一个新的 Number_Long
@@ -135,22 +134,10 @@ class Number_Long{
         }
         return rtn;
     }
-    static MAX=1e+8;
-    static SP=1e-8;
-    static MAX_LENGTH=8;
 }
-
-console.log(new Number_Long(899999999).add(899999999).toString());      //1799999998
-console.log(new Number_Long(899999999).add(1).multiply().toString());
-
-var temp=new Number_Long(1);
-for(var i=1;i<=100;++i){
-    temp=temp.multiply(i);
-}
-console.log(temp.toString());
-
-
-
+Number_Long.MAX=1e+8;
+Number_Long.SP=1e-8;
+Number_Long.MAX_LENGTH=8;
 
 /**
  * 步进器
@@ -259,6 +246,7 @@ Stepper.prototype={
  * 矩阵乘法
  * @param {Number[][]} m1 左侧矩阵
  * @param {Number[][]} m2 右侧矩阵
+ * @returns {Number[][]} 返回新矩阵
  */
 function matrixMULT(m1,m2){
     if(m1[0].length!=m2.length) throw new Error("矩阵乘法格式错误");
@@ -319,6 +307,7 @@ const Bezier_Matrixs=[[1]];
 /**
  * 贝塞尔曲线的矩阵 
  * @param {Number} n n阶贝塞尔曲线
+ * @returns {Number[][]} 贝塞尔曲线的计算矩阵
  */
 function getBezierMatrix(n){
     if(Bezier_Matrixs[n])return Bezier_Matrixs[n];
@@ -341,8 +330,9 @@ function getBezierMatrix(n){
 /**
  * 用控制点得到各次幂的系数
  * @param {Number[]} points 控制点集合
+ * @returns {Number[]} 贝塞尔曲线采样计算系数
  */
-function getBezierCoefficient(points){
+function get_BezierCoefficient(points){
     var n=points.length-1;
     var m=getBezierMatrix(n);
     var rtn=new Array(points.length);
@@ -376,8 +366,9 @@ function get_BezierDerivativesPoints(points){
  * 计算贝塞尔曲线分割时使用的 Q 矩阵 (不补零)
  * @param {Number} n  n阶贝塞尔曲线
  * @param {Number} t  t参数 0~1
+ * @returns {Number[][]} 贝塞尔曲线的计算分割时使用的矩阵
  */
-function createCutBezierMatrixQ(n,t){
+function create_CutBezierMatrixQ(n,t){
     if(g_Pascals_Triangle.length<=n){
         calcPascalsTriangle(n);
     }
@@ -406,10 +397,11 @@ function createCutBezierMatrixQ(n,t){
 /**
  * 用矩阵分割贝塞尔曲线
  * @param {Number[]} points        控制点集合
- * @param {Number[][]} matrix 分割时使用的矩阵, 用 createCutBezierMatrixQ 函数生成
+ * @param {Number[][]} matrix 分割时使用的矩阵, 用 create_CutBezierMatrixQ 函数生成
  * @param {Boolean} flag 前后两边 false(0)为p1起点, true(!0)为p4终点
+ * @return {Number[]} 返回两组控制点
  */
-function cutBezierByMatrix(points,matrix,flag){
+function cut_Bezier__ByMatrix(points,matrix,flag){
     var n=points.length-1,
         i,j,
         rtn=new Array(points.length),
@@ -558,8 +550,8 @@ rootsOfCubic.cuberoot=function(v){
 
 /**
  * 通过系数创建贝塞尔曲线控制点
- * @param {Number[]}    coefficient 
- * @returns {Number[]}  
+ * @param {Number[]}    coefficient 采样点计算系数
+ * @returns {Number[]}  返回控制点
  */
 function coefficientToPoints(coefficient){
     var n=coefficient.length,
@@ -604,15 +596,17 @@ function calc_k__BezierToCyles(angle){
 const BEZIER_TO_CYCLES_K__1D4=0.551784777779014;
 
 export {
+    get_NumberLength,
+    Number_Long,
     getBezierMatrix,
     get_BezierCurvePoint__DeCasteljau,
     matrixMULT,
     calcPascalsTriangle,
     getPascalsTriangle,
-    getBezierCoefficient,
+    get_BezierCoefficient,
     get_BezierDerivativesPoints,
-    createCutBezierMatrixQ,
-    cutBezierByMatrix,
+    create_CutBezierMatrixQ,
+    cut_Bezier__ByMatrix,
     binaryLinearEquation,
     approximately,
     derivative,
