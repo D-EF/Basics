@@ -1,11 +1,156 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-05-05 17:06:28
+ * @LastEditTime: 2022-05-17 14:27:04
  * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
 window.deg=Math.PI/180;
+
+function get_NumberLength(val){
+    var rtn=0;
+    while(val>=1){
+        val*=0.1;
+        rtn++;
+    }
+    return rtn;
+}
+
+class Number_Long{
+    /**
+     * @param {Number|Number[]|Number_Long} val 
+     */
+    constructor(val){
+        /** @type {Number[]} */
+        this.data;
+        this.f=true;
+        if(val instanceof Number_Long){
+            this.data=Array.from(val.data);
+            this.f=val.f;
+        }else if(Array.isArray(val)){
+            this.data=val.map(i=>{
+                if(i<0){
+                    this.f=!f;
+                }
+                return Math.abs(i);
+            });
+        }
+        else if(val!==undefined){
+            if(val<0){
+                this.f=!f;
+            }
+            this.data=[Math.abs(Number(val))];
+        }else{
+            this.data=[];
+        }
+        this.sp();
+    }
+    toString(){
+        var rtn="",
+            temp,temp_l;
+        rtn+=this.data[0];
+        for(var i=1;i<this.data.length;++i){
+            temp=this.data[i].toString();
+            temp_l=Number_Long.MAX_LENGTH-temp.length;
+            while(temp_l--){
+                temp="0"+temp;
+            }
+            rtn+=temp;
+        }
+        return rtn;
+    }
+    /** 进位 */
+    sp(){
+        var temp1=0,temp_f,
+            l=this.data.length-1;
+
+        for(var i=l;i>=0;--i){
+            temp_f=this.data[i]%1;
+            if(temp_f!==0){
+                this.data[i]=parseInt(this.data[i]);
+                if(i+1<=l){
+                    ++i;
+                    this.data[i]=(this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX;
+                }
+            }
+            while(this.data[i]>=Number_Long.MAX){
+                temp1=parseInt(this.data[i]*Number_Long.SP);
+                if(this.data[i-1]!==undefined){
+                    this.data[i-1]+=temp1;
+                    this.data[i]=parseInt(this.data[i]%Number_Long.MAX);
+                }else{
+                    this.data.unshift(temp1);
+                    this.data[i+1]=parseInt(this.data[i+1]%Number_Long.MAX);
+                }
+            }
+        }
+    }
+    /** 加法运算
+     * @param {Number|Number[]|Number_Long} val 增加的值
+     * @return {Number_Long} 返回一个新的 Number_Long
+     */
+    add(val){
+        var rtn;
+        var _val=val,l1=this.data.length-1;
+        if(_val.constructor===Number){
+            if(_val<Number_Long.MAX){
+                rtn=new Number_Long(this);
+                rtn.data[l1]+=_val;
+                rtn.sp();
+                return rtn;
+            }
+            _val=new Number_Long(_val);
+        }else if(Array.isArray(_val)){
+            _val=new Number_Long(_val);
+        }
+
+        var l2=_val.data.length-1;
+        rtn=new Number_Long();
+        for(var i=l1,j=l2;(i>=0)||(j>=0);--i,--j){
+            rtn.data.unshift((this.data[i]||0)+(_val.data[j]||0));
+        }
+        rtn.sp();
+        return rtn;
+    }
+    /** 乘法运算
+     * @param {Number|Number[]|Number_Long} val 
+     * @return {Number_Long} 返回一个新的 Number_Long
+     */
+    multiply(val){
+        var _val=new Number_Long(val),
+            org,temp,rtn;
+        var l1=this.data.length-1;
+        var l2=_val.data.length-1;
+        var i,j,k=0;
+        rtn=new Number_Long(0);
+        org=new Number_Long(this);
+        for(i=l2;i>=0;--i){
+            temp=new Number_Long(org);
+            for(j=l1;j>=0;--j){
+                temp.data[j]*=_val.data[i];
+            }
+            rtn=rtn.add(temp);
+            org.data.push(0);
+            ++k;
+        }
+        return rtn;
+    }
+    static MAX=1e+8;
+    static SP=1e-8;
+    static MAX_LENGTH=8;
+}
+
+console.log(new Number_Long(899999999).add(899999999).toString());      //1799999998
+console.log(new Number_Long(899999999).add(1).multiply().toString());
+
+var temp=new Number_Long(1);
+for(var i=1;i<=100;++i){
+    temp=temp.multiply(i);
+}
+console.log(temp.toString());
+
+
+
 
 /**
  * 步进器
