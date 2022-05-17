@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-05-17 18:12:51
+ * @LastEditTime: 2022-05-17 19:53:56
  * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
@@ -19,24 +19,17 @@ function get_NumberLength(val){
  * @param {Number|Number[]|Number_Long} val 
  */
 function Number_Long(val){
-    /** @type {Number[]} */
+    /** @type {Number[]} 数字集合 */
     this.data;
-    this.f=true;
+    /** @type {Boolean} 符号+- */
     if(val instanceof Number_Long){
         this.data=Array.from(val.data);
-        this.f=val.f;
     }else if(Array.isArray(val)){
         this.data=val.map(i=>{
-            if(i<0){
-                this.f=!f;
-            }
             return Math.abs(i);
         });
     }
     else if(val!==undefined){
-        if(val<0){
-            this.f=!f;
-        }
         this.data=[Math.abs(Number(val))];
     }else{
         this.data=[];
@@ -61,9 +54,18 @@ Number_Long.prototype={
     /** 进位 */
     sp(){
         var temp1=0,temp_f,
-            l=this.data.length-1;
+            l=this.data.length-1,
+            f=true,f1;
 
         for(var i=l;i>=0;--i){
+            if(this.data[i-1]){
+                debugger;
+                f=(f1=this.data[i-1]<0)===(this.data[i]<0);
+                if(!f){
+                    this.data[i-1]+=(f1?1:-1);
+                    this.data[i]+=(f1?-1:1)*Number_Long.MAX;
+                }
+            }
             temp_f=this.data[i]%1;
             if(temp_f!==0){
                 this.data[i]=parseInt(this.data[i]);
@@ -72,7 +74,7 @@ Number_Long.prototype={
                     this.data[i]=(this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX;
                 }
             }
-            while(this.data[i]>=Number_Long.MAX){
+            while(Math.abs(this.data[i])>=Number_Long.MAX){
                 temp1=parseInt(this.data[i]*Number_Long.SP);
                 if(this.data[i-1]!==undefined){
                     this.data[i-1]+=temp1;
@@ -139,6 +141,7 @@ Number_Long.MAX=1e+8;
 Number_Long.SP=1e-8;
 Number_Long.MAX_LENGTH=8;
 
+console.log(new Number_Long(123456789).add(-987654321))
 /**
  * 步进器
  * @param {Number} max 步进器的最大值
