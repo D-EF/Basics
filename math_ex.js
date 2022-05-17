@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-05-17 19:53:56
+ * @LastEditTime: 2022-05-17 20:33:25
  * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
@@ -59,7 +59,6 @@ Number_Long.prototype={
 
         for(var i=l;i>=0;--i){
             if(this.data[i-1]){
-                debugger;
                 f=(f1=this.data[i-1]<0)===(this.data[i]<0);
                 if(!f){
                     this.data[i-1]+=(f1?1:-1);
@@ -71,7 +70,11 @@ Number_Long.prototype={
                 this.data[i]=parseInt(this.data[i]);
                 if(i+1<=l){
                     ++i;
-                    this.data[i]=(this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX;
+                    if(this.data[i]){
+                        this.data[i]=(this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX;
+                    }else{
+                        this.data.push((this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX);
+                    }
                 }
             }
             while(Math.abs(this.data[i])>=Number_Long.MAX){
