@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-05-17 20:33:25
+ * @LastEditTime: 2022-05-17 21:07:40
  * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
@@ -55,28 +55,30 @@ Number_Long.prototype={
     sp(){
         var temp1=0,temp_f,
             l=this.data.length-1,
-            f=true,f1;
+            f=true,f1,k;
 
         for(var i=l;i>=0;--i){
             if(this.data[i-1]){
+                // 符号变更
                 f=(f1=this.data[i-1]<0)===(this.data[i]<0);
                 if(!f){
                     this.data[i-1]+=(f1?1:-1);
                     this.data[i]+=(f1?-1:1)*Number_Long.MAX;
                 }
             }
-            temp_f=this.data[i]%1;
-            if(temp_f!==0){
+            temp_f=String(this.data[i]);
+            if((k=temp_f.indexOf('.'))!==-1){
+                // 浮点退位
+                temp_f=parseFloat('0.'+temp_f.slice(k));
                 this.data[i]=parseInt(this.data[i]);
                 if(i+1<=l){
                     ++i;
-                    if(this.data[i]){
+                    if(this.data[i]!==undefined){
                         this.data[i]=(this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX;
-                    }else{
-                        this.data.push((this.data[i]*Number_Long.SP+temp_f)*Number_Long.MAX);
                     }
                 }
             }
+            // 进位
             while(Math.abs(this.data[i])>=Number_Long.MAX){
                 temp1=parseInt(this.data[i]*Number_Long.SP);
                 if(this.data[i-1]!==undefined){
@@ -116,7 +118,7 @@ Number_Long.prototype={
         rtn.sp();
         return rtn;
     },
-    /** 乘法运算
+    /** 乘法运算, 忌用浮点数数参与大数值运算 因为js对浮点运算支持很垃圾
      * @param {Number|Number[]|Number_Long} val 
      * @return {Number_Long} 返回一个新的 Number_Long
      */
