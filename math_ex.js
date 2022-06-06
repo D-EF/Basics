@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-01-11 15:07:26
  * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-05-17 21:07:40
+ * @LastEditTime: 2022-06-06 22:46:27
  * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
  */
 
@@ -146,7 +146,6 @@ Number_Long.MAX=1e+8;
 Number_Long.SP=1e-8;
 Number_Long.MAX_LENGTH=8;
 
-console.log(new Number_Long(123456789).add(-987654321))
 /**
  * 步进器
  * @param {Number} max 步进器的最大值
@@ -170,11 +169,30 @@ function Stepper(max,min,now){
     this.i=now||0;
     this.overflowHanding();
 }
-
+/** 拷贝函数
+ * @param {Stepper} stepper 拷贝对象
+ * @returns {Stepper}
+ */
+Stepper.copy=function (stepper){
+    return new Stepper(stepper.max,stepper.min,stepper.valueOf())
+}
 Stepper.prototype={
+    
+    /** 拷贝函数
+     * @returns {Stepper}
+     */
+    copy(){
+        return new Stepper(this.max,this.min,this.valueOf());
+    },
+    /** 用于获取当前值
+     * @returns {Number}
+     */
     valueOf:function(){
         return this.i;
     },
+    /** 用于获取当前值(字符串)
+     * @returns {String}
+     */
     toString:function(){
         return this.i.toString();
     },
