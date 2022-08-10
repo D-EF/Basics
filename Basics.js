@@ -1270,6 +1270,82 @@ class Act_History{
     }
 }
 
+/** 字段映射数据 函数
+ * @param {Object|FieldMap_Item[]} map 
+ * @param {*} tgt 数据来源
+ * @return {Object} 返回映射后的对象
+ */
+function mapping_Field(map,tgt){
+    
+    var i=map.length-1;
+    var rtn=Object.assign({},tgt);
+    if(Array.isArray(map)){
+        for(;i>=0;--i){
+            rtn[map[i][0]]=get_Mapping__Item(tgt,map[i][1],rtn);
+        }
+        return rtn;
+    }else{
+        for(i in map){
+            rtn[i]=get_Mapping__Item(tgt,map[i],rtn);
+        }
+        return rtn;
+    }
+}
+
+/** 获得某字段数据映射的后的数据
+ * @param {*} tgt 源数据
+ * @param {String|Number|Array<String|Number|function>|Object|FieldMap_Function} path 用于获取数据的 路径或函数
+ * @param {*} rtn mapping的 返回用的数据
+ * @return {*} 返回字段
+ */
+function get_Mapping__Item(tgt,path,_rtn){
+    console.log(path);
+    if(typeof path==="number"||typeof path==="string"){
+        return tgt[path];
+    }
+    if(typeof path==="function"){
+        return path(tgt,path,_rtn);
+    }
+    if(Array.isArray(path)){
+        return get_Data__ByPath(tgt,path).data;
+    }
+
+    // is object 
+    var rtn={};
+    var i=0;
+    for(i in path){
+        rtn[i]=get_Data__ByPath(tgt,path[i]).data;
+    }
+    return rtn
+}
+
+/**
+ * @callback callback_GetData__ByPath
+ * @param {*} tgt 源数据
+ * @param {*} temp 上一次进入位置的数据
+ * @param {Array<String|Number|callback_GetData__ByPath>} path 使用中的路径
+ * @param {Number} index 路径下标
+ * @return {*} 返回当前位置数据
+ */
+/** 使用路径获取数据
+ * @param {*} tgt 
+ * @param {Array<String|Number|callback_GetData__ByPath>} path 进入数据位置的路径
+ * @return {{data:*,data_parent:*}} 返回数据和它的父级
+ */
+function get_Data__ByPath(tgt,path){
+    var data=tgt,data_parent=null;
+    for(var i in path){
+        data_parent=data;
+        if(typeof path[i] === "function"){
+            data=path[i](tgt,data,path,i);
+        }else{
+            data=data[path[i]];
+            console.log(data);
+        }
+    }
+    return {data:data,data_parent:data_parent};
+}
+
 export {
     judgeOs,
     arrayMove,
