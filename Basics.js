@@ -4,8 +4,8 @@
 
 /*
 * @Author: Darth_Eternalfaith
- * @LastEditTime: 2022-05-09 16:06:59
- * @LastEditors: Darth_Eternalfaith
+ * @LastEditTime: 2022-09-08 01:04:22
+ * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
 */
 
 /** 当前运行环境 (可能是 window 或 worker)
@@ -594,6 +594,7 @@ Date.prototype.toString=OlFunction.create(temp);
 /** @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
  */
 Date.prototype.toString.addOverload([String],function(str){
+    /** @type {Date} */
     var that=this,
     d={
         Y:that.getFullYear().toString(),
@@ -601,7 +602,7 @@ Date.prototype.toString.addOverload([String],function(str){
         D:that.getDate().toString(),
         d:that.getDay().toString(),
         h:that.getHours().toString(),
-        m:that.get_Minutes().toString(),
+        m:that.getMinutes().toString(),
         s:that.getSeconds().toString()
     }
     var i,rtn=[],tstr;
