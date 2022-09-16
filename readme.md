@@ -1,7 +1,18 @@
+
 <!--
- * @LastEditTime: 2022-03-11 21:13:30
- * @LastEditors: Darth_Eternalfaith
+ * @Author: Darth_Eternalfaith darth_ef@hotmail.com
+ * @Date: 2022-09-16 22:28:36
+ * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
+ * @LastEditTime: 2022-09-16 22:29:59
+ * @FilePath: \site\js\import\Basics\readme.md
+ * @Description: 
+ * 
+ * Copyright (c) 2022 by Darth_Eternalfaith darth_ef@hotmail.com, All Rights Reserved. 
 -->
+
+重构、重新编辑文档中
+
+
 # 提供一些函数, 全局变量 和 一些类 的js文件
 ---
 # 全局变量

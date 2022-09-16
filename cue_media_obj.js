@@ -351,7 +351,7 @@ class DEF_MediaObj{
  * @param {function(Number)} _callback 获取长度的回调 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
  * 3个重载 fnc(audio) 和 fnc(callback); 用 audio 的重载可以返回长度, 可以不用 callback
  */
-DEF_MediaObj.prototype.getDuration = OlFunction.create();
+DEF_MediaObj.prototype.getDuration = OlFunction._create();
 DEF_MediaObj.prototype.getDuration.addOverload([Function],
     function(_callback){
         var that = this;

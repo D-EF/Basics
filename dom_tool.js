@@ -59,7 +59,7 @@ window.stopPropagation=stopPropagation;
 // 强化 对 dom 操作
 
 /**获取所有后代元素*/
-if(thisEnvironment.Element)
+if(globalThis.Element)
 Element.prototype.getChildElement=function(){
     var chE=[];
     var _chE=this.children;
@@ -488,6 +488,23 @@ addEventType("mousefree",function(tgt){
     });
 });
 
+
+function download_flie(url,name){
+    var xhr=new XMLHttpRequest();
+    xhr.open("Get",url);
+    xhr.requestType="blob";
+    xhr.send();
+    xhr.onload=function(){
+        var data=this.response;
+        var tempA=document.createElement("a");
+        var dataurl=URL.createObjectURL(data);
+        console.log(dataurl);
+        tempA.setAttribute("href",dataurl);
+        tempA.setAttribute("download",name===undefined?"":name);
+        tempA.click();
+    }
+}
+
 export{
     stopPropagation,
     stopEvent,
@@ -501,5 +518,6 @@ export{
     linkClick,
     setupLinkClick,
     addEventType,
+    download_flie
 }
 
