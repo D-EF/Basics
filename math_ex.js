@@ -1,11 +1,13 @@
 /*
  * @Date: 2022-01-11 15:07:26
- * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-06-06 22:46:27
- * @FilePath: \PrimitivesTGT-2D_Editor\js\import\basics\math_ex.js
+ * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
+ * @LastEditTime: 2022-10-07 16:41:57
+ * @FilePath: \site\js\import\basics\math_ex.js
+ * 
+ * 已弃用 请使用 NML
  */
 
-window.deg=Math.PI/180;
+globalThis.deg=Math.PI/180;
 
 function get_NumberLength(val){
     var rtn=0;
@@ -246,13 +248,12 @@ Stepper.prototype={
     }
 }
 
-/**
- * 贝塞尔曲线求pt点 算法来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
+/** DeCasteljau算法 求 贝塞尔曲线 pt 点 算法来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
  * @param {{x:Number,y:Number}[]} points 控制点集合
  * @param {Number} t t参数
  * @returns {{x:Number,y:Number}} 返回对应点
  */
- function get_BezierCurvePoint__DeCasteljau(points,t){
+function get_BezierCurvePoint__DeCasteljau(points,t){
     if(points.length>1){
         var newPoints=new Array(points.length-1);
         var x,y;
@@ -266,38 +267,6 @@ Stepper.prototype={
     }else{
         return points[0];
     }
-}
-
-/**
- * 矩阵乘法
- * @param {Number[][]} m1 左侧矩阵
- * @param {Number[][]} m2 右侧矩阵
- * @returns {Number[][]} 返回新矩阵
- */
-function matrixMULT(m1,m2){
-    if(m1[0].length!=m2.length) throw new Error("矩阵乘法格式错误");
-
-    var rtn=new Array(m1.length);
-    for(var i=rtn.length-1;i>=0;--i){
-        rtn[i]=new Array(m2[0].length);
-    }
-
-    var i=0,j=0,k=0;
-    do{
-        j=0
-        do{
-            k=0;
-            var temp=0;
-            do{
-                temp+=m1[i][k]*m2[k][j];
-                ++k;
-            }while(k<m1[0].length);
-            rtn[i][j]=temp;
-            ++j;
-        }while(j<m2[0].length);
-        ++i;
-    }while(i<m1.length);
-    return rtn;
 }
 
 /**
@@ -598,8 +567,8 @@ function coefficientToPoints(coefficient){
 const deg=Math.DEG;
 const deg_90=90*deg;
 const deg_180=180*deg;
-window.cycles=Math.PI*2;
-const cycles=window.cycles;
+globalThis.cycles=Math.PI*2;
+const cycles=globalThis.cycles;
 
 
 // 二维平面贝塞尔曲线拟合圆弧公式
@@ -626,7 +595,6 @@ export {
     Number_Long,
     getBezierMatrix,
     get_BezierCurvePoint__DeCasteljau,
-    matrixMULT,
     calcPascalsTriangle,
     getPascalsTriangle,
     get_BezierCoefficient,

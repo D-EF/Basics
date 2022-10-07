@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-09-16 22:28:36
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-09-17 00:21:23
+ * @LastEditTime: 2022-10-07 16:43:46
  * @FilePath: \site\js\import\Basics\Basics.js
  * @Description: Basics.js 应该在其他脚本之前载入
  * 
@@ -25,9 +25,6 @@
 
     /** @type {Function} 空函数 返回 undefiend */
     globalThis.nullfnc=function nullfnc(){};
-
-    /** @type {Number} rad -> 1deg */
-    Math.DEG=Math.PI/180;
 
     /** [judgeOs UA & 内核 判断]
      * @returns {{isTabvar:Boolean,isPhone:Boolean,isAndroid:Boolean,isPc:Boolean,isFireFox:Boolean,isWebkit:Boolean,isIE:Boolean,isMozilla:Boolean}} [description]
@@ -607,6 +604,106 @@
 // end  * 对 Date 的拓展 * end 
 
 // open * 数值操作拓展 * open
+    // open * 步进器 * open
+        /** 步进器
+         * @param {Number} max 步进器的最大值
+         * @param {Number} min 步进器的最小值
+         * @param {Number} now 步进器的当前值
+         */
+        function Stepper(max,min,now){
+            this.max=max===undefined?Infinity:max;
+            this.min=(min===undefined)?(0>this.max?this.max-1:0):(min);
+            if(this.max<this.min){
+                var temp=this.min;
+                this.min=this.max;
+                this.max=temp;
+            }
+            /**
+             * 用来添加监听的 当发生返回时调用 this.regression_listener[i].call(this,this.i,val,this);
+             * val是表示往前走了还是往后走了 用不同正负的数字表示
+             * @type {function(this:Stepper,Number,Number,Stepper))[]}
+             */
+            this.regression_listener=[];
+            this.i=now||0;
+            this.overflowHanding();
+        }
+        /** Stepper 拷贝函数
+         * @param {Stepper} stepper 拷贝对象
+         * @returns {Stepper}
+         */
+        Stepper.copy=function (stepper){
+            return new Stepper(stepper.max,stepper.min,stepper.valueOf())
+        }
+        Stepper.prototype={
+            
+            /** 拷贝函数
+             * @returns {Stepper}
+             */
+            copy(){
+                return new Stepper(this.max,this.min,this.valueOf());
+            },
+            /** 用于获取当前值
+             * @returns {Number}
+             */
+            valueOf:function(){
+                return this.i;
+            },
+            /** 用于获取当前值(字符串)
+             * @returns {String}
+             */
+            toString:function(){
+                return this.i.toString();
+            },
+            /**
+             * 设置当前值
+             * @param {Number} _i 目标
+             * @returns {Number} 返回修改后的值
+             */
+            set:function(_i){
+                this.i=_i;
+                this.overflowHanding();
+                return this.i;
+            },
+            /**
+             * 让步进器步进
+             * @param {Number} _l 步长
+             * @returns {Number} 返回步进后的位置
+             */
+            next:function(_l){
+                var l=_l===undefined?1:_l;
+                this.i+=l;
+                
+                this.overflowHanding();
+
+                return this.i;
+            },
+            /**
+             * 让步进器的溢出值回到范围内
+             */
+            overflowHanding:function(){
+                if(this.max===this.min) return this.i=this.min;
+                var l=this.max-this.min+1;
+                if(this.i<this.min){
+                    this.i=this.max-(this.min-this.i)%(l+1)+1;
+                    this._regressionlin_Call(-1);
+                }
+                else if(this.i>this.max){
+                    this.i=this.min+(this.i-this.max)%(l+1)-1;
+                    this._regressionlin_Call(+1);
+                }
+                return this.i;
+            },
+            /**
+             * 触发溢出后的回调
+             * @param {Number} val 表示正向溢出了还是逆向溢出了 +1 -1
+             */
+            _regressionlin_Call(val){
+                for(var i=this.regression_listener.length-1;i>=0;--i){
+                    this.regression_listener[i].call(this,this.i,val,this);
+                }
+            }
+        }
+    // end  * 步进器 * end 
 
     /** 二分法查找显式查找表
      * @param {Number[]}   lut 显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
@@ -1257,6 +1354,7 @@ export {
     strToVar,
     canBeNumberChar,
     DEF_Caller,
+    Stepper,
     select_Lut__Binary,
     dependencyMapping,
     get_Root__DependencyMapping,
