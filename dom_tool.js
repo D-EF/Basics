@@ -12,9 +12,9 @@ import {
     arrayDiff,
     arrayEqual,
     arrayHasDiff,
-    canBeNumberChar,
-    hashcaller,
+    canBeNumberChar
 } from "./Basics.js"
+import { hashcaller } from "./bom_tool.js";
 
 /** 阻止事件冒泡 */
 function stopPropagation(e){e.stopPropagation();window.event.cancelBubble=true;}
