@@ -9,9 +9,9 @@
  * Copyright (c) 2022 by Darth_Eternalfaith darth_ef@hotmail.com, All Rights Reserved. 
  */
 
-/** Hashcaller
+/** HashCaller
  */
-class Hashcaller{
+class HashCaller{
     constructor(flag_only_touch_one=true){
         /** @type {RegExp[]} */
         this.listeners=[];
@@ -77,10 +77,10 @@ class HashListener{
         return this.hash_selector.exec(string);
     }
 }
-var hashcaller=new Hashcaller();
+var hashcaller=new HashCaller();
 
 export {
-    Hashcaller,
+    HashCaller,
     HashListener,
     hashcaller,
 }

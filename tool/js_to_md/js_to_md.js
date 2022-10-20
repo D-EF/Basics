@@ -114,6 +114,7 @@
                         }
                     }while((temp[p]!=='\n')&&temp[p]);
                     // console.log(temp.slice(q,p));
+                    ++p;
                     rtn.push(process_Line(temp.slice(q,p),l,close_flag));
                     temp=temp.slice(p);
                     ++l;
@@ -165,24 +166,94 @@
     /** @type {Function__Process_String[]} */
     var process_programs=[
         create_ProcessString__RegExp(/\r/g,''),
-        function(str){
-            // 删除函数代码块
-            return process_Block(str,/(?<!class).*\(.*\) *\{/,function(str,l,cf){
+        function(str){  // 删除 class 的花括号
+            return process_Block(str,/class.*\{/,function(str,l,cf){
                 if(!l){
-                    return str.slice(0,str.lastIndexOf('{'));
+                    return str.slice(0,str.indexOf('{'));
+                }
+                if(cf){
+                    return "";
+                }
+                return str;
+            });
+        },
+        function(str){  // 删除函数代码块
+            return process_Block(str,/.*(?<!constructor *)\(.*\) *\{/,function(str,l,cf){
+                if(!l){
+                    return str.slice(0,str.indexOf('{'));
                 }else{
+                    if(cf)return '\n';
                     return '';
                 }
             });
         },
         create_ProcessString__RegExp(/\/\/#/g,"#"),
-        create_ProcessString__RegExp(
-            // 函数 to md
-            /( *)\/\*\*(.*)\n+((?:(?:(?: *\*).*\n+))+) *\*\/\n+ *(.*\(.*)/g,
+        create_ProcessString__RegExp(   // class to md
+            /( *)\/\*\*(.*)\n+((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *(.*class .*)/g,
             "$1# $4 $2\n$3"
         ),
-        create_ProcessString__RegExp__More(
-            // 处理 // open * {title} * open 
+        create_ProcessString__RegExp(   // class to md (line)
+            /( *)\/\*\*(.*)\*\/ *\n* *(.*class .*)/g,
+            "$1# $3 $2\n"
+        ),
+        create_ProcessString__RegExp(   // 构造函数
+            /# class *(\w*)( *.*( *\n)*( *)\/\*\*(.*)\n+((?:(?:(?: *\*).*\n+))+) *\*\/\n+ *)constructor/g,
+            "# class $1$2构造函数 new $1"
+        ),
+        function(str){
+            var temp_space,class_name;
+            var i;
+            var attr_flag;
+            var r_head=/构造函数 new (\w*)\(.*\{/,r_attr=/ *this\.(\w*)=.*/,r_attr_node=/\/\*\* @type *(.*?)(\*\/)/;
+            // 成员变量
+            return process_Block(str,r_head,function(str,l,cf){
+                var rtn='',cache;
+                switch(l){
+                    case 0:
+                        class_name=r_head.exec(str)[1];
+                        return str.slice(0,str.indexOf('{'));
+                    break;
+                    case 1: 
+                        i=0;
+                        while(str[++i]===' ');
+                        temp_space=str.slice(0,i);
+                        rtn='\n'+temp_space+"# 属性(成员变量)\n";
+                    default:
+                        if(attr_flag){
+                            attr_flag=false;
+                            if(cache=r_attr.exec(str)){
+                                return rtn+temp_space+'* '+class_name+".prototype."+cache[1]+'\n';
+                            }
+                        }else{
+                            if(~(i=str.indexOf("/** @type"))){
+                                cache_attr_node=r_attr_node.exec(str)[1];
+                                attr_flag=true;
+                            }
+                            return rtn+'';
+                        }
+                }
+            });
+        },
+        
+        function(str){  // 处理静态成员变量(对象或数组)
+            return process_Block(str,/(?<= *\/\*\*.*\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+) *static .*= *[\{\[]/,function(str,l,cf){
+                if(!l){
+                    return str.replace(/( *)(static .*)= *([\{\[])/,'$1$2\n```\n$2=$3')
+                }else{
+                    if(cf)return str+'\n```'
+                    return str
+                }
+            });
+        },
+        create_ProcessString__RegExp(   // 静态属性(静态成员变量) to md
+            /( *)\/\*\*(.*)\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *(static .*?)(=.*)?\n/g,
+            "$1# $4 $2\n$3"
+        ),
+        create_ProcessString__RegExp(   // 函数 to md
+            /( *)\/\*\*(.*)\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *(.*\(.*)/g,
+            "$1# $4 $2\n$3"
+        ),
+        create_ProcessString__RegExp__More( // 处理 // open * {title} * open 
             /\/\/ open \* (.*) \* open([\s\S\n]*) *\/\/ end  \* \1 \* end *\n?/g,
             "# $1$2"
         ),
@@ -208,6 +279,10 @@
         ),
         create_ProcessString__RegExp(
             /\/\*\*\//g,
+            ''
+        ),
+        create_ProcessString__RegExp(
+            /\/\*[Hh]\*\/.*/g,
             ''
         ),
         create_ProcessString__RegExp(

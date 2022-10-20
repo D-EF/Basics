@@ -376,7 +376,7 @@ DEF_MediaObjMark 的列表
 @param {Number} time 时刻   
 @param {Number} maxTouch 最大触发次数   
 
-## hash 监听者的发生器 Hashcaller
+## hash 监听者的发生器 HashCaller
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数constructor(onlyTouchOne=true)
 
