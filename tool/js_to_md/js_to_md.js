@@ -47,7 +47,7 @@
                 temp=temp.slice(i.index);
                 q=p=0;
                 do{
-                    do{
+                    while((temp[p]!=='\n')&&temp[p]){
                         ++p;
                         if(!(isString||isNotes)){
                             j=3;
@@ -112,7 +112,7 @@
                                 }
                             }
                         }
-                    }while((temp[p]!=='\n')&&temp[p]);
+                    }
                     // console.log(temp.slice(q,p));
                     ++p;
                     rtn.push(process_Line(temp.slice(q,p),l,close_flag));
@@ -166,7 +166,8 @@
     /** @type {Function__Process_String[]} */
     var process_programs=[
         create_ProcessString__RegExp(/\r/g,''),
-        function(str){  // 删除 class 的花括号
+        // 删除 class 的花括号
+        function(str){
             return process_Block(str,/class.*\{/,function(str,l,cf){
                 if(!l){
                     return str.slice(0,str.indexOf('{'));
@@ -177,7 +178,8 @@
                 return str;
             });
         },
-        function(str){  // 删除函数代码块
+        // 删除函数代码块
+        function(str){
             return process_Block(str,/.*(?<!constructor *)\(.*\) *\{/,function(str,l,cf){
                 if(!l){
                     return str.slice(0,str.indexOf('{'));
@@ -187,19 +189,21 @@
                 }
             });
         },
+        // 处理注释的# 标题
         create_ProcessString__RegExp(/\/\/#/g,"#"),
-        create_ProcessString__RegExp(   // class to md
+        // class to md
+        create_ProcessString__RegExp(
             /( *)\/\*\*(.*)\n+((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *(.*class .*)/g,
-            "$1# $4 $2\n$3"
-        ),
-        create_ProcessString__RegExp(   // class to md (line)
+            "$1# $4 $2\n$3"),
+        // class to md (line)
+        create_ProcessString__RegExp(   
             /( *)\/\*\*(.*)\*\/ *\n* *(.*class .*)/g,
-            "$1# $3 $2\n"
-        ),
-        create_ProcessString__RegExp(   // 构造函数
+            "$1# $3 $2\n"),
+        // 处理构造函数
+        create_ProcessString__RegExp(   
             /# class *(\w*)( *.*( *\n)*( *)\/\*\*(.*)\n+((?:(?:(?: *\*).*\n+))+) *\*\/\n+ *)constructor/g,
-            "# class $1$2构造函数 new $1"
-        ),
+            "# class $1$2构造函数 new $1"),
+        //成员变量处理
         function(str){
             var temp_space,class_name;
             var i;
@@ -222,7 +226,7 @@
                         if(attr_flag){
                             attr_flag=false;
                             if(cache=r_attr.exec(str)){
-                                return rtn+temp_space+'* '+class_name+".prototype."+cache[1]+'\n';
+                                return rtn+temp_space+"* "+class_name+".prototype."+cache[1]+"\n/**/    "+cache_attr_node+"\n";
                             }
                         }else{
                             if(~(i=str.indexOf("/** @type"))){
@@ -234,61 +238,86 @@
                 }
             });
         },
-        
-        function(str){  // 处理静态成员变量(对象或数组)
-            return process_Block(str,/(?<= *\/\*\*.*\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+) *static .*= *[\{\[]/,function(str,l,cf){
+        // 处理变量(对象或数组)
+        function(str){  
+            var space_i;
+            return process_Block(str,/(?<= *\/\*\*.*\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+) *(?:const|static|let|var) .*= *[\{\[]/,function(str,l,cf){
+                var i=0;
                 if(!l){
-                    return str.replace(/( *)(static .*)= *([\{\[])/,'$1$2\n```\n$2=$3')
+                    while(str[++i]===' ');
+                    space_i=i;
+                    return str.replace(/( *)((?:const|static|let|var) .*)= *([\{\[])/,'$1$2\n```javascript\n$2=$3');
                 }else{
-                    if(cf)return str+'\n```'
-                    return str
+                    while(str[i]===' '&&i<space_i)++i;
+                    var rtn=str.slice(i);
+                    if(cf)return "/**/"+rtn+'```';
+                    return "/**/"+rtn;
                 }
             });
         },
-        create_ProcessString__RegExp(   // 静态属性(静态成员变量) to md
-            /( *)\/\*\*(.*)\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *(static .*?)(=.*)?\n/g,
-            "$1# $4 $2\n$3"
-        ),
-        create_ProcessString__RegExp(   // 函数 to md
+        // 导出
+        function(str){  
+            var space_i;
+            return process_Block(str,/ *export( default)? *\{/,function(str,l,cf){
+                var i=0;
+                if(!l){
+                    while(str[++i]===' ');
+                    space_i=i;
+                    return str.replace(/ *(.*)/,'```javascript\n$1');
+                }else{
+                    while(str[i]===' '&&i<space_i)++i;
+                    console.log(str);
+
+                    var rtn=str.slice(i);
+                    if(cf)return "/**/"+rtn+'```';
+                    return "/**/"+rtn;
+                }
+            });
+        },
+        // 变量 to md
+        create_ProcessString__RegExp(   
+            /( *)\/\*\*(.*)\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *((?:const|static|let|var) .*?)(=.*)?\n/g,
+            "$1# $4 $2\n$3"),
+        // 函数 to md
+        create_ProcessString__RegExp(   
             /( *)\/\*\*(.*)\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+ *(.*\(.*)/g,
-            "$1# $4 $2\n$3"
-        ),
-        create_ProcessString__RegExp__More( // 处理 // open * {title} * open 
+            "$1# $4 $2\n$3"),
+        // 处理 // open * {title} * open 
+        create_ProcessString__RegExp__More( 
             /\/\/ open \* (.*) \* open([\s\S\n]*) *\/\/ end  \* \1 \* end *\n?/g,
-            "# $1$2"
-        ),
+            "# $1$2"),
+        // 缩进的# 增加等级
         create_ProcessString__RegExp__More(
             /(    )(#)/g,
-            "$2$2"
-        ),
+            "$2$2"),
+        // 清理缩进
         create_ProcessString__RegExp__More(
             /\n(    )+/g,
-            '\n'
-        ),
+            '\n'),
+        // 换行
         create_ProcessString__RegExp(
             /\n/g,
-            '   \n'
-        ),
+            '   \n'),
+        // 处理块注释中插入的代码块
         create_ProcessString__RegExp(
             /\* *```/g,
-            '```'
-        ),
+            '```'),
+        // 注释中代码块标记 //```
         create_ProcessString__RegExp(
             /\/\/ *```/g,
-            '```'
-        ),
+            '```'),
+        // 清理占位符 /**/
         create_ProcessString__RegExp(
             /\/\*\*\//g,
-            ''
-        ),
+            ''),
+        // 隐藏行
         create_ProcessString__RegExp(
             /\/\*[Hh]\*\/.*/g,
-            ''
-        ),
+            ''),
+        // "\n" to "\r\n"
         create_ProcessString__RegExp(
             /\n/g,
-            '\r\n'
-        ),
+            '\r\n'),
     ]
 
     function js_to_md(code_str){

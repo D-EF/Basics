@@ -24,7 +24,8 @@
     /** 示例的类 */
     class Demo{
 
-        /** constructor
+        /** 
+         * 构造函数的说明尽量放第二行
          * @param {Number} param1 参数1
          */
          constructor(param1){
@@ -46,7 +47,7 @@
         // open * 方法 成员函数 * open
             
             /** 这是将放入标题的一行说明
-             * demo二次函数
+             * 详细说明 demo二次函数
              * ```
              * f(x)=x^2+x+1
              * ```
