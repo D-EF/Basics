@@ -170,7 +170,7 @@
         function(str){
             return process_Block(str,/class.*\{/,function(str,l,cf){
                 if(!l){
-                    return str.slice(0,str.indexOf('{'));
+                    return str.slice(0,str.indexOf('{'))+'\n';
                 }
                 if(cf){
                     return "";
@@ -246,7 +246,9 @@
                 if(!l){
                     while(str[++i]===' ');
                     space_i=i;
-                    return str.replace(/( *)((?:const|static|let|var) .*)= *([\{\[])/,'$1$2\n```javascript\n$2=$3');
+                    rtn=str.replace(/( *)((?:const|static|let|var) .*)= *([\{\[])/,'$1$2\n```javascript\n$2=$3');
+                    if(cf)rtn+="```\n";
+                    return rtn;
                 }else{
                     while(str[i]===' '&&i<space_i)++i;
                     var rtn=str.slice(i);
@@ -314,6 +316,10 @@
         create_ProcessString__RegExp(
             /\/\*[Hh]\*\/.*/g,
             ''),
+        // 清理多余的换行
+        create_ProcessString__RegExp(
+            /\n( *\n){2,}/g,
+            '\n   \n'),
         // "\n" to "\r\n"
         create_ProcessString__RegExp(
             /\n/g,
