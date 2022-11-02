@@ -2,14 +2,7 @@
  * 用于读取 cue 格式和存储到 js 的
  */
 
-/*
- * @Date        : 2022-01-11 14: 27: 30
- * @LastEditors: Darth_Eternalfaith
- * @LastEditTime: 2022-03-31 16:37:18
- * @FilePath: \def-web\js\basics\cue_media_obj.js
- */
-
-import {rltToAbs,inheritClass,OlFunction} from "./Basics.js"
+import {rltToAbs,inheritClass,OlFunction} from "../Basics.js"
 /**
  * 存储 cue 格式为js的obj格式
  * 参考资料来自: https: //tieba.baidu.com/p/6160083867
