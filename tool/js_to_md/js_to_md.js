@@ -20,7 +20,7 @@
             i=0,j=0,t=0,
             q=0,p=0,
             brackets_stack=[],
-            l=0,
+            line=0,
             isNotes=0,
             isString=0,
             close_flag=true;
@@ -42,7 +42,7 @@
             i=head_regexp.exec(temp);
             if(i){
                 // 命中 head_regexp
-                l=0
+                line=0
                 rtn.push(temp.slice(p,i.index));
                 temp=temp.slice(i.index);
                 q=p=0;
@@ -115,9 +115,9 @@
                     }
                     // console.log(temp.slice(q,p));
                     ++p;
-                    rtn.push(process_Line(temp.slice(q,p),l,close_flag));
+                    rtn.push(process_Line(temp.slice(q,p),line,close_flag));
                     temp=temp.slice(p);
-                    ++l;
+                    ++line;
                     q=p=0;
                 }while(!close_flag&&temp[p]);
             }else{
@@ -168,8 +168,8 @@
         create_ProcessString__RegExp(/\r/g,''),
         // 删除 class 的花括号
         function(str){
-            return process_Block(str,/class.*\{/,function(str,l,cf){
-                if(!l){
+            return process_Block(str,/class.*\{/,function(str,line,cf){
+                if(!line){
                     return str.slice(0,str.indexOf('{'))+'\n';
                 }
                 if(cf){
@@ -180,8 +180,8 @@
         },
         // 删除函数代码块
         function(str){
-            return process_Block(str,/.*(?<!constructor *)\(.*\) *\{/,function(str,l,cf){
-                if(!l){
+            return process_Block(str,/.*(?<!constructor *)\(.*\) *\{/,function(str,line,cf){
+                if(!line){
                     return str.slice(0,str.indexOf('{'));
                 }else{
                     if(cf)return '\n';
@@ -210,9 +210,9 @@
             var attr_flag;
             var r_head=/构造函数 new (\w*)\(.*\{/,r_attr=/ *this\.(\w*)=.*/,r_attr_node=/\/\*\* @type *(.*?)(\*\/)/;
             // 成员变量
-            return process_Block(str,r_head,function(str,l,cf){
+            return process_Block(str,r_head,function(str,line,cf){
                 var rtn='',cache;
-                switch(l){
+                switch(line){
                     case 0:
                         class_name=r_head.exec(str)[1];
                         return str.slice(0,str.indexOf('{'));
@@ -241,9 +241,9 @@
         // 处理变量(对象或数组)
         function(str){  
             var space_i;
-            return process_Block(str,/(?<= *\/\*\*.*\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+) *(?:const|static|let|var) .*= *[\{\[]/,function(str,l,cf){
+            return process_Block(str,/(?<= *\/\*\*.*\n*((?:(?:(?: *\*).*\n*))*) *\*\/\n+) *(?:const|static|let|var) .*= *[\{\[]/,function(str,line,cf){
                 var i=0;
-                if(!l){
+                if(!line){
                     while(str[++i]===' ');
                     space_i=i;
                     rtn=str.replace(/( *)((?:const|static|let|var) .*)= *([\{\[])/,'$1$2\n```javascript\n$2=$3');
@@ -260,9 +260,9 @@
         // 导出
         function(str){  
             var space_i;
-            return process_Block(str,/ *export( default)? *\{/,function(str,l,cf){
+            return process_Block(str,/ *export( default)? *\{/,function(str,line,cf){
                 var i=0;
-                if(!l){
+                if(!line){
                     while(str[++i]===' ');
                     space_i=i;
                     return str.replace(/ *(.*)/,'```javascript\n$1');

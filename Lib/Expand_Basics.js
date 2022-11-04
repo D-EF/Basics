@@ -68,10 +68,10 @@ globalThis.nullfnc=function nullfnc(){};
     }
 
     /** 重载函数类 */
-    class OlFunction extends Function{
+    class OverloadFunction extends Function{
         /**
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @return  {OlFunction} 带重载的函数
+         * @return  {OverloadFunction} 带重载的函数
          * 用 .addOverload 添加重载
          */
         constructor(default_fnc){
@@ -79,7 +79,7 @@ globalThis.nullfnc=function nullfnc(){};
             this.ols=[];
             /** @type {function} 默认动作*/
             this.default_fnc=new Function();
-            return OlFunction._create(default_fnc);
+            return OverloadFunction._create(default_fnc);
         }
 
         /** 添加一个重载
@@ -92,21 +92,20 @@ globalThis.nullfnc=function nullfnc(){};
         }
         /** 创建重载函数
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @return  {OlFunction} 带重载的函数
+         * @return  {OverloadFunction} 带重载的函数
          * 用 .addOverload 添加重载
          */
         static _create(default_fnc){
-            // 如果需要ie中使用，把 create 和 addOverload 拷贝走就行
             var OverloadFunction=(function(){
                 return function(){
-                    var i=arguments.length-1,j,flag=false;
-                    var l=arguments.length;
-                    j=arguments.length-1;
-                    while(j>=0&&arguments[j]===undefined){--l;--j;};
+                    var i,j,flag=false;
+                    var length=arguments.length;
+                    j=i==length-1;
+                    while(j>=0&&arguments[j]===undefined){--length;--j;};
                     for(i=OverloadFunction.ols.length-1;i>=0;--i){
-                        if(l===OverloadFunction.ols[i].parameterType.length){
+                        if(length===OverloadFunction.ols[i].parameterType.length){
                             flag=true;
-                            for(j=l-1;flag&&j>=0;--j){
+                            for(j=length-1;flag&&j>=0;--j){
                                 flag=(arguments[j].constructor===OverloadFunction.ols[i].parameterType[j]||arguments[j] instanceof OverloadFunction.ols[i].parameterType[j]);
                             }
                             if(flag)break;
@@ -122,7 +121,7 @@ globalThis.nullfnc=function nullfnc(){};
             })();
             OverloadFunction.ols=[];
             OverloadFunction.default_fnc=default_fnc;
-            OverloadFunction.addOverload=OlFunction.prototype.addOverload;
+            OverloadFunction.addOverload=OverloadFunction.prototype.addOverload;
             return OverloadFunction;
         }
     }
@@ -204,7 +203,7 @@ globalThis.nullfnc=function nullfnc(){};
      */
      (function(){
         var temp=Date.prototype.toString;
-        Date.prototype.toString=OlFunction._create(temp);
+        Date.prototype.toString=OverloadFunction._create(temp);
         /** @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
          */
         Date.prototype.toString.addOverload([String],function(str){
@@ -486,7 +485,7 @@ globalThis.nullfnc=function nullfnc(){};
 
 export{
     inheritClass,
-    OlFunction,
+    OverloadFunction as OlFunction,
     Delegate,
     Stepper,
     select_Lut__Binary,

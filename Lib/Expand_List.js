@@ -14,15 +14,15 @@ const ArrayEqual_EqualObj=Symbol?Symbol("If the function 'arrayEqual' params (a1
 
 /** 数组移位
  * @param {AllTypeArray}  arr  数组
- * @param {Number} l    移动步长
+ * @param {Number} long    移动步长
  * @returns {Array} 返回一个新数组
  */
-function arrayMove(arr,l){
+function arrayMove(arr,long){
     if(!arr.length) return new arr.constructor(arr);
-    var ll=Math.abs(l)%arr.length;
+    var ll=Math.abs(long)%arr.length;
     if(!ll)return new arr.constructor(arr);
     var temp;
-    if(l<0){
+    if(long<0){
         temp=arr.splice(0,ll);
         return new arr.constructor([...arr,...temp]);
     }else{
