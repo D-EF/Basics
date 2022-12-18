@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:04:40
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-11-03 01:19:50
+ * @LastEditTime: 2022-12-18 23:11:07
  * @FilePath: \site\js\import\Basics\Lib\Expand_OO.js
  * @Description: 面向对象拓展
  * 
@@ -176,7 +176,6 @@ class Iterator__Tree extends Iterator__MyVirtual{
         return this._depth;
     }
 }
-
 
 
 // open * 依赖注入 * open

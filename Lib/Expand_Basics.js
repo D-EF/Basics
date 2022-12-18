@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:00:17
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-11-03 01:26:17
+ * @LastEditTime: 2022-12-18 23:10:38
  * @FilePath: \site\js\import\Basics\Lib\Expand_Basics.js
  * @Description: 
  * 
@@ -75,11 +75,11 @@ globalThis.nullfnc=function nullfnc(){};
          * 用 .addOverload 添加重载
          */
         constructor(default_fnc){
+            return OverloadFunction._create(default_fnc);
             /** @type {{parameterType:parameterType,fnc:fnc,codeComments:codeComments}[]} 重载函数 */
             this.ols=[];
             /** @type {function} 默认动作*/
             this.default_fnc=new Function();
-            return OverloadFunction._create(default_fnc);
         }
 
         /** 添加一个重载
@@ -128,9 +128,11 @@ globalThis.nullfnc=function nullfnc(){};
 
     /** 委托 */
     class Delegate extends Function{
+        
         constructor(){
-            this.act_list=[];
             return Delegate._create();
+            /** @type {Function[]}*/
+            this.act_list;
         }
 
         /**添加一个委托
@@ -196,6 +198,54 @@ globalThis.nullfnc=function nullfnc(){};
         }
     }
 
+    /** 时间变动回调操作 */
+    class Date_Callback{
+        constructor(){
+
+            /** @type {{[time_long:string]:(function(number)|Delegate)}} 时间单位分变动回调委托 */
+            this.delegate_set={};
+            /** @type {{[time_long:String]:number}} 计时器集合 */
+            this.timers={};
+        }
+
+        /** 增加 时间单位分变动回调函数
+         * @param {string} key 回调函数委托与计时器的索引
+         * @param {number} time_long 每次回调的间隔(步长)
+         * @param {number} deviation 初始化与第一次回调的间隔 取负值将设置为当前时间戳取余步长 (now % time_long)
+         * @param {function(number)} callback 回调函数
+         */
+        add_Callback(key,time_long,deviation,callback){
+            if(!this.delegate_set[key]){
+                this.delegate_set[key]=new Delegate();
+            }
+            this.delegate_set[key].addAct(this,callback);
+            this._init_Callback(key,time_long,deviation,callback);
+        }
+        /** 初始化, 创建计时器
+         * @param {string} key 回调函数委托与计时器的索引
+         * @param {number} time_long 每次回调的间隔(步长)
+         * @param {number} deviation 初始化与第一次回调的间隔 取负值将设置为当前时间戳取余步长 (now % time_long)
+         * @returns 
+         */
+        _init_Callback(key,time_long,deviation){
+            if(this.timers[key]) return;
+
+            var that=this;
+            var millisecond__now_to_next=deviation<0?(time_long-Date.now()%time_long):deviation;
+
+            that.timers[key]=setTimeout(function(){
+                that.delegate_set[key](Date.now());
+                that.timers[key]=setInterval(function(){
+                    that.delegate_set[key](Date.now());
+                }, time_long);
+            }, millisecond__now_to_next);
+        }
+        /** @type {number} 一分钟的毫秒数 */
+        static MINUTE = 60000;
+        /** @type {number} 一小时的毫秒数 */
+        static HOURS  = 3600000;
+    }
+
 // end  * 对 functoin 的拓展 * end 
 
 // open * 原有的api函数重载 * open
@@ -204,37 +254,38 @@ globalThis.nullfnc=function nullfnc(){};
      (function(){
         var temp=Date.prototype.toString;
         Date.prototype.toString=OverloadFunction._create(temp);
-        /** @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
+        /** @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 n-毫秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
          */
         Date.prototype.toString.addOverload([String],function(str){
             /** @type {Date} */
             var that=this,
-            d={
+            mapping_date_time={
                 Y:that.getFullYear().toString(),
                 M:(that.getMonth()+1).toString(),
                 D:that.getDate().toString(),
                 d:that.getDay().toString(),
                 h:that.getHours().toString(),
                 m:that.getMinutes().toString(),
-                s:that.getSeconds().toString()
+                s:that.getSeconds().toString(),
+                n:that.getMilliseconds().toString()
             }
             var i,rtn=[],tstr;
             for(i=0;i<str.length;++i){
                 if(str[i]==='%'){
                     ++i;
-                    if(d[str[i]]!=undefined){
+                    if(mapping_date_time[str[i]]!==undefined){
                         var ti=parseInt(str[i+1]),tempstr=[];
                         if(isNaN(ti)){
-                            tstr=d[str[i]];
+                            tstr=mapping_date_time[str[i]];
                         }else{
                             ti=parseInt(str.slice(i+1))
-                            if(ti>d[str[i]].length){
+                            if(ti>mapping_date_time[str[i]].length){
                                 do{
                                     tempstr.push('0');
                                     --ti;
-                                }while(ti>d[str[i]].length)
+                                }while(ti>mapping_date_time[str[i]].length)
                             }
-                            tempstr.push(d[str[i]].slice(d[str[i]].length-ti));
+                            tempstr.push(mapping_date_time[str[i]].slice(mapping_date_time[str[i]].length-ti));
                             i+=ti.toString().length;
                             tstr=tempstr.join('');
                         }
@@ -487,6 +538,7 @@ export{
     inheritClass,
     OverloadFunction as OlFunction,
     Delegate,
+    Date_Callback,
     Stepper,
     select_Lut__Binary,
     templateStringRender,

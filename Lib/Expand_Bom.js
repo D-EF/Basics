@@ -2,45 +2,42 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-09-16 23:48:00
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-09-16 23:48:48
- * @FilePath: \site\js\import\Basics\bom_tool.js
+ * @LastEditTime: 2022-11-13 07:33:33
+ * @FilePath: \site\js\import\Basics\Lib\Expand_Bom.js
  * @Description: 
  * 
  * Copyright (c) 2022 by Darth_Eternalfaith darth_ef@hotmail.com, All Rights Reserved. 
  */
 
-// open * UA * open
 
-    /** [judgeOs UA & 内核 判断]
-     * @returns {{isTabvar:Boolean,isPhone:Boolean,isAndroid:Boolean,isPc:Boolean,isFireFox:Boolean,isWebkit:Boolean,isIE:Boolean,isMozilla:Boolean}} [description]
-     */
-    function judgeOs() {
-        var ua = navigator.userAgent,
-            isWindowsPhone = /(?:Windows Phone)/.test(ua),
-            isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
-            // 平板
-            isFireFox = ua.indexOf("Mozilla") != -1,
-            isTabvar = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tabvar)/.test(ua)),
-            isPhone = /(?:iPhone)/.test(ua) && !isTabvar,
-            isPc = !isPhone && !isAndroid && !isSymbian,
-            isAndroid = ua.indexOf("Android") != -1,
-            isAndroid = ua.indexOf("Android") != -1,
-            isIE = ua.indexOf("Trident") != -1,
-            isWebkit = ua.indexOf("isWebkit") != -1,
-            isMozilla = ua.indexOf("Mozilla") != -1;
-        return {
-            isTabvar: isTabvar,
-            isPhone: isPhone,
-            isAndroid: isAndroid,
-            isPc: isPc,
-            isFireFox: isFireFox,
-            isWebkit: isWebkit,
-            isIE: isIE,
-            isMozilla: isMozilla
-        };
-    }
-
-// end  * UA * end 
+/** [judgeOs UA & 内核 判断]
+ * @returns {{isTabvar:Boolean,isPhone:Boolean,isAndroid:Boolean,isPc:Boolean,isFireFox:Boolean,isWebkit:Boolean,isIE:Boolean,isMozilla:Boolean}} [description]
+ */
+function judgeOs() {
+    var ua = navigator.userAgent,
+        isWindowsPhone = /(?:Windows Phone)/.test(ua),
+        isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+        // 平板
+        isFireFox = ua.indexOf("Mozilla") != -1,
+        isTabvar = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tabvar)/.test(ua)),
+        isPhone = /(?:iPhone)/.test(ua) && !isTabvar,
+        isPc = !isPhone && !isAndroid && !isSymbian,
+        isAndroid = ua.indexOf("Android") != -1,
+        isAndroid = ua.indexOf("Android") != -1,
+        isIE = ua.indexOf("Trident") != -1,
+        isWebkit = ua.indexOf("isWebkit") != -1,
+        isMozilla = ua.indexOf("Mozilla") != -1;
+    return {
+        isTabvar: isTabvar,
+        isPhone: isPhone,
+        isAndroid: isAndroid,
+        isPc: isPc,
+        isFireFox: isFireFox,
+        isWebkit: isWebkit,
+        isIE: isIE,
+        isMozilla: isMozilla
+    };
+}
 
 /** HashCaller
  */
