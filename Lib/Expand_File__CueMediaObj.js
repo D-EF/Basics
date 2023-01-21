@@ -478,7 +478,7 @@ DEF_MediaObjMark.prototype.commandList={
  * 将cue格式的转换成 DEF_MediaObj
  * @param {DEF_CUEOBJ} _cueobj 读取cue后生成的对象
  * @param {String} _url 为了找到轨道文件, 需要提供 cue 的路径
- * @return {DEF_MediaObj[]} 返回 DEF_MediaObj 数组
+ * @returns {DEF_MediaObj[]} 返回 DEF_MediaObj 数组
  */
 function cueObjToMediaObj(_cueobj,_url){
     var rtn = [], urlList = [rltToAbs(_cueobj.file,_url)];

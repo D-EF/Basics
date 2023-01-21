@@ -52,7 +52,7 @@
              * f(x)=x^2+x+1
              * ```
              * @param {Number} x 参数x
-             * @return {Number} 返回y
+             * @returns {Number} 返回y
              */
             calc_DemoFunction(x){
                 return x*(x+1)+1;
@@ -74,9 +74,9 @@
      * f(x)= |x|^3
      * ```
      * @param {Number} 传入参数x
-     * @return {Number} 返回y
+     * @returns {Number} 返回y
      */
-    function clac_DemoFunction__Outsize(x){
+    function calc_DemoFunction__Outsize(x){
         return Math.abs(x*x*x);
     }
 

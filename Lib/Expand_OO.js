@@ -37,7 +37,7 @@ class  Iterator__MyVirtual{
     
     /** 当前数据
      * @virtual
-     * @return {*} 返回当前
+     * @returns {*} 返回当前
      */
     get_Now(){}
 }
@@ -202,7 +202,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
      * @param {*} rely_on_TGT     数据来源
      * @param {String[]} keys   tgt上的key
      * @param {String[]} [_rely_on_keys] 可选参数 relyOnTGT上的key, 下标和keys要对应
-     * @return {HadDependencyObject} 返回 tgt 
+     * @returns {HadDependencyObject} 返回 tgt 
      */
     function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
         var rely_on_keys=_rely_on_keys||keys;
@@ -229,7 +229,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
     /** 寻找依赖的根部
      * @param {*} tgt 使用了依赖的对象
      * @param {String} key key
-     * @return {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
+     * @returns {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
      */
     function get_Root__DependencyMapping(tgt,_key){
         var root={rely_on_TGT:tgt ,rely_on_key:_key},

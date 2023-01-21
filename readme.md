@@ -81,7 +81,7 @@ arrayMove([1,2,3,4,5,6],2);  // >> [5,6,1,2,3,4]
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
-    @return {Boolean}    返回是否相同   
+    @returns {Boolean}    返回是否相同   
 ---
 
 ## 对比两个列表项是否相同(不区分项的类型和顺序) arrayDiff
@@ -90,7 +90,7 @@ arrayDiff(a1,a2)
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
-    @return {Boolean}    返回是否相同   
+    @returns {Boolean}    返回是否相同   
 ---
 
 ## 类继承函数 inheritClass 

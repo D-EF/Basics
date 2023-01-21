@@ -95,7 +95,7 @@ Number_Long.prototype={
     },
     /** 加法运算
      * @param {Number|Number[]|Number_Long} val 增加的值
-     * @return {Number_Long} 返回一个新的 Number_Long
+     * @returns {Number_Long} 返回一个新的 Number_Long
      */
     add(val){
         var rtn;
@@ -122,7 +122,7 @@ Number_Long.prototype={
     },
     /** 乘法运算, 忌用浮点数数参与大数值运算 因为js对浮点运算支持很垃圾
      * @param {Number|Number[]|Number_Long} val 
-     * @return {Number_Long} 返回一个新的 Number_Long
+     * @returns {Number_Long} 返回一个新的 Number_Long
      */
     multiply(val){
         var _val=new Number_Long(val),
@@ -394,7 +394,7 @@ function create_CutBezierMatrixQ(n,t){
  * @param {Number[]} points        控制点集合
  * @param {Number[][]} matrix 分割时使用的矩阵, 用 create_CutBezierMatrixQ 函数生成
  * @param {Boolean} flag 前后两边 false(0)为p1起点, true(!0)为p4终点
- * @return {Number[]} 返回两组控制点
+ * @returns {Number[]} 返回两组控制点
  */
 function cut_Bezier__ByMatrix(points,matrix,flag){
     var n=points.length-1,

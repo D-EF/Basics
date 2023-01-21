@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:00:17
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-12-18 23:10:38
+ * @LastEditTime: 2023-01-21 03:30:11
  * @FilePath: \site\js\import\Basics\Lib\Expand_Basics.js
  * @Description: 
  * 
@@ -71,7 +71,7 @@ globalThis.nullfnc=function nullfnc(){};
     class OverloadFunction extends Function{
         /**
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @return  {OverloadFunction} 带重载的函数
+         * @returns  {OverloadFunction} 带重载的函数
          * 用 .addOverload 添加重载
          */
         constructor(default_fnc){
@@ -92,7 +92,7 @@ globalThis.nullfnc=function nullfnc(){};
         }
         /** 创建重载函数
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @return  {OverloadFunction} 带重载的函数
+         * @returns  {OverloadFunction} 带重载的函数
          * 用 .addOverload 添加重载
          */
         static _create(default_fnc){
@@ -100,7 +100,7 @@ globalThis.nullfnc=function nullfnc(){};
                 return function(){
                     var i,j,flag=false;
                     var length=arguments.length;
-                    j=i==length-1;
+                    j=i=length-1;
                     while(j>=0&&arguments[j]===undefined){--length;--j;};
                     for(i=OverloadFunction.ols.length-1;i>=0;--i){
                         if(length===OverloadFunction.ols[i].parameterType.length){
@@ -410,7 +410,7 @@ globalThis.nullfnc=function nullfnc(){};
      * @param {Number[]}   lut 显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
      * @param {Number}     val   值     
      * @param {String}     [key]  如果是对象数组, 使用属性作为查找表的关键字
-     * @return {int}    返回对应下标    溢出将直接使用首或尾的值
+     * @returns {int}    返回对应下标    溢出将直接使用首或尾的值
      */
     function select_Lut__Binary(lut,val,key){
         var find = false,
@@ -526,7 +526,7 @@ globalThis.nullfnc=function nullfnc(){};
 
     /** 某字符是否能作为数字的一元
      * @param {char} _char 
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     function canBeNumberChar(_char){
         return ((_char>='1'&&_char<='9')||_char==='0'||('+-.eE'.indexOf(_char)!==-1));

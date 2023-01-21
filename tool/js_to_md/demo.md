@@ -46,7 +46,7 @@ asd:123
  * f(x)=x^2+x+1   
  ```   
  * @param {Number} x 参数x   
- * @return {Number} 返回y   
+ * @returns {Number} 返回y   
    
    
 #### get_Index()  获取索引   
@@ -55,12 +55,12 @@ asd:123
    
 
    
-## function clac_DemoFunction__Outsize(x)    
+## function calc_DemoFunction__Outsize(x)    
  * 全局demo函数   
  ```   
  * f(x)= |x|^3   
  ```   
  * @param {Number} 传入参数x   
- * @return {Number} 返回y   
+ * @returns {Number} 返回y   
    
    
