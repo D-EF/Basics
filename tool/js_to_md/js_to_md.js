@@ -5,14 +5,14 @@
      * @param {String} str 处理中的一行字符串
      * @param {Number} line_index 处理中的第几行
      * @param {Boolean} close_flag 是否结束
-     * @returns {String} 返回字符串
+     * @return {String} 返回字符串
      */
 
     /** 处理代码块
      * @param {String} str 原本的代码
      * @param {String|RegExp} head_regexp 选择到头部的选择器
      * @param {process_Line} process_Line 各行处理函数 返回字符串
-     * @returns {String} 返回处理后的代码
+     * @return {String} 返回处理后的代码
      */
     function process_Block(str,head_regexp,process_Line){
         var rtn=[],
@@ -131,13 +131,13 @@
     /**
      * @callback Function__Process_String 字符串处理函数
      * @param {String} str 原字符串
-     * @returns {String} 返回处理后的字符串
+     * @return {String} 返回处理后的字符串
      */
 
     /** 使用正则表达式生成字符串处理函数
      * @param {RegExp} searchValue  
      * @param {String} replaceValue 
-     * @returns {Function__Process_String}
+     * @return {Function__Process_String}
      */
     function create_ProcessString__RegExp(searchValue,replaceValue){
         /** @type {Function__Process_String} */
@@ -149,7 +149,7 @@
     /** 使用正则表达式生成字符串处理函数 处理多次，直到无法找到匹配项
      * @param {RegExp} searchValue  
      * @param {String} replaceValue 
-     * @returns {Function__Process_String}
+     * @return {Function__Process_String}
      */
     function create_ProcessString__RegExp__More(searchValue,replaceValue){
         /** @type {Function__Process_String} */

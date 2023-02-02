@@ -37,7 +37,7 @@ class  Iterator__MyVirtual{
     
     /** 当前数据
      * @virtual
-     * @returns {*} 返回当前
+     * @return {*} 返回当前
      */
     get_Now(){}
 }
@@ -66,7 +66,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
     }
     /** 获取子节点列表
      * @param {TreeNode} item 
-     * @returns {Array}
+     * @return {Array}
      */
     _get_Itemchildren(item){
         if(this.childrenKey){
@@ -77,7 +77,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
     }
     /** 获取目标深度的父节点
      * @param {Number} depth 
-     * @returns {TreeNode}
+     * @return {TreeNode}
      */
     _get_Parent(depth){
         return (depth?this._gg[depth-1]:this.data);
@@ -158,19 +158,19 @@ class Iterator__Tree extends Iterator__MyVirtual{
         return Array.from(this._now_node_path);
     }
     /** 获取当前路径
-     * @returns {Number[]} 返回下标形式的路径
+     * @return {Number[]} 返回下标形式的路径
      */
     get_Now__Path(){
         return Array.from(this._now_path);
     }
     /** 获取当前迭代的次数
-     * @returns {Number} 当前是第几次迭代
+     * @return {Number} 当前是第几次迭代
      */
     get_Now__Di(){
         return this._di;
     }
     /** 获取当前迭代的次数
-     * @returns {Number} 当前是第几次迭代
+     * @return {Number} 当前是第几次迭代
      */
     get_Now__Depth(){
         return this._depth;
@@ -202,7 +202,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
      * @param {*} rely_on_TGT     数据来源
      * @param {String[]} keys   tgt上的key
      * @param {String[]} [_rely_on_keys] 可选参数 relyOnTGT上的key, 下标和keys要对应
-     * @returns {HadDependencyObject} 返回 tgt 
+     * @return {HadDependencyObject} 返回 tgt 
      */
     function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
         var rely_on_keys=_rely_on_keys||keys;
@@ -229,7 +229,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
     /** 寻找依赖的根部
      * @param {*} tgt 使用了依赖的对象
      * @param {String} key key
-     * @returns {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
+     * @return {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
      */
     function get_Root__DependencyMapping(tgt,_key){
         var root={rely_on_TGT:tgt ,rely_on_key:_key},

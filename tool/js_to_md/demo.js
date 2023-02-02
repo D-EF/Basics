@@ -52,14 +52,14 @@
              * f(x)=x^2+x+1
              * ```
              * @param {Number} x 参数x
-             * @returns {Number} 返回y
+             * @return {Number} 返回y
              */
             calc_DemoFunction(x){
                 return x*(x+1)+1;
             }
 
             /** 获取索引
-             * @returns {Number}
+             * @return {Number}
              */
             get_Index(){return this.index}
 
@@ -74,7 +74,7 @@
      * f(x)= |x|^3
      * ```
      * @param {Number} 传入参数x
-     * @returns {Number} 返回y
+     * @return {Number} 返回y
      */
     function calc_DemoFunction__Outsize(x){
         return Math.abs(x*x*x);

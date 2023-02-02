@@ -60,7 +60,7 @@
         }
         /** 找到最近的缓存
          * @param {Number} index 对应指令的下标
-         * @returns {Act_History_Cache} 返回缓存
+         * @return {Act_History_Cache} 返回缓存
          */
         find_Cache(index){
             return this.snapshot_cache[select_Lut__Binary(this.snapshot_cache,index,"index")-1];
@@ -68,7 +68,7 @@
         /** 使用历史记录创建缓存
          * @param {Number} index 对应指令的下标
          * @param {Act_History_Cache} [cache] 使用某条缓存
-         * @returns 
+         * @return 
          */
         create_Cache(index,cache){
             var temp=cache;
@@ -89,7 +89,7 @@
         /** 加入指令
          * @param {Act_Command} cmd 新指令
          * @param {Boolean} [want_overwrite] 是否要覆盖操作 默认否
-         * @returns {*} 指令对应函数的返回
+         * @return {*} 指令对应函数的返回
          */
         set_ActCommand(cmd,want_overwrite){
             var i=this.now_cache.index,j;
@@ -140,7 +140,7 @@
         /** 执行命令
          * @param {Object} tgt 数据
          * @param {Act_Command} cmd 命令
-         * @returns {*} 
+         * @return {*} 
          */
         static run_Cmd(tgt,cmd){
             var rtn=Act_History.into_CmdPointer(tgt,cmd);
@@ -155,7 +155,7 @@
         /** 进入 cmd 的指向位置
          * @param {Object} tgt 数据
          * @param {Act_Command} cmd 命令
-         * @returns {*}  返回倒数第二个, 最后操作 rtn[path[path.length-1]]=val; 或者rtn[path[path.length-1]].apply(rtn,args);
+         * @return {*}  返回倒数第二个, 最后操作 rtn[path[path.length-1]]=val; 或者rtn[path[path.length-1]].apply(rtn,args);
          */
         static into_CmdPointer(tgt,cmd){
             var temp=tgt,
@@ -171,7 +171,7 @@
         }
         /** 复制运行时使用的参数
          * @param {Act_Command} cmd 
-         * @returns 
+         * @return 
          */
         static copy_CmdArgs(cmd){
             if(cmd.f_copy_args){
@@ -196,12 +196,12 @@
      * @param {*} temp 上一次进入位置的数据
      * @param {Array<String|Number|callback_GetData__ByPath>} path 使用中的路径
      * @param {Number} index 路径下标
-     * @returns {*} 返回当前位置数据
+     * @return {*} 返回当前位置数据
      */
     /** 使用路径获取数据
      * @param {*} tgt 
      * @param {Array<String|Number|callback_GetData__ByPath>} path 进入数据位置的路径
-     * @returns {{data:*,data_parent:*}} 返回数据和它的父级
+     * @return {{data:*,data_parent:*}} 返回数据和它的父级
      */
     function get_Data__ByPath(tgt,path){
         var data=tgt,data_parent=null;

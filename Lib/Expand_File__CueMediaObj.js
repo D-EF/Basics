@@ -5,7 +5,7 @@
 import {rltToAbs,inheritClass,OlFunction} from "../Basics.js"
 /**
  * 存储 cue 格式为js的obj格式
- * 参考资料来自: https: //tieba.baidu.com/p/6160083867
+ * 参考资料来自: https://tieba.baidu.com/p/6160083867
  */
 function DEF_CUEOBJ(){
     this.performer  = "";
@@ -20,7 +20,7 @@ DEF_CUEOBJ.prototype={
     /**
      * 查找rem指令
      * @param {String} rem1 rem 的 第一个指令
-     * @returns {String[][]}
+     * @return {String[][]}
      */
     selectRem:function(rem1){
         var rtn = [];
@@ -110,7 +110,7 @@ DEF_CUEOBJTrack.prototype.getDuration=function(){
 /**
  * 把cue的表示时间的格式转换成秒
  * @param {String} timeStr mm: ss: ff
- * @returns {Number}
+ * @return {Number}
  */
 function cueTimeToSecond(timeStr){
     var temp = timeStr.split(':');
@@ -284,7 +284,7 @@ class DEF_MediaObj{
     /**
      * 拷贝以创建一个 DEF_MediaObj
      * @param {Object} baseObj
-     * @returns {DEF_MediaObj}
+     * @return {DEF_MediaObj}
      */
     static copy(baseObj){
         var rtn = new DEF_MediaObj();
@@ -309,7 +309,7 @@ class DEF_MediaObj{
     /**
      * 克隆以创建一个 DEF_MediaObj
      * @param {Object} baseObj
-     * @returns {DEF_MediaObj}
+     * @return {DEF_MediaObj}
      */
     static clone(baseObj){
         var rtn = new DEF_MediaObj();
@@ -324,14 +324,14 @@ class DEF_MediaObj{
     }
     /**
      * 克隆当前对象
-     * @returns {DEF_MediaObj}
+     * @return {DEF_MediaObj}
      */
     clone(){
         return DEF_MediaObj.clone(this);;
     }
     /**
      * 拷贝当前对象
-     * @returns {DEF_MediaObj}
+     * @return {DEF_MediaObj}
      */
     copy(){
         return DEF_MediaObj.copy(this);
@@ -478,7 +478,7 @@ DEF_MediaObjMark.prototype.commandList={
  * 将cue格式的转换成 DEF_MediaObj
  * @param {DEF_CUEOBJ} _cueobj 读取cue后生成的对象
  * @param {String} _url 为了找到轨道文件, 需要提供 cue 的路径
- * @returns {DEF_MediaObj[]} 返回 DEF_MediaObj 数组
+ * @return {DEF_MediaObj[]} 返回 DEF_MediaObj 数组
  */
 function cueObjToMediaObj(_cueobj,_url){
     var rtn = [], urlList = [rltToAbs(_cueobj.file,_url)];

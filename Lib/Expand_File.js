@@ -1,5 +1,5 @@
 /** 获取当前运行脚本的地址
- * @returns {String}
+ * @return {String}
  */
     function getCurrAbsPath(){
     if(document.currentScript){

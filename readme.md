@@ -70,7 +70,7 @@ arrayMove([1,2,3,4,5,6],2);  // >> [5,6,1,2,3,4]
     数组移位   
     @param {Array}  arr  数组   
     @param {Number} l    移动步长   
-    @returns {Array} 返回一个新数组   
+    @return {Array} 返回一个新数组   
 ---
 
 ## 对比两个列表项是否相同 arrayEqual
@@ -81,7 +81,7 @@ arrayMove([1,2,3,4,5,6],2);  // >> [5,6,1,2,3,4]
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
-    @returns {Boolean}    返回是否相同   
+    @return {Boolean}    返回是否相同   
 ---
 
 ## 对比两个列表项是否相同(不区分项的类型和顺序) arrayDiff
@@ -90,7 +90,7 @@ arrayDiff(a1,a2)
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
-    @returns {Boolean}    返回是否相同   
+    @return {Boolean}    返回是否相同   
 ---
 
 ## 类继承函数 inheritClass 
@@ -108,7 +108,7 @@ encodeHTML(str)
 ```
 为了防止服务器出错对部分字符进行编码   
 @param {String} str <>"'{}[] to &#ascii;   
-@returns {String} 转换后的字符串   
+@return {String} 转换后的字符串   
     
 如果需要修改，请修改下列静态属性   
 * encodeHTML.regex 存放正则表达式   
@@ -123,7 +123,7 @@ templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKey
 @param {Array} argArray 实参   
 @param {String} _opKey 插值关键文本 op   
 @param {String} _edKey 插值关键文本 ed   
-@returns {{str:String,hit:Array\< String \>}}   
+@return {{str:String,hit:Array\< String \>}}   
 * hit 是被认为是
 
 ## 将字符串转换成js的类型 strToVar 
@@ -177,7 +177,7 @@ addResizeEvent(_element,_listener)
 * sampleCurveX(t) , sampleCurveY(t)
     根据时间柄参数得到x坐标
     @param {Number} t 时间柄参数
-    @returns {Number} x坐标
+    @return {Number} x坐标
 
 ---
 
@@ -215,7 +215,7 @@ addResizeEvent(_element,_listener)
     @param {function} fnc 执行的函数   
     后加入的会先运行
 * 移除一个委托 removeAct(tgt,fnc) 参数和加入的一样才能移除   
-    @returns {Boolean} 返回是否移除成功   
+    @return {Boolean} 返回是否移除成功   
 * 使用例 
   ``` javascript
   var delegate=Delegate.create();
@@ -265,7 +265,7 @@ addResizeEvent(_element,_listener)
 * next(_l)
     让步进器步进
     @param {Number} _l 步长
-    @returns {Number} 返回步进后的值
+    @return {Number} 返回步进后的值
 * overflowHanding()
     让步进器的溢出值回到范围内
 ---

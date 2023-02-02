@@ -7,7 +7,7 @@ class DEF_Caller{
     }
     /** 创建监听者
      * @param {{key:Function}} callbacks 回调函数集合 属性全为 Function 的对象
-     * @returns {Array} 返回一个数组
+     * @return {Array} 返回一个数组
      */
     create_Listener(callbacks){
         var rtn=[];
@@ -17,7 +17,7 @@ class DEF_Caller{
     /** 增加 监听者(订阅者) 
      * @param {*} tgt 监听者 给回调函数当this指向用的
      * @param {{key:Function}} callbacks 回调函数集合 属性全为 Function 的对象
-     * @returns {DEF_Caller} 返回当前的对象
+     * @return {DEF_Caller} 返回当前的对象
      */
     add_Listener(tgt,callbacks){
         var keys=Object.keys(callbacks),
@@ -37,7 +37,7 @@ class DEF_Caller{
     }
     /** 移除监听者
      * @param {*} tgt 
-     * @returns {DEF_Caller}
+     * @return {DEF_Caller}
      */
     remove_Listener(tgt){
         var keys=Object.keys(callbacks),

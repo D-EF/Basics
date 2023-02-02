@@ -15,7 +15,7 @@ const ArrayEqual_EqualObj=Symbol?Symbol("If the function 'arrayEqual' params (a1
 /** 数组移位
  * @param {AllTypeArray}  arr  数组
  * @param {Number} long    移动步长
- * @returns {Array} 返回一个新数组
+ * @return {Array} 返回一个新数组
  */
 function arrayMove(arr,long){
     if(!arr.length) return new arr.constructor(arr);
@@ -35,7 +35,7 @@ function arrayMove(arr,long){
  * @param {AllTypeArray} a1 要进行比较的数组
  * @param {AllTypeArray} a2 要进行比较的数组
  * @param {Boolean} [checkType] 对类型是否宽松 默认否 (使用==还是===)
- * @returns {Boolean}    返回是否相同
+ * @return {Boolean}    返回是否相同
  */
 function arrayEqual(a1,a2,checkType){
     if(a1===ArrayEqual_EqualObj||a2===ArrayEqual_EqualObj){
@@ -52,7 +52,7 @@ function arrayEqual(a1,a2,checkType){
 /**对比两个列表项是否相同 (无序)
  * @param {Array}   arr1       要进行比较的数组
  * @param {Array}   arr2       要进行比较的数组
- * @returns {Array}    返回差异的内容的数组
+ * @return {Array}    返回差异的内容的数组
  */
 function arrayDiff(arr1,arr2){
     // 本来是给KeyNotbook用的 
@@ -80,7 +80,7 @@ function arrayDiff(arr1,arr2){
 /**对比两个列表项是否有差异 (无序)
  * @param {Array}   arr1       要进行比较的数组
  * @param {Array}   arr2       要进行比较的数组
- * @returns {Boolean} 是否有差异
+ * @return {Boolean} 是否有差异
  */
 function arrayHasDiff(arr1,arr2){
     if(arr1.length!=arr2.length)return true;

@@ -46,11 +46,11 @@ asd:123
  * f(x)=x^2+x+1   
  ```   
  * @param {Number} x 参数x   
- * @returns {Number} 返回y   
+ * @return {Number} 返回y   
    
    
 #### get_Index()  获取索引   
- * @returns {Number}   
+ * @return {Number}   
    
    
 
@@ -61,6 +61,6 @@ asd:123
  * f(x)= |x|^3   
  ```   
  * @param {Number} 传入参数x   
- * @returns {Number} 返回y   
+ * @return {Number} 返回y   
    
    

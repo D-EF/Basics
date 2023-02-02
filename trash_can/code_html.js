@@ -11,7 +11,7 @@
 
 /**为了防止服务器出错对部分字符进行编码
      * @param {String} str <>"'{}[] to &#ascii;
-     * @returns {String} 转换后的字符串
+     * @return {String} 转换后的字符串
      */
  function encodeHTML(str){
     var enStr=str;

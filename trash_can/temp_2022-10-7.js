@@ -85,7 +85,7 @@ Number_Long.prototype={
     },
     /** 加法运算
      * @param {Number|Number[]|Number_Long} val 增加的值
-     * @returns {Number_Long} 返回一个新的 Number_Long
+     * @return {Number_Long} 返回一个新的 Number_Long
      */
     add(val){
         var rtn;
@@ -112,7 +112,7 @@ Number_Long.prototype={
     },
     /** 乘法运算, 忌用浮点数数参与大数值运算 因为js对浮点运算支持很垃圾
      * @param {Number|Number[]|Number_Long} val 
-     * @returns {Number_Long} 返回一个新的 Number_Long
+     * @return {Number_Long} 返回一个新的 Number_Long
      */
     multiply(val){
         var _val=new Number_Long(val),

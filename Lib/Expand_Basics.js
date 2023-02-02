@@ -71,7 +71,7 @@ globalThis.nullfnc=function nullfnc(){};
     class OverloadFunction extends Function{
         /**
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @returns  {OverloadFunction} 带重载的函数
+         * @return  {OverloadFunction} 带重载的函数
          * 用 .addOverload 添加重载
          */
         constructor(default_fnc){
@@ -92,7 +92,7 @@ globalThis.nullfnc=function nullfnc(){};
         }
         /** 创建重载函数
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @returns  {OverloadFunction} 带重载的函数
+         * @return  {OverloadFunction} 带重载的函数
          * 用 .addOverload 添加重载
          */
         static _create(default_fnc){
@@ -138,7 +138,7 @@ globalThis.nullfnc=function nullfnc(){};
         /**添加一个委托
          * @param {*} tgt   执行动作的this指向
          * @param {function} act 执行的动作
-         * @returns {Delegate} 返回当前
+         * @return {Delegate} 返回当前
          */
         addAct(tgt,act){
             this.act_list.push({tgt:tgt,act:act});
@@ -147,7 +147,7 @@ globalThis.nullfnc=function nullfnc(){};
 
         /**移除一个委托
          * 参数和加入相同
-         * @returns {Delegate} 返回当前
+         * @return {Delegate} 返回当前
          */
         removeAct(tgt,act){
             var i;
@@ -162,7 +162,7 @@ globalThis.nullfnc=function nullfnc(){};
 
         /** 使用 TGT 移除委托 所有带有相同tgt的委托全部会被移除
          * @param {*} tgt   用添加委托时的tgt属性标识
-         * @returns {Delegate} 返回当前
+         * @return {Delegate} 返回当前
          */
         removeActs_ByTGT(tgt){
             var i=this.act_list.length-1;
@@ -175,7 +175,7 @@ globalThis.nullfnc=function nullfnc(){};
         }
         
         /** 创建一个委托对象
-         * @returns {Delegate} fnc.apply(delegate.act_list[i].tgt,arguments)
+         * @return {Delegate} fnc.apply(delegate.act_list[i].tgt,arguments)
          */
         static _create(){
             var delegate=(function(){
@@ -225,7 +225,7 @@ globalThis.nullfnc=function nullfnc(){};
          * @param {string} key 回调函数委托与计时器的索引
          * @param {number} time_long 每次回调的间隔(步长)
          * @param {number} deviation 初始化与第一次回调的间隔 取负值将设置为当前时间戳取余步长 (now % time_long)
-         * @returns 
+         * @return 
          */
         _init_Callback(key,time_long,deviation){
             if(this.timers[key]) return;
@@ -330,7 +330,7 @@ globalThis.nullfnc=function nullfnc(){};
         }
         /** Stepper 拷贝函数
          * @param {Stepper} stepper 拷贝对象
-         * @returns {Stepper}
+         * @return {Stepper}
          */
         Stepper.copy=function (stepper){
             return new Stepper(stepper.max,stepper.min,stepper.valueOf())
@@ -338,19 +338,19 @@ globalThis.nullfnc=function nullfnc(){};
         Stepper.prototype={
             
             /** 拷贝函数
-             * @returns {Stepper}
+             * @return {Stepper}
              */
             copy(){
                 return new Stepper(this.max,this.min,this.valueOf());
             },
             /** 用于获取当前值
-             * @returns {Number}
+             * @return {Number}
              */
             valueOf:function(){
                 return this.i;
             },
             /** 用于获取当前值(字符串)
-             * @returns {String}
+             * @return {String}
              */
             toString:function(){
                 return this.i.toString();
@@ -358,7 +358,7 @@ globalThis.nullfnc=function nullfnc(){};
             /**
              * 设置当前值
              * @param {Number} _i 目标
-             * @returns {Number} 返回修改后的值
+             * @return {Number} 返回修改后的值
              */
             set:function(_i){
                 this.i=_i;
@@ -368,7 +368,7 @@ globalThis.nullfnc=function nullfnc(){};
             /**
              * 让步进器步进
              * @param {Number} _l 步长
-             * @returns {Number} 返回步进后的位置
+             * @return {Number} 返回步进后的位置
              */
             next:function(_l){
                 var l=_l===undefined?1:_l;
@@ -410,7 +410,7 @@ globalThis.nullfnc=function nullfnc(){};
      * @param {Number[]}   lut 显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
      * @param {Number}     val   值     
      * @param {String}     [key]  如果是对象数组, 使用属性作为查找表的关键字
-     * @returns {int}    返回对应下标    溢出将直接使用首或尾的值
+     * @return {int}    返回对应下标    溢出将直接使用首或尾的值
      */
     function select_Lut__Binary(lut,val,key){
         var find = false,
@@ -451,7 +451,7 @@ globalThis.nullfnc=function nullfnc(){};
      * @param {String} edKey 插值关键文本 ed; 默认 "}"
      * @param {char}   opKeyMask 插值关键文本 的屏蔽字符; 默认'\'
      * @param {char}   edKeyMask 插值关键文本 的屏蔽字符; 默认'\'
-     * @returns {{str:String,hit:String[]}}
+     * @return {{str:String,hit:String[]}}
      */
     function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
         if(Object.keys(that).length){
@@ -526,7 +526,7 @@ globalThis.nullfnc=function nullfnc(){};
 
     /** 某字符是否能作为数字的一元
      * @param {char} _char 
-     * @returns {Boolean}
+     * @return {Boolean}
      */
     function canBeNumberChar(_char){
         return ((_char>='1'&&_char<='9')||_char==='0'||('+-.eE'.indexOf(_char)!==-1));

@@ -33,7 +33,7 @@ window.stopPropagation=stopPropagation;
 
 /** NodeList 转换为 Array
  * @param {NodeList} nodelist 
- * @returns {Node[]} 保留引用的链接
+ * @return {Node[]} 保留引用的链接
  */
  function nodeListToArray(nodelist){
     var array=null;
@@ -70,7 +70,7 @@ Element.prototype.getChildElement=function(){
     KeyNotbook.mapping__keyCode_code={'27':'escape','112':'f1','113':'f2','114':'f3','115':'f4','116':'f5','117':'f6','118':'f7','119':'f8','120':'f9','121':'f10','122':'f11','123':'f12','145':'scrolllock','19':'pause','192':'backquote','49':'digit1','50':'digit2','51':'digit3','52':'digit4','53':'digit5','54':'digit6','55':'digit7','56':'digit8','57':'digit9','48':'digit0','189':'minus','187':'equal','8':'backspace','45':'insert','36':'home','33':'pageup','144':'numlock','111':'numpaddivide','106':'numpadmultiply','109':'numpadsubtract','9':'tab','81':'keyq','87':'keyw','69':'keye','82':'keyr','84':'keyt','89':'keyy','85':'keyu','73':'keyi','79':'keyo','80':'keyp','219':'bracketleft','221':'bracketright','220':'backslash','46':'delete','35':'end','34':'pagedown','36':'numpad7','38':'numpad8','33':'numpad9','107':'numpadadd','20':'capslock','65':'keya','83':'keys','68':'keyd','70':'keyf','71':'keyg','72':'keyh','74':'keyj','75':'keyk','76':'keyl','186':'semicolon','222':'quote','13':'enter','37':'numpad4','12':'numpad5','39':'numpad6','90':'keyz','88':'keyx','67':'keyc','86':'keyv','66':'keyb','78':'keyn','77':'keym','188':'comma','190':'period','191':'slash','16':'shift','38':'arrowup','35':'numpad1','40':'numpad2','34':'numpad3','13':'numpadenter','17':'control','91':'metaleft','18':'alt','32':'space','93':'contextmenu','37':'arrowleft','40':'arrowdown','39':'arrowright','45':'numpad0','46':'numpaddecimal'};
     /** 
      * @param {Number|String} _val 
-     * @returns {String} 返回 code
+     * @return {String} 返回 code
      */
     KeyNotbook.toCode=function(_val){
         var val=_val;
@@ -177,7 +177,7 @@ Element.prototype.getChildElement=function(){
         /**按下新按键
          * @param {KeyboardEvent} e 事件对象
          * @param {Element} tgt 事件触发的元素
-         * @returns 
+         * @return 
          */
         setKey:function(e,tgt){
             var flag=false;
@@ -218,7 +218,7 @@ Element.prototype.getChildElement=function(){
         /**抬起按键
          * @param {KeyboardEvent} e 事件对象
          * @param {Element} tgt     事件触发的元素
-         * @returns 
+         * @return 
          */
         removeKey:function(e,tgt){
             var code=KeyNotbook.toCode(e.code||e.keyCode);
@@ -354,7 +354,7 @@ Element.prototype.getChildElement=function(){
     /** 移除 addResizeEvent 给element添加resize事件
      * @param {HTMLElement} _element 
      * @param {function(this:Element)} _listener 
-     * @returns 
+     * @return 
      */
     function removeResizeEvent(_element,_listener){
         if(_element.resizeMarkFlag){
