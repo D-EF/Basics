@@ -1,5 +1,5 @@
 /** 获取当前运行脚本的地址
- * @return {String}
+ * @return {string}
  */
     function getCurrAbsPath(){
     if(document.currentScript){
@@ -20,8 +20,8 @@
 }
 
 /** 把相对地址转换成绝对地址
- * @param {String} _fileURL 相对路径
- * @param {String} rootURL  起始路径
+ * @param {string} _fileURL 相对路径
+ * @param {string} rootURL  起始路径
  */
     function rltToAbs(_fileURL,rootURL){
     var fileURL,fileURL_Root;

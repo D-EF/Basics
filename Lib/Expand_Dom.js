@@ -69,8 +69,8 @@ Element.prototype.getChildElement=function(){
     /** @type {*} keyCode to code的映射表 */
     KeyNotbook.mapping__keyCode_code={'27':'escape','112':'f1','113':'f2','114':'f3','115':'f4','116':'f5','117':'f6','118':'f7','119':'f8','120':'f9','121':'f10','122':'f11','123':'f12','145':'scrolllock','19':'pause','192':'backquote','49':'digit1','50':'digit2','51':'digit3','52':'digit4','53':'digit5','54':'digit6','55':'digit7','56':'digit8','57':'digit9','48':'digit0','189':'minus','187':'equal','8':'backspace','45':'insert','36':'home','33':'pageup','144':'numlock','111':'numpaddivide','106':'numpadmultiply','109':'numpadsubtract','9':'tab','81':'keyq','87':'keyw','69':'keye','82':'keyr','84':'keyt','89':'keyy','85':'keyu','73':'keyi','79':'keyo','80':'keyp','219':'bracketleft','221':'bracketright','220':'backslash','46':'delete','35':'end','34':'pagedown','36':'numpad7','38':'numpad8','33':'numpad9','107':'numpadadd','20':'capslock','65':'keya','83':'keys','68':'keyd','70':'keyf','71':'keyg','72':'keyh','74':'keyj','75':'keyk','76':'keyl','186':'semicolon','222':'quote','13':'enter','37':'numpad4','12':'numpad5','39':'numpad6','90':'keyz','88':'keyx','67':'keyc','86':'keyv','66':'keyb','78':'keyn','77':'keym','188':'comma','190':'period','191':'slash','16':'shift','38':'arrowup','35':'numpad1','40':'numpad2','34':'numpad3','13':'numpadenter','17':'control','91':'metaleft','18':'alt','32':'space','93':'contextmenu','37':'arrowleft','40':'arrowdown','39':'arrowright','45':'numpad0','46':'numpaddecimal'};
     /** 
-     * @param {Number|String} _val 
-     * @return {String} 返回 code
+     * @param {number|string} _val 
+     * @return {string} 返回 code
      */
     KeyNotbook.toCode=function(_val){
         var val=_val;
@@ -100,11 +100,11 @@ Element.prototype.getChildElement=function(){
     /**按键记录器key notbook
     */
     function KeyNotbook(){
-        /**@type {String[]} 记录中的按下的按键 列表项为 KeyboardEvent.code */
+        /**@type {string[]} 记录中的按下的按键 列表项为 KeyboardEvent.code */
         this.downing_key_codes=[];
         /**@type {function(this:Element,KeyboardEvent)[]} 动作函数*/
         this.keys_down_fuc  =[];
-        /**@type {String[][]} 组合键记录表 列表项为 KeyboardEvent.code*/
+        /**@type {string[][]} 组合键记录表 列表项为 KeyboardEvent.code*/
         this.keys_down_table =[];
         this.keys_up_fnc={};
         this.state={
@@ -116,7 +116,7 @@ Element.prototype.getChildElement=function(){
     }
     KeyNotbook.prototype={
         /** 变更状态以替换key事件 
-         * @param {String} key 状态的key，初始状态为 base
+         * @param {string} key 状态的key，初始状态为 base
          */
         change_State:function(key){
             if(!this.state[key]){
@@ -131,7 +131,7 @@ Element.prototype.getChildElement=function(){
         },
         constructor:KeyNotbook,
         /** 添加按键事件
-         * @param {Number|String|(Number|String)[]} keycode 触发回调的按键 keycode, 接受 数字(keyCode) or 字符串(code) or 数组
+         * @param {number|string|(number|string)[]} keycode 触发回调的按键 keycode, 接受 数字(keyCode) or 字符串(code) or 数组
          * @param {function(this:Element,KeyboardEvent)} func 触发后的回调函数
          */
         setDKeyFunc:function(keycode,func){
@@ -149,7 +149,7 @@ Element.prototype.getChildElement=function(){
             this.keys_down_fuc.push(func);
         },
         /** 移除按键事件
-         * @param {Number|Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
+         * @param {number|Array} _keycode 触发回调的按键 keycode, 接受 数字 或者 数组
          * @param {function(this:Element,KeyboardEvent)} func 触发后的回调函数
          */
         removeDKeyFunc:function(_keycode,func){
@@ -241,7 +241,7 @@ Element.prototype.getChildElement=function(){
      * @param {Element} _Element 添加事件的元素
      * @param {Boolean} _keepFlag 按住键盘是否重复触发事件
      * @param {Boolean} _orderFlag 组合键是否需要有序
-     * @param {Number|Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
+     * @param {number|Array} _keycode 按键的 keycode 如果是组合键 需要输入数组
      * @param {function(this:Element,KeyboardEvent)} act_fnc 触发的动作函数
      * @param {Boolean} _type false=>down;true=>up 注意up只能有一个按键
      */
@@ -269,7 +269,7 @@ Element.prototype.getChildElement=function(){
     }
     /** 移除 element 上的 keyNotBook 的事件
      * @param {Element} _Element 
-     * @param {Number|Array} _keycode 
+     * @param {number|Array} _keycode 
      * @param {function(this:Element,KeyboardEvent)} act_fnc 这个函数应该与 addKeyEvent 时使用的保持一致
      * @param {Boolean} _type false=>down;true=>up
      */
@@ -383,13 +383,13 @@ Element.prototype.getChildElement=function(){
 
 // open * dom 自定义事件 (event) * open
 
-    /** @type {String[]} 自定义事件类型记录表 */
+    /** @type {string[]} 自定义事件类型记录表 */
     HTMLElement._event_type=[];
     /** @type {function(this:Element,Element)[]} 注册触发自定义事件类型的函数 */
     HTMLElement._event_touch_fnc=[];
 
     /** 增加 dom 事件类型
-     * @param {String} type 事件类型名 
+     * @param {string} type 事件类型名 
      * @param {function(this:Element,Element)} func_for_registeCustomEvent  用于注册的触发事件的函数
      * 要在函数中执行 this.dispatchEvent(e); e 为对应 type 的 事件对象 (建议使用 new CustomEvent())
      */

@@ -14,7 +14,7 @@ const ArrayEqual_EqualObj=Symbol?Symbol("If the function 'arrayEqual' params (a1
 
 /** 数组移位
  * @param {AllTypeArray}  arr  数组
- * @param {Number} long    移动步长
+ * @param {number} long    移动步长
  * @return {Array} 返回一个新数组
  */
 function arrayMove(arr,long){

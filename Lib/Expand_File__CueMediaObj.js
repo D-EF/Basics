@@ -19,8 +19,8 @@ function DEF_CUEOBJ(){
 DEF_CUEOBJ.prototype={
     /**
      * 查找rem指令
-     * @param {String} rem1 rem 的 第一个指令
-     * @return {String[][]}
+     * @param {string} rem1 rem 的 第一个指令
+     * @return {string[][]}
      */
     selectRem:function(rem1){
         var rtn = [];
@@ -36,7 +36,7 @@ DEF_CUEOBJ.prototype={
         // 在此处添加对cue格式的指令的处理
         // 由于我只需要处理音乐文件的 所以省略了很多指令
         /**
-         * @param {String[]} _cl 指令的字符串数组
+         * @param {string[]} _cl 指令的字符串数组
          */
         rem:function(_cl){
             this.rem.push(_cl);
@@ -84,9 +84,9 @@ DEF_CUEOBJ.prototype={
 }
 /**
  * cue 的一截轨道内容
- * @param {String}      file        文件路径
+ * @param {string}      file        文件路径
  * @param {DEF_CUEOBJ}  root        根 对象
- * @param {Number}      track_index  轨道序号
+ * @param {number}      track_index  轨道序号
  */
 function DEF_CUEOBJTrack(file,root,track_index){
     this.performer  = "";
@@ -109,8 +109,8 @@ DEF_CUEOBJTrack.prototype.getDuration=function(){
 
 /**
  * 把cue的表示时间的格式转换成秒
- * @param {String} timeStr mm: ss: ff
- * @return {Number}
+ * @param {string} timeStr mm: ss: ff
+ * @return {number}
  */
 function cueTimeToSecond(timeStr){
     var temp = timeStr.split(':');
@@ -119,7 +119,7 @@ function cueTimeToSecond(timeStr){
 }
 /**
  * 解析 cue 格式 的字符串
- * @param {String} str 
+ * @param {string} str 
  */
 function loadCue(str){
     var p = 0, q = 0, isQuotes = false;
@@ -180,10 +180,10 @@ function loadCue(str){
 
 /** 
  * 查找图片文件
- * @param {String} _rootUrl 根目录
- * @param {String[]} _nameList 文件名列表
- * @param {String[]} _afertList 后缀名列表
- * @param {function(String[])} callBack 搜索完成的回调函数  参数是搜索到的所有文件路径的列表
+ * @param {string} _rootUrl 根目录
+ * @param {string[]} _nameList 文件名列表
+ * @param {string[]} _afertList 后缀名列表
+ * @param {function(string[])} callBack 搜索完成的回调函数  参数是搜索到的所有文件路径的列表
  */
 function selectImg(_rootUrl,_nameList,_afertList,callBack){
     var temp = new Array(_afertList.length);
@@ -226,8 +226,8 @@ function selectImg(_rootUrl,_nameList,_afertList,callBack){
  */
 class DEF_MediaObj{
     /**
-     * @param {String}  scr     媒体文件的 url
-     * @param {String}  title   标题
+     * @param {string}  scr     媒体文件的 url
+     * @param {string}  title   标题
      */
     constructor(src,title){
         this.title      = "";
@@ -253,7 +253,7 @@ class DEF_MediaObj{
     }
     /**
      * 通过路径创建mediaObj, 并尝试读取 ID3
-     * @param {String} src  媒体的链接
+     * @param {string} src  媒体的链接
      * @param {function(DEF_MediaObj)} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
      */
     static f(src,callback){
@@ -341,7 +341,7 @@ class DEF_MediaObj{
 /**
  * 获取当前轨道的长度
  * @param {Audio} audio 当前正在播放这个文件的 Audio 元素
- * @param {function(Number)} _callback 获取长度的回调 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
+ * @param {function(number)} _callback 获取长度的回调 某些情况无法直接获取当前的长度，所以需要传入回调函数接收值
  * 3个重载 fnc(audio) 和 fnc(callback); 用 audio 的重载可以返回长度, 可以不用 callback
  */
 DEF_MediaObj.prototype.getDuration = OlFunction._create();
@@ -419,8 +419,8 @@ class DEF_MediaObjMarkList{
     /**
      * 根据时刻触发标记, 如果有两个会被触发 将会仅触发在 list 中靠后的
      * @param {Exctrl} mediaCtrl 媒体控件
-     * @param {Number} time 时刻
-     * @param {Number} afterTolerance 向后容差 在容差内的时刻也会触发
+     * @param {number} time 时刻
+     * @param {number} afterTolerance 向后容差 在容差内的时刻也会触发
      */
     touchMarkByTime(mediaCtrl,time,afterTolerance){
         for(var i=this.list.length-1;i>=0;--i){
@@ -435,9 +435,9 @@ class DEF_MediaObjMarkList{
  */
 class DEF_MediaObjMark{
     /**
-     * @param {String} command 遭遇标记 的 指令
-     * @param {Number} time 时刻
-     * @param {Number} max_touch 最大触发次数
+     * @param {string} command 遭遇标记 的 指令
+     * @param {number} time 时刻
+     * @param {number} max_touch 最大触发次数
      */
     constructor(command,time,max_touch){
         this.command  = command;
@@ -477,7 +477,7 @@ DEF_MediaObjMark.prototype.commandList={
 /**
  * 将cue格式的转换成 DEF_MediaObj
  * @param {DEF_CUEOBJ} _cueobj 读取cue后生成的对象
- * @param {String} _url 为了找到轨道文件, 需要提供 cue 的路径
+ * @param {string} _url 为了找到轨道文件, 需要提供 cue 的路径
  * @return {DEF_MediaObj[]} 返回 DEF_MediaObj 数组
  */
 function cueObjToMediaObj(_cueobj,_url){

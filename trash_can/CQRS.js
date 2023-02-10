@@ -3,12 +3,12 @@
 
     /** 动作记录器的缓存
      * @typedef Act_History_Cache
-     * @property {Number} index 当前缓存对应动作记录器中的指令的下标
+     * @property {number} index 当前缓存对应动作记录器中的指令的下标
      * @property {Object} data 数据
      */
     /** 动作命令
      * @typedef Act_Command
-     * @property {String}   message 命令的信息
+     * @property {string}   message 命令的信息
      * @property {*[]}      path 路径
      * @property {*[]}      args 执行参数
      * @property {Function[]}[f_copy_args] 执行参数的copy函数,与执行参数下标对应
@@ -33,7 +33,7 @@
             this.f_copy=f_copy?f_copy:Array.isArray(data)?Array.from:Object.copy;
             /**@type {Act_History_Cache[]} 快照缓存 由步长控制的缓存 */
             this.snapshot_cache=[];
-            /**@type {Number} 派生快照缓存的步长, 为0时不会派生快照 */
+            /**@type {number} 派生快照缓存的步长, 为0时不会派生快照 */
             this.snapshot_step=0;
             /** @type {Act_Command[]} 命令记录 */
             this.act_command_history=[];
@@ -53,20 +53,20 @@
             return this.now_cache.data;
         }
         /** 返回某个操作
-         * @param {Number} index 对应命令的下标
+         * @param {number} index 对应命令的下标
          */
         back(index){
             this.now_cache=this.create_Cache(index);
         }
         /** 找到最近的缓存
-         * @param {Number} index 对应指令的下标
+         * @param {number} index 对应指令的下标
          * @return {Act_History_Cache} 返回缓存
          */
         find_Cache(index){
             return this.snapshot_cache[select_Lut__Binary(this.snapshot_cache,index,"index")-1];
         }
         /** 使用历史记录创建缓存
-         * @param {Number} index 对应指令的下标
+         * @param {number} index 对应指令的下标
          * @param {Act_History_Cache} [cache] 使用某条缓存
          * @return 
          */
@@ -194,13 +194,13 @@
      * @callback callback_GetData__ByPath
      * @param {*} tgt 源数据
      * @param {*} temp 上一次进入位置的数据
-     * @param {Array<String|Number|callback_GetData__ByPath>} path 使用中的路径
-     * @param {Number} index 路径下标
+     * @param {Array<string|number|callback_GetData__ByPath>} path 使用中的路径
+     * @param {number} index 路径下标
      * @return {*} 返回当前位置数据
      */
     /** 使用路径获取数据
      * @param {*} tgt 
-     * @param {Array<String|Number|callback_GetData__ByPath>} path 进入数据位置的路径
+     * @param {Array<string|number|callback_GetData__ByPath>} path 进入数据位置的路径
      * @return {{data:*,data_parent:*}} 返回数据和它的父级
      */
     function get_Data__ByPath(tgt,path){

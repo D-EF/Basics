@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:00:17
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2023-01-21 03:30:11
+ * @LastEditTime: 2023-02-09 17:45:59
  * @FilePath: \site\js\import\Basics\Lib\Expand_Basics.js
  * @Description: 
  * 
@@ -85,7 +85,7 @@ globalThis.nullfnc=function nullfnc(){};
         /** 添加一个重载
          * @param {Array} parameterType   形参的类型
          * @param {function}    fnc             执行的函数
-         * @param {String}      codeComments    没用的属性, 作为函数的注释
+         * @param {string}      codeComments    没用的属性, 作为函数的注释
          */
         addOverload(parameterType,fnc,codeComments){
             this.ols.push({parameterType:parameterType,fnc:fnc,codeComments:codeComments});
@@ -204,7 +204,7 @@ globalThis.nullfnc=function nullfnc(){};
 
             /** @type {{[time_long:string]:(function(number)|Delegate)}} 时间单位分变动回调委托 */
             this.delegate_set={};
-            /** @type {{[time_long:String]:number}} 计时器集合 */
+            /** @type {{[time_long:string]:number}} 计时器集合 */
             this.timers={};
         }
 
@@ -254,7 +254,7 @@ globalThis.nullfnc=function nullfnc(){};
      (function(){
         var temp=Date.prototype.toString;
         Date.prototype.toString=OverloadFunction._create(temp);
-        /** @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 n-毫秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
+        /** @param {string} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 n-毫秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
          */
         Date.prototype.toString.addOverload([String],function(str){
             /** @type {Date} */
@@ -306,10 +306,10 @@ globalThis.nullfnc=function nullfnc(){};
 
 // open * 数值操作拓展 * open
     // open * 步进器 * open
-        /** 步进器
-         * @param {Number} max 步进器的最大值
-         * @param {Number} min 步进器的最小值
-         * @param {Number} now 步进器的当前值
+        /** @class Stepper步进器
+         * @param {number} max 步进器的最大值
+         * @param {number} min 步进器的最小值
+         * @param {number} now 步进器的当前值
          */
          function Stepper(max,min,now){
             this.max=max===undefined?Infinity:max;
@@ -344,21 +344,21 @@ globalThis.nullfnc=function nullfnc(){};
                 return new Stepper(this.max,this.min,this.valueOf());
             },
             /** 用于获取当前值
-             * @return {Number}
+             * @return {number}
              */
             valueOf:function(){
                 return this.i;
             },
             /** 用于获取当前值(字符串)
-             * @return {String}
+             * @return {string}
              */
             toString:function(){
                 return this.i.toString();
             },
             /**
              * 设置当前值
-             * @param {Number} _i 目标
-             * @return {Number} 返回修改后的值
+             * @param {number} _i 目标
+             * @return {number} 返回修改后的值
              */
             set:function(_i){
                 this.i=_i;
@@ -367,8 +367,8 @@ globalThis.nullfnc=function nullfnc(){};
             },
             /**
              * 让步进器步进
-             * @param {Number} _l 步长
-             * @return {Number} 返回步进后的位置
+             * @param {number} _l 步长
+             * @return {number} 返回步进后的位置
              */
             next:function(_l){
                 var l=_l===undefined?1:_l;
@@ -396,7 +396,7 @@ globalThis.nullfnc=function nullfnc(){};
             },
             /**
              * 触发溢出后的回调
-             * @param {Number} val 表示正向溢出了还是逆向溢出了 +1 -1
+             * @param {number} val 表示正向溢出了还是逆向溢出了 +1 -1
              */
             _regressionlin_Call(val){
                 for(var i=this.regression_listener.length-1;i>=0;--i){
@@ -407,9 +407,9 @@ globalThis.nullfnc=function nullfnc(){};
     // end  * 步进器 * end 
 
     /** 二分法查找显式查找表
-     * @param {Number[]}   lut 显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
-     * @param {Number}     val   值     
-     * @param {String}     [key]  如果是对象数组, 使用属性作为查找表的关键字
+     * @param {number[]}   lut 显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
+     * @param {number}     val   值     
+     * @param {string}     [key]  如果是对象数组, 使用属性作为查找表的关键字
      * @return {int}    返回对应下标    溢出将直接使用首或尾的值
      */
     function select_Lut__Binary(lut,val,key){
@@ -443,68 +443,96 @@ globalThis.nullfnc=function nullfnc(){};
 
 // open * 字符串操作拓展 * open
 
-    /** 模版字符串 可以在原字符串中使用 '\\' 屏蔽 插值关键文本
-     * @param {String} _str  字符串
-     * @param {Object} that this 指针
-     * @param {Array} argArray 实参
-     * @param {String} opKey 插值关键文本 op; 默认 "${"
-     * @param {String} edKey 插值关键文本 ed; 默认 "}"
-     * @param {char}   opKeyMask 插值关键文本 的屏蔽字符; 默认'\'
-     * @param {char}   edKeyMask 插值关键文本 的屏蔽字符; 默认'\'
-     * @return {{str:String,hit:String[]}}
+    /** 
+     * @typedef TemplateStringRenderer_Item
+     * @property {function()}   [renderer]   渲染器函数
+     * @property {string}       [value]      缓存值
+     * @property {string}       org          原捕获表达式字符串
      */
-    function templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
-        if(Object.keys(that).length){
-            var temp=[],tempstr="",hit=[];
-            var strkey="\"'`",strKP=0,strFlag=false;
-            var q,p;// q是左
-            var headFlag=0,footFlag=0;
-            for(p=0,q=0;str[p];++p){
-                if((headFlag=((str[p]===opKey[0])&&(str[p-1]!=opKeyMask))))
-                for(var i=1;i<opKey.length;++i){
-                    if(!(headFlag=str[p+i]===opKey[i])){break;}
-                }
-                if(headFlag){ // 检测到头
-                    temp.push(str.slice(q,p));
-                    q=p+opKey.length;
-                    tempstr="";
-                    while(p<str.length){
-                        ++p;
-                        if((!strFlag)){
-                            for(strKP=strkey.length-1;strKP>=0;--strKP){
-                                if(strkey[strKP]===str[p]){
-                                    strFlag=true;
-                                    break;
-                                }
-                            }
-                        }else{
-                            if((strkey[strKP]===str[p])&&(str[p-1]!=='\\')){
-                                strFlag=false;
+
+    /** @typedef {Array<string|TemplateStringRenderer_Item>} TemplateStringRenderer */
+
+    /** 模版字符串 可以在原字符串中使用 '\\' 屏蔽 插值关键文本
+     * @param {string}   str         字符串
+     * @param {string}   argArray    实参表
+     * @param {string}   opKey       插值关键文本 op; 默认 "${"
+     * @param {string}   edKey       插值关键文本 ed; 默认 "}"
+     * @param {char}     opKeyMask   插值关键文本 的屏蔽字符; 默认'\'
+     * @param {char}     edKeyMask   插值关键文本 的屏蔽字符; 默认'\'
+     * @return {{renderer:renderer[],hit:string[]}}
+     */
+    function create_TemplateStringRenderer(str,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
+        var renderer=[],tempstr="",hit={};
+        
+        var strkey="\"'`",strKP=0,strFlag=false;
+        var q,p;// q是左
+        var headFlag=0,footFlag=0;
+        for(p=0,q=0;str[p];++p){
+            if((headFlag=((str[p]===opKey[0])&&(str[p-1]!=opKeyMask))))
+            for(var i=1;i<opKey.length;++i){
+                if(!(headFlag=str[p+i]===opKey[i])){break;}
+            }
+            if(headFlag){ // 检测到头
+                renderer.push(str.slice(q,p));
+                q=p+opKey.length;
+                tempstr="";
+                while(p<str.length){
+                    ++p;
+                    if((!strFlag)){
+                        for(strKP=strkey.length-1;strKP>=0;--strKP){
+                            if(strkey[strKP]===str[p]){
+                                strFlag=true;
+                                break;
                             }
                         }
-                        if((footFlag=(str[p]===edKey[0]))&&!strFlag){
-                            if((str[p-1]!=edKeyMask)){
-                                for(var j=1;j<edKey.length;++j){
-                                    if(!(footFlag=str[p+i]===edKey[i])){break;}
-                                }
-                                if(footFlag){
-                                    tempstr+=str.slice(q,p);
-                                    temp.push((new Function(["tgt"],"return "+tempstr)).apply(that,argArray));
-                                    hit.push({expression:tempstr,value:temp[temp.length-1]});
-                                    q=p+edKey.length;
-                                    break;
-                                }
-                            }else{
-                                tempstr+=str.slice(q,p-1);
-                                q=p;
+                    }else{
+                        if((strkey[strKP]===str[p])&&(str[p-1]!=='\\')){
+                            strFlag=false;
+                        }
+                    }
+                    if((footFlag=(str[p]===edKey[0]))&&!strFlag){
+                        if((str[p-1]!=edKeyMask)){
+                            for(var j=1;j<edKey.length;++j){
+                                if(!(footFlag=str[p+i]===edKey[i])){break;}
                             }
+                            if(footFlag){
+                                tempstr+=str.slice(q,p);
+                                // var fnc__renderer=new Function(["tgt"],"return "+tempstr);
+                                // if(!hit[tempstr]){
+                                //     hit[tempstr]={
+                                //         renderer:fnc__renderer,
+                                //         value:fnc__renderer(),
+                                //         org:tempstr
+                                //     };
+                                // }
+                                if(!hit[tempstr]){
+                                    hit[tempstr]={
+                                        renderer:null,
+                                        value:null,
+                                        org:tempstr
+                                    };
+                                }
+                                renderer.push(hit[tempstr]);
+                                q=p+edKey.length;
+                                break;
+                            }
+                        }else{
+                            tempstr+=str.slice(q,p-1);
+                            q=p;
                         }
                     }
                 }
             }
-            temp.push(str.slice(q,p));
-            return {str:temp.join(""),hit:hit};
         }
+        renderer.push(str.slice(q,p));
+        return {renderer:renderer,hit:hit};
+    }
+
+    /**
+     * 
+     */
+    function render_TemplateRenderer(){
+
     }
 
     /** 将字符串转换成js的类型, 相当于JSON.parse, 如果只是个字符串就是字符串(口胡)
@@ -515,7 +543,7 @@ globalThis.nullfnc=function nullfnc(){};
         if(str[0]==='"'&&str[ed]==='"');
         else if(str[0]==="{"&&str[0]==="}");
         else if(str[0]==="["&&str[0]==="]");
-        else if(!isNaN(Number(str)));
+        else if(!isNaN(parseFloat(str)));
         else{
             // 这个字符串是不符合格式的 直接输出字符串
             return str;
@@ -541,7 +569,7 @@ export{
     Date_Callback,
     Stepper,
     select_Lut__Binary,
-    templateStringRender,
+    create_TemplateStringRenderer,
     strToVar,
     canBeNumberChar
 }

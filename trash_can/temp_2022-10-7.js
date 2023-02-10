@@ -8,10 +8,10 @@ function get_NumberLength(val){
     return rtn;
 }
 /** 大数运算使用的类
- * @param {Number|Number[]|Number_Long} val 
+ * @param {number|number[]|Number_Long} val 
  */
 function Number_Long(val){
-    /** @type {Number[]} 数字集合 */
+    /** @type {number[]} 数字集合 */
     this.data;
     /** @type {Boolean} 符号+- */
     if(val instanceof Number_Long){
@@ -22,7 +22,7 @@ function Number_Long(val){
         });
     }
     else if(val!==undefined){
-        this.data=[Math.abs(Number(val))];
+        this.data=[Math.abs(parseFloat(val))];
     }else{
         this.data=[];
     }
@@ -84,7 +84,7 @@ Number_Long.prototype={
         }
     },
     /** 加法运算
-     * @param {Number|Number[]|Number_Long} val 增加的值
+     * @param {number|number[]|Number_Long} val 增加的值
      * @return {Number_Long} 返回一个新的 Number_Long
      */
     add(val){
@@ -111,7 +111,7 @@ Number_Long.prototype={
         return rtn;
     },
     /** 乘法运算, 忌用浮点数数参与大数值运算 因为js对浮点运算支持很垃圾
-     * @param {Number|Number[]|Number_Long} val 
+     * @param {number|number[]|Number_Long} val 
      * @return {Number_Long} 返回一个新的 Number_Long
      */
     multiply(val){

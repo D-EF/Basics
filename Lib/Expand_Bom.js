@@ -94,7 +94,7 @@ class HashListener{
         this.filter_flag=filter_flag;
     }
     /** 测试表达式能否匹配字符串
-     * @param {String} _string  文本
+     * @param {string} _string  文本
      */
     exec(_string){
         var string;

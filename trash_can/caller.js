@@ -58,15 +58,15 @@ class DEF_Caller{
 
     /** 预设的 移除 回调, 将对应的项移除
      * @this  {Array}  this指向当前的监听者数据
-     * @param {Number} op 被修改的项的下标(起点)
-     * @param {Number} length 被修改的长度
+     * @param {number} op 被修改的项的下标(起点)
+     * @param {number} length 被修改的长度
      */
     static _remove_Def(op,length){
         this.splice(op,length);
     }
     /** 预设的 插入 回调, 在监听者中插入null
      * @this  {Array}  this指向当前的监听者数据
-     * @param {Number} op 被修改的项的下标(起点)
+     * @param {number} op 被修改的项的下标(起点)
      * @param {Array} values 插入的内容集合
      */
     static _insert_Def(op,values){
@@ -81,8 +81,8 @@ class DEF_Caller{
     }
     /** 预设的 修改 回调, 将监听者中的与修改的内容相同下标的item设为null
      * @this  {Array}  this指向当前的监听者数据
-     * @param {Number} op 被修改的项的下标(起点)
-     * @param {Number} ed 被修改的项的下标(终点)
+     * @param {number} op 被修改的项的下标(起点)
+     * @param {number} ed 被修改的项的下标(终点)
      */
     static _update_Def(op,ed){
         var i=op;

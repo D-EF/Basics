@@ -26,11 +26,11 @@ function get_CanvasData(){
 // 1 角落画形状 圆角矩形 open
     /**
      * @param {CanvasRenderingContext2D} ctx
-     * @param {Number} x
-     * @param {Number} y
-     * @param {Number} w
-     * @param {Number} h
-     * @param {Number} r
+     * @param {number} x
+     * @param {number} y
+     * @param {number} w
+     * @param {number} h
+     * @param {number} r
     */
     function render_ArcRect(ctx,x,y,w,h,r){
         var c=[
@@ -60,9 +60,9 @@ function get_CanvasData(){
     /**
      * 
      * @param {CanvasRenderingContext2D} ctx 
-     * @param {Number} w 
-     * @param {Number} h 
-     * @param {Number} sp_i 
+     * @param {number} w 
+     * @param {number} h 
+     * @param {number} sp_i 
      */
     function render_SPGrid(ctx,w,h,sp_i){
         var sp=1/sp_i,

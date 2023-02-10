@@ -107,8 +107,8 @@ inheritClass(_basics,_derived)
 encodeHTML(str)
 ```
 为了防止服务器出错对部分字符进行编码   
-@param {String} str <>"'{}[] to &#ascii;   
-@return {String} 转换后的字符串   
+@param {string} str <>"'{}[] to &#ascii;   
+@return {string} 转换后的字符串   
     
 如果需要修改，请修改下列静态属性   
 * encodeHTML.regex 存放正则表达式   
@@ -118,12 +118,12 @@ encodeHTML(str)
 ``` javascript
 templateStringRender(str,that,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\')
 ```
-@param {String} _str  字符串   
+@param {string} _str  字符串   
 @param {Object} that this 指针   
 @param {Array} argArray 实参   
-@param {String} _opKey 插值关键文本 op   
-@param {String} _edKey 插值关键文本 ed   
-@return {{str:String,hit:Array\< String \>}}   
+@param {string} _opKey 插值关键文本 op   
+@param {string} _edKey 插值关键文本 ed   
+@return {{str:string,hit:Array\< String \>}}   
 * hit 是被认为是
 
 ## 将字符串转换成js的类型 strToVar 
@@ -274,17 +274,17 @@ addResizeEvent(_element,_listener)
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数无参数   请使用 函数 loadCue(str) 创建
 ### 属性 
-* @type {String}                  performer     演出者/作者
-* @type {String}                  songwriter    歌唱者
-* @type {String}                  title         标题
-* @type {String}                  file          文件路径
-* @type {String}                  file_type     文件类型
-* @type {String[]}           rem           额外指令/注释
+* @type {string}                  performer     演出者/作者
+* @type {string}                  songwriter    歌唱者
+* @type {string}                  title         标题
+* @type {string}                  file          文件路径
+* @type {string}                  file_type     文件类型
+* @type {string[]}           rem           额外指令/注释
 * @type {DEF_CUEOBJTrack[]}  track         分轨道
 
 ### 方法 
 * selectRem(rem1) 
-  @param {String} rem1 rem 的 第一个指令
+  @param {string} rem1 rem 的 第一个指令
 * 方法集 setCommand 详见代码
   
 ---
@@ -293,19 +293,19 @@ addResizeEvent(_element,_listener)
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*   
 构造函数 
 DEF_CUEOBJTrack(file,root,track_index)   
-@param {String}      file        文件路径   
+@param {string}      file        文件路径   
 @param {DEF_CUEOBJ}  root        根 对象   
 @param {Number}      track_index  轨道序号   
 
 ### 属性
-* @type {String}          performer     演出者/作者
-* @type {String}          songwriter    歌唱者
-* @type {String}          title         标题
+* @type {string}          performer     演出者/作者
+* @type {string}          songwriter    歌唱者
+* @type {string}          title         标题
 * @type {Number}          list_index     在 列表 中的序号
-* @type {String[]}   rem           额外指令/注释
+* @type {string[]}   rem           额外指令/注释
 * @type {Number}          track_index    轨道序号
 * @type {DEF_CUEOBJ}      root          根
-* @type {String}          file          文件路径
+* @type {string}          file          文件路径
 * @type {Number}          op            在波形文件中的 开始时间(单位 秒)
 * @type {Number}          ed            在波形文件中的 结束时间(单位 秒)
 * @type {Object}          index_list     子 index 的列表
@@ -320,22 +320,22 @@ DEF_CUEOBJTrack(file,root,track_index)
 构造函数 constructor(src,title) 
 
 ### 属性
-* @type {String}                title       标题
-* @type {String[]}         cover       封面 (url)
-* @type {String}                artist      艺术家
-* @type {String}                songwriter  歌唱者
-* @type {String}                performer   表演者
-* @type {String}                album       专辑
+* @type {string}                title       标题
+* @type {string[]}         cover       封面 (url)
+* @type {string}                artist      艺术家
+* @type {string}                songwriter  歌唱者
+* @type {string}                performer   表演者
+* @type {string}                album       专辑
 * @type {Number}                op          开始时间
 * @type {Number}                ed          结束时间
 * @type {Number}                duration    持续时间
 * @type {DEF_MediaObjMarkList}  mark        标记集合
-* @type {String}                urlList     文件 url 列表
+* @type {string}                urlList     文件 url 列表
 
 ### 方法
 * 静态方法 f(src,callback)
     通过路径创建mediaObj, 并尝试读取 ID3
-    @param {String} src  媒体的链接
+    @param {string} src  媒体的链接
     @param {function} callback 读取 id3 之后的回调 callback(rtn{DEF_MediaObj})
 * getArtist()
     获取 "Artist" 编曲者 and 演唱者
@@ -372,7 +372,7 @@ DEF_MediaObjMark 的列表
 
 ## DEF_MediaObjMark 给 DEF_MediaObj 的时间轴 做标记
 构造函数 constructor(command,time,maxTouch)
-@param {String} command 遭遇标记指令的   
+@param {string} command 遭遇标记指令的   
 @param {Number} time 时刻   
 @param {Number} maxTouch 最大触发次数   
 
@@ -391,4 +391,4 @@ DEF_MediaObjMark 的列表
 
 ## Date.prototype.toString()
 * 添加了一个重载 toString(str)
-    @param {String} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
+    @param {string} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1

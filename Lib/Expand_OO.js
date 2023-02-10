@@ -10,7 +10,7 @@
  */
 
 
-Number.copy=Boolean.copy=String.copy=function(tgt){return tgt;}
+number.copy=Boolean.copy=String.copy=function(tgt){return tgt;}
 Object.copy=function(tgt){return Object.assign({},tgt);}
 Array.copy=function(tgt){return Array.from(tgt);}
 Map.copy=function(tgt){return new Map(tgt);}
@@ -53,7 +53,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
     
     /** 
      * @param {TreeNode} data 
-     * @param {String} childrenKey 
+     * @param {string} childrenKey 
      */
     constructor(data,childrenKey="children"){
         super(data);
@@ -76,7 +76,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
         }
     }
     /** 获取目标深度的父节点
-     * @param {Number} depth 
+     * @param {number} depth 
      * @return {TreeNode}
      */
     _get_Parent(depth){
@@ -158,19 +158,19 @@ class Iterator__Tree extends Iterator__MyVirtual{
         return Array.from(this._now_node_path);
     }
     /** 获取当前路径
-     * @return {Number[]} 返回下标形式的路径
+     * @return {number[]} 返回下标形式的路径
      */
     get_Now__Path(){
         return Array.from(this._now_path);
     }
     /** 获取当前迭代的次数
-     * @return {Number} 当前是第几次迭代
+     * @return {number} 当前是第几次迭代
      */
     get_Now__Di(){
         return this._di;
     }
     /** 获取当前迭代的次数
-     * @return {Number} 当前是第几次迭代
+     * @return {number} 当前是第几次迭代
      */
     get_Now__Depth(){
         return this._depth;
@@ -181,13 +181,13 @@ class Iterator__Tree extends Iterator__MyVirtual{
 // open * 依赖注入 * open
     /** 使用依赖的对象
      * @typedef HadDependencyObject
-     * @property {Map<String,Delegate>} _dependency_mapping_delegates   set时的委托集合
-     * @property {Map<String,DependencyMapping_Notbook>} _dependency_mapping_notbook 记录依赖的对象的集合
+     * @property {Map<string,Delegate>} _dependency_mapping_delegates   set时的委托集合
+     * @property {Map<string,DependencyMapping_Notbook>} _dependency_mapping_notbook 记录依赖的对象的集合
      */
     /** 记录依赖的item
      * @typedef DependencyMapping_Notbook
      * @property {HadDependencyObject} rely_on_TGT 依赖的对象
-     * @property {String} rely_on_key 依赖的key
+     * @property {string} rely_on_key 依赖的key
      */
     /** 依赖的数据修改时的回调函数
      * @callback DependencyListener_Callback
@@ -200,8 +200,8 @@ class Iterator__Tree extends Iterator__MyVirtual{
     /** 映射依赖 (读取 tgt[key] 会得到 rely_on_TGT[key])
      * @param {HadDependencyObject} tgt 要操作的对象
      * @param {*} rely_on_TGT     数据来源
-     * @param {String[]} keys   tgt上的key
-     * @param {String[]} [_rely_on_keys] 可选参数 relyOnTGT上的key, 下标和keys要对应
+     * @param {string[]} keys   tgt上的key
+     * @param {string[]} [_rely_on_keys] 可选参数 relyOnTGT上的key, 下标和keys要对应
      * @return {HadDependencyObject} 返回 tgt 
      */
     function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
@@ -228,7 +228,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
     }
     /** 寻找依赖的根部
      * @param {*} tgt 使用了依赖的对象
-     * @param {String} key key
+     * @param {string} key key
      * @return {{root:DependencyMapping_Notbook,head:DependencyMapping_Notbook}} 返回根部对象(数据来源) 和 第一次派生依赖的对象 和 key
      */
     function get_Root__DependencyMapping(tgt,_key){
@@ -247,7 +247,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
 
     /** 添加依赖的数据修改时的委托; 注意: 当直接使用root对象进行修改时 委托不会被执行
      * @param {HadDependencyObject} tgt 使用了依赖的对象
-     * @param {String} key 成员变量名
+     * @param {string} key 成员变量名
      * @param {DependencyListener_Callback} callback 回调函数  this 指向 tgt, 不能在这里再给属性赋值; 如果必要,直接修改root的内容
      */
     function add_DependencyListener(tgt,key,callback){
@@ -264,7 +264,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
 
     /** 移除某个依赖下的某个成员的某个回调函数
      * @param {HadDependencyObject} tgt 使用了依赖的对象
-     * @param {String} key 成员变量名
+     * @param {string} key 成员变量名
      * @param {DependencyListener_Callback} callback 调用 add_DependencyListener 时使用的函数
      */
     function remove_DependencyListener(tgt,key,callback){
@@ -277,7 +277,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
 
     /** 移除某个依赖来源下的某个成员的所有回调函数
      * @param {HadDependencyObject} tgt 使用了依赖的对象
-     * @param {String} key 成员变量名
+     * @param {string} key 成员变量名
      */
     function remove_DependencyListener_all(tgt,key){
         var temp=get_Root__DependencyMapping(tgt,key);

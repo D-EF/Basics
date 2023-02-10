@@ -18,10 +18,10 @@ function get_NumberLength(val){
     return rtn;
 }
 /** 大数运算使用的类
- * @param {Number|Number[]|Number_Long} val 
+ * @param {number|number[]|Number_Long} val 
  */
 function Number_Long(val){
-    /** @type {Number[]} 数字集合 */
+    /** @type {number[]} 数字集合 */
     this.data;
     /** @type {Boolean} 符号+- */
     if(val instanceof Number_Long){
@@ -32,7 +32,7 @@ function Number_Long(val){
         });
     }
     else if(val!==undefined){
-        this.data=[Math.abs(Number(val))];
+        this.data=[Math.abs(parseFloat(val))];
     }else{
         this.data=[];
     }
@@ -94,7 +94,7 @@ Number_Long.prototype={
         }
     },
     /** 加法运算
-     * @param {Number|Number[]|Number_Long} val 增加的值
+     * @param {number|number[]|Number_Long} val 增加的值
      * @return {Number_Long} 返回一个新的 Number_Long
      */
     add(val){
@@ -121,7 +121,7 @@ Number_Long.prototype={
         return rtn;
     },
     /** 乘法运算, 忌用浮点数数参与大数值运算 因为js对浮点运算支持很垃圾
-     * @param {Number|Number[]|Number_Long} val 
+     * @param {number|number[]|Number_Long} val 
      * @return {Number_Long} 返回一个新的 Number_Long
      */
     multiply(val){
@@ -150,9 +150,9 @@ Number_Long.MAX_LENGTH=8;
 
 /**
  * 步进器
- * @param {Number} max 步进器的最大值
- * @param {Number} min 步进器的最小值
- * @param {Number} now 步进器的当前值
+ * @param {number} max 步进器的最大值
+ * @param {number} min 步进器的最小值
+ * @param {number} now 步进器的当前值
  */
 function Stepper(max,min,now){
     this.max=max===undefined?Infinity:max;
@@ -187,21 +187,21 @@ Stepper.prototype={
         return new Stepper(this.max,this.min,this.valueOf());
     },
     /** 用于获取当前值
-     * @return {Number}
+     * @return {number}
      */
     valueOf:function(){
         return this.i;
     },
     /** 用于获取当前值(字符串)
-     * @return {String}
+     * @return {string}
      */
     toString:function(){
         return this.i.toString();
     },
     /**
      * 设置当前值
-     * @param {Number} _i 目标
-     * @return {Number} 返回修改后的值
+     * @param {number} _i 目标
+     * @return {number} 返回修改后的值
      */
     set:function(_i){
         this.i=_i;
@@ -210,8 +210,8 @@ Stepper.prototype={
     },
     /**
      * 让步进器步进
-     * @param {Number} _l 步长
-     * @return {Number} 返回步进后的位置
+     * @param {number} _l 步长
+     * @return {number} 返回步进后的位置
      */
     next:function(_l){
         var l=_l===undefined?1:_l;
@@ -239,7 +239,7 @@ Stepper.prototype={
     },
     /**
      * 触发溢出后的回调
-     * @param {Number} val 表示正向溢出了还是逆向溢出了 +1 -1
+     * @param {number} val 表示正向溢出了还是逆向溢出了 +1 -1
      */
     _regressionlin_Call(val){
         for(var i=this.regression_listener.length-1;i>=0;--i){
@@ -249,9 +249,9 @@ Stepper.prototype={
 }
 
 /** DeCasteljau算法 求 贝塞尔曲线 pt 点 算法来自 https://pomax.github.io/bezierinfo/zh-CN/index.html
- * @param {{x:Number,y:Number}[]} points 控制点集合
- * @param {Number} t t参数
- * @return {{x:Number,y:Number}} 返回对应点
+ * @param {{x:number,y:number}[]} points 控制点集合
+ * @param {number} t t参数
+ * @return {{x:number,y:number}} 返回对应点
  */
 function get_BezierCurvePoint__DeCasteljau(points,t){
     if(points.length>1){
@@ -270,13 +270,13 @@ function get_BezierCurvePoint__DeCasteljau(points,t){
 }
 
 /**
- * @type {Number[][]} 帕斯卡三角
+ * @type {number[][]} 帕斯卡三角
  */
 const g_Pascals_Triangle=[[1]];
 calcPascalsTriangle(3);
 /**
  * 演算帕斯卡三角
- * @param {Number} n 到多少阶停止
+ * @param {number} n 到多少阶停止
  * @return 返回帕斯卡三角 的 不规则二维数组, 别修改内容返回值的内容!
  */
 function calcPascalsTriangle(n){
@@ -291,7 +291,7 @@ function calcPascalsTriangle(n){
     return rtn;
 }
 /** 获取帕斯卡三角的某一层
- * @param {Number} n 第n层 从 0 开始数数
+ * @param {number} n 第n层 从 0 开始数数
  */
 function getPascalsTriangle(n){
     if(g_Pascals_Triangle.length<=n)calcPascalsTriangle(n);
@@ -301,8 +301,8 @@ function getPascalsTriangle(n){
 const Bezier_Matrixs=[[1]];
 /**
  * 贝塞尔曲线的矩阵 
- * @param {Number} n n阶贝塞尔曲线
- * @return {Number[][]} 贝塞尔曲线的计算矩阵
+ * @param {number} n n阶贝塞尔曲线
+ * @return {number[][]} 贝塞尔曲线的计算矩阵
  */
 function getBezierMatrix(n){
     if(Bezier_Matrixs[n])return Bezier_Matrixs[n];
@@ -324,8 +324,8 @@ function getBezierMatrix(n){
 
 /**
  * 用控制点得到各次幂的系数
- * @param {Number[]} points 控制点集合
- * @return {Number[]} 贝塞尔曲线采样计算系数
+ * @param {number[]} points 控制点集合
+ * @return {number[]} 贝塞尔曲线采样计算系数
  */
 function get_BezierCoefficient(points){
     var n=points.length-1;
@@ -344,8 +344,8 @@ function get_BezierCoefficient(points){
 
 /**
  * 求贝塞尔曲线的导函数的控制点 (一维)
- * @param {Number[]} points 原曲线的控制点集合 
- * @return {Number[]} 导函数的控制点
+ * @param {number[]} points 原曲线的控制点集合 
+ * @return {number[]} 导函数的控制点
  */
 function get_BezierDerivativesPoints(points){
     var n=points.length-2;
@@ -359,9 +359,9 @@ function get_BezierDerivativesPoints(points){
 
 /**
  * 计算贝塞尔曲线分割时使用的 Q 矩阵 (不补零)
- * @param {Number} n  n阶贝塞尔曲线
- * @param {Number} t  t参数 0~1
- * @return {Number[][]} 贝塞尔曲线的计算分割时使用的矩阵
+ * @param {number} n  n阶贝塞尔曲线
+ * @param {number} t  t参数 0~1
+ * @return {number[][]} 贝塞尔曲线的计算分割时使用的矩阵
  */
 function create_CutBezierMatrixQ(n,t){
     if(g_Pascals_Triangle.length<=n){
@@ -391,10 +391,10 @@ function create_CutBezierMatrixQ(n,t){
 
 /**
  * 用矩阵分割贝塞尔曲线
- * @param {Number[]} points        控制点集合
- * @param {Number[][]} matrix 分割时使用的矩阵, 用 create_CutBezierMatrixQ 函数生成
+ * @param {number[]} points        控制点集合
+ * @param {number[][]} matrix 分割时使用的矩阵, 用 create_CutBezierMatrixQ 函数生成
  * @param {Boolean} flag 前后两边 false(0)为p1起点, true(!0)为p4终点
- * @return {Number[]} 返回两组控制点
+ * @return {number[]} 返回两组控制点
  */
 function cut_Bezier__ByMatrix(points,matrix,flag){
     var n=points.length-1,
@@ -429,7 +429,7 @@ function cut_Bezier__ByMatrix(points,matrix,flag){
  * 解二元一次方程
  * z1 + o1 \* x = z2 + o2 \* y;
  * z3 + o3 \* x = z4 + o4 \* y;
- * @return {{x:Number,y:Number}} 
+ * @return {{x:number,y:number}} 
  */
 function binaryLinearEquation(z1,o1,z2,o2,z3,o3,z4,o4){
     var x=(z2*o4+o2*z3-z4*o2-z1*o4)/(o1*o4-o2*o3),
@@ -439,9 +439,9 @@ function binaryLinearEquation(z1,o1,z2,o2,z3,o3,z4,o4){
 
 /**
  * 近似相等, 用于浮点误差计算后判断结果是否相近; 
- * @param {Number} num1 数字
- * @param {Number} num2 数字
- * @param {Number} tolerance 容差， 默认为 1e-12
+ * @param {number} num1 数字
+ * @param {number} num2 数字
+ * @param {number} tolerance 容差， 默认为 1e-12
  */
 function approximately(num1,num2,tolerance){
     return Math.abs(num1-num2)<(tolerance||1e-12);
@@ -449,8 +449,8 @@ function approximately(num1,num2,tolerance){
 
 /**
  * 多次函数的导数
- * @param {Number[]} coefficients 各次幂的系数 [1, t^1, t^2, t^3, ...]
- * @return {Number[]}  导数的各次幂的系数 [1, t^1, t^2, t^3, ...] 长度会比形参少 1
+ * @param {number[]} coefficients 各次幂的系数 [1, t^1, t^2, t^3, ...]
+ * @return {number[]}  导数的各次幂的系数 [1, t^1, t^2, t^3, ...] 长度会比形参少 1
  */
 function derivative(coefficients){
     var i=coefficients.length-1,
@@ -463,8 +463,8 @@ function derivative(coefficients){
 
 /**
  * 解一元三次方程, ax^3+bx^2+cx+d=0
- * @param {Number[]} coefficient 系数集合从低次幂到高次幂 [ 1, x, x^2, x^3 ]
- * @return {Number[]} 返回根的集合
+ * @param {number[]} coefficient 系数集合从低次幂到高次幂 [ 1, x, x^2, x^3 ]
+ * @return {number[]} 返回根的集合
  */
 function rootsOfCubic(coefficient){
     var a=coefficient[2]||0,
@@ -545,8 +545,8 @@ rootsOfCubic.cuberoot=function(v){
 
 /**
  * 通过系数创建贝塞尔曲线控制点
- * @param {Number[]}    coefficient 采样点计算系数
- * @return {Number[]}  返回控制点
+ * @param {number[]}    coefficient 采样点计算系数
+ * @return {number[]}  返回控制点
  */
 function coefficientToPoints(coefficient){
     var n=coefficient.length,
@@ -581,13 +581,13 @@ const cycles=globalThis.cycles;
 
 const DIVISION_4_3=4/3;
 /** 计算 贝塞尔曲线拟合圆弧 的 k 值
- * @param   {Number} angle 夹角
- * @return {Number} 返回 k 值
+ * @param   {number} angle 夹角
+ * @return {number} 返回 k 值
  */
 function calc_k__BezierToCyles(angle){
     return DIVISION_4_3*Math.tan(angle*0.25);
 }
-/**@type {Number} 贝塞尔曲线拟合四分之一圆 的 k 值 */
+/**@type {number} 贝塞尔曲线拟合四分之一圆 的 k 值 */
 const BEZIER_TO_CYCLES_K__1D4=0.551784777779014;
 
 export {

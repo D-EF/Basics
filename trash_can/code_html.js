@@ -10,8 +10,8 @@
  */
 
 /**为了防止服务器出错对部分字符进行编码
-     * @param {String} str <>"'{}[] to &#ascii;
-     * @return {String} 转换后的字符串
+     * @param {string} str <>"'{}[] to &#ascii;
+     * @return {string} 转换后的字符串
      */
  function encodeHTML(str){
     var enStr=str;
