@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:00:17
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2023-02-09 17:45:59
+ * @LastEditTime: 2023-02-13 02:28:11
  * @FilePath: \site\js\import\Basics\Lib\Expand_Basics.js
  * @Description: 
  * 
@@ -198,6 +198,10 @@ globalThis.nullfnc=function nullfnc(){};
         }
     }
 
+// end  * 对 functoin 的拓展 * end 
+
+// open * 对 原生对象 的拓展 * open
+
     /** 时间变动回调操作 */
     class Date_Callback{
         constructor(){
@@ -246,7 +250,31 @@ globalThis.nullfnc=function nullfnc(){};
         static HOURS  = 3600000;
     }
 
-// end  * 对 functoin 的拓展 * end 
+    /** 获取对象属性
+     * @param {*} tgt                  数据对象
+     * @param {ObjectAttributePath} path   路径
+     */
+    function get_ObjectAttribute(tgt,path){
+        var temp=tgt;
+        var i=0;
+        while(i<path.length){
+            ++i;
+            // todo
+        }
+        return temp;
+    }
+
+    /** 创建用于获取对象属性的路径
+     * @param {string} str_path 字符串路径
+     * @return {ObjectAttributePath} 路径
+     */
+    function create_ObjectAttributePath(str_path){
+        var p=0;
+        
+        return rtn;
+    }
+
+// end  * 对 原生对象 的拓展 * end 
 
 // open * 原有的api函数重载 * open
     /** 将时间类型转换成字符串
@@ -467,6 +495,9 @@ globalThis.nullfnc=function nullfnc(){};
         var strkey="\"'`",strKP=0,strFlag=false;
         var q,p;// q是左
         var headFlag=0,footFlag=0;
+
+        var fnc__renderer=get_ObjectAttribute;
+
         for(p=0,q=0;str[p];++p){
             if((headFlag=((str[p]===opKey[0])&&(str[p-1]!=opKeyMask))))
             for(var i=1;i<opKey.length;++i){
@@ -497,17 +528,12 @@ globalThis.nullfnc=function nullfnc(){};
                             }
                             if(footFlag){
                                 tempstr+=str.slice(q,p);
-                                // var fnc__renderer=new Function(["tgt"],"return "+tempstr);
-                                // if(!hit[tempstr]){
-                                //     hit[tempstr]={
-                                //         renderer:fnc__renderer,
-                                //         value:fnc__renderer(),
-                                //         org:tempstr
-                                //     };
-                                // }
                                 if(!hit[tempstr]){
+                                    if(fnc){
+                                        fnc__renderer=new Function(["tgt","expression"],"return "+tempstr);
+                                    }
                                     hit[tempstr]={
-                                        renderer:null,
+                                        renderer:fnc__renderer,
                                         value:null,
                                         org:tempstr
                                     };
