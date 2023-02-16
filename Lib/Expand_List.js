@@ -2,20 +2,20 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:06:52
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-11-03 01:08:24
+ * @LastEditTime: 2023-02-16 23:31:58
  * @FilePath: \site\js\import\Basics\Lib\Expand_List.js
  * @Description: 给 数组(列表) 的功能
  * 
  * Copyright (c) 2022 by Darth_Eternalfaith darth_ef@hotmail.com, All Rights Reserved. 
  */
 
-/** @type {Symbol} 执行 arrayEqual 时使用 ArrayEqual_EqualObj 作为参数会直接为返回 true. If the function 'arrayEqual' params (a1/a2) has ArrayEqual_EqualObj. It will return true! */
-const ArrayEqual_EqualObj=Symbol?Symbol("If the function 'arrayEqual' params (a1/a2) has ArrayEqual_EqualObj. It will return true! "):{};
+/** @type {Symbol} 执行 arrayEqual 时使用 ARRAY_EQUAL_EQUAL_OBJ 作为参数会直接为返回 true. If the function 'arrayEqual' params (a1/a2) has ARRAY_EQUAL_EQUAL_OBJ. It will return true! */
+const ARRAY_EQUAL_EQUAL_OBJ=Symbol?Symbol("If the function 'arrayEqual' params (a1/a2) has ARRAY_EQUAL_EQUAL_OBJ. It will return true! "):{};
 
 /** 数组移位
- * @param {AllTypeArray}  arr  数组
- * @param {number} long    移动步长
- * @return {Array} 返回一个新数组
+ * @param {*[]}      arr    数组
+ * @param {number}   long   移动步长
+ * @return {*[]} 返回一个新数组
  */
 function arrayMove(arr,long){
     if(!arr.length) return new arr.constructor(arr);
@@ -32,13 +32,13 @@ function arrayMove(arr,long){
 }
 
 /**对比两个列表项是否相同
- * @param {AllTypeArray} a1 要进行比较的数组
- * @param {AllTypeArray} a2 要进行比较的数组
+ * @param {*[]} a1 要进行比较的数组
+ * @param {*[]} a2 要进行比较的数组
  * @param {Boolean} [checkType] 对类型是否宽松 默认否 (使用==还是===)
- * @return {Boolean}    返回是否相同
+ * @return {boolean}    返回是否相同
  */
 function arrayEqual(a1,a2,checkType){
-    if(a1===ArrayEqual_EqualObj||a2===ArrayEqual_EqualObj){
+    if(a1===ARRAY_EQUAL_EQUAL_OBJ||a2===ARRAY_EQUAL_EQUAL_OBJ){
         return true
     }
     if(a1.length!=a2.length)return false;
@@ -80,7 +80,7 @@ function arrayDiff(arr1,arr2){
 /**对比两个列表项是否有差异 (无序)
  * @param {Array}   arr1       要进行比较的数组
  * @param {Array}   arr2       要进行比较的数组
- * @return {Boolean} 是否有差异
+ * @return {boolean} 是否有差异
  */
 function arrayHasDiff(arr1,arr2){
     if(arr1.length!=arr2.length)return true;
@@ -105,7 +105,7 @@ function arrayHasDiff(arr1,arr2){
 }
 
 export{
-    ArrayEqual_EqualObj,
+    ARRAY_EQUAL_EQUAL_OBJ,
     arrayMove,
     arrayEqual,
     arrayDiff,

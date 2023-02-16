@@ -81,7 +81,7 @@ arrayMove([1,2,3,4,5,6],2);  // >> [5,6,1,2,3,4]
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
-    @return {Boolean}    返回是否相同   
+    @return {boolean}    返回是否相同   
 ---
 
 ## 对比两个列表项是否相同(不区分项的类型和顺序) arrayDiff
@@ -90,7 +90,7 @@ arrayDiff(a1,a2)
 ```
     @param {Array}   a1       要进行比较的数组   
     @param {Array}   a2       要进行比较的数组   
-    @return {Boolean}    返回是否相同   
+    @return {boolean}    返回是否相同   
 ---
 
 ## 类继承函数 inheritClass 
@@ -181,11 +181,11 @@ addResizeEvent(_element,_listener)
 
 ---
 
-## OlFunction 重载函数 
+## Overload_Function 重载函数 
 *注意, 该类使用了 class 语法，所以不能直接使用于ie*    
 没有构造函数, 写成类的语法纯粹是为了让编辑器认代码提示
 
-* 使用 OlFunction.create(defineFnc)创建一个重载函数   
+* 使用 Overload_Function.create(defineFnc)创建一个重载函数   
     @param {function} defaultFnc 当没有和实参对应的重载时默认执行的函数
   
 * 使用 addOverload(parameterType,fnc) 以添加重载   
@@ -195,7 +195,7 @@ addResizeEvent(_element,_listener)
     
 * 使用例 
   ``` javascript
-  var fnc=OlFunction.create(function(){console.log("def")});
+  var fnc=Overload_Function.create(function(){console.log("def")});
   fnc.addOverload([String],function(str){console.log(str)});
   fnc.addOverload([String,Number],function(str,nub){for(var i=0,i<nub;++i)console.log(i+':'+str)});
   
@@ -215,7 +215,7 @@ addResizeEvent(_element,_listener)
     @param {function} fnc 执行的函数   
     后加入的会先运行
 * 移除一个委托 removeAct(tgt,fnc) 参数和加入的一样才能移除   
-    @return {Boolean} 返回是否移除成功   
+    @return {boolean} 返回是否移除成功   
 * 使用例 
   ``` javascript
   var delegate=Delegate.create();

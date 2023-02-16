@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:00:17
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2023-02-13 02:28:11
+ * @LastEditTime: 2023-02-16 23:15:45
  * @FilePath: \site\js\import\Basics\Lib\Expand_Basics.js
  * @Description: 
  * 
@@ -68,14 +68,14 @@ globalThis.nullfnc=function nullfnc(){};
     }
 
     /** 重载函数类 */
-    class OverloadFunction extends Function{
+    class Overload_Function extends Function{
         /**
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @return  {OverloadFunction} 带重载的函数
+         * @return  {Overload_Function} 带重载的函数
          * 用 .addOverload 添加重载
          */
         constructor(default_fnc){
-            return OverloadFunction._create(default_fnc);
+            return Overload_Function._create(default_fnc);
             /** @type {{parameterType:parameterType,fnc:fnc,codeComments:codeComments}[]} 重载函数 */
             this.ols=[];
             /** @type {function} 默认动作*/
@@ -92,37 +92,37 @@ globalThis.nullfnc=function nullfnc(){};
         }
         /** 创建重载函数
          * @param   {function} default_fnc 当没有和实参对应的重载时默认执行的函数
-         * @return  {OverloadFunction} 带重载的函数
+         * @return  {Overload_Function} 带重载的函数
          * 用 .addOverload 添加重载
          */
         static _create(default_fnc){
-            var OverloadFunction=(function(){
+            var Overload_Function=(function(){
                 return function(){
                     var i,j,flag=false;
                     var length=arguments.length;
                     j=i=length-1;
                     while(j>=0&&arguments[j]===undefined){--length;--j;};
-                    for(i=OverloadFunction.ols.length-1;i>=0;--i){
-                        if(length===OverloadFunction.ols[i].parameterType.length){
+                    for(i=Overload_Function.ols.length-1;i>=0;--i){
+                        if(length===Overload_Function.ols[i].parameterType.length){
                             flag=true;
                             for(j=length-1;flag&&j>=0;--j){
-                                flag=(arguments[j].constructor===OverloadFunction.ols[i].parameterType[j]||arguments[j] instanceof OverloadFunction.ols[i].parameterType[j]);
+                                flag=(arguments[j].constructor===Overload_Function.ols[i].parameterType[j]||arguments[j] instanceof Overload_Function.ols[i].parameterType[j]);
                             }
                             if(flag)break;
                         }
                     }
                     if(flag){
-                        return OverloadFunction.ols[i].fnc.apply(this,arguments);
+                        return Overload_Function.ols[i].fnc.apply(this,arguments);
                     }
                     else{
-                        return OverloadFunction.default_fnc.apply(this,arguments);
+                        return Overload_Function.default_fnc.apply(this,arguments);
                     }
                 }
             })();
-            OverloadFunction.ols=[];
-            OverloadFunction.default_fnc=default_fnc;
-            OverloadFunction.addOverload=OverloadFunction.prototype.addOverload;
-            return OverloadFunction;
+            Overload_Function.ols=[];
+            Overload_Function.default_fnc=default_fnc;
+            Overload_Function.addOverload=Overload_Function.prototype.addOverload;
+            return Overload_Function;
         }
     }
 
@@ -281,7 +281,7 @@ globalThis.nullfnc=function nullfnc(){};
      */
      (function(){
         var temp=Date.prototype.toString;
-        Date.prototype.toString=OverloadFunction._create(temp);
+        Date.prototype.toString=Overload_Function._create(temp);
         /** @param {string} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 n-毫秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
          */
         Date.prototype.toString.addOverload([String],function(str){
@@ -473,23 +473,22 @@ globalThis.nullfnc=function nullfnc(){};
 
     /** 
      * @typedef TemplateStringRenderer_Item
-     * @property {function()}   [renderer]   渲染器函数
-     * @property {string}       [value]      缓存值
-     * @property {string}       org          原捕获表达式字符串
+     * @property {TemplateRenderer}    [renderer]   渲染器函数
+     * @property {string}                     [value]      缓存值
+     * @property {string}                     org          原捕获表达式字符串
      */
 
     /** @typedef {Array<string|TemplateStringRenderer_Item>} TemplateStringRenderer */
 
     /** 模版字符串 可以在原字符串中使用 '\\' 屏蔽 插值关键文本
      * @param {string}   str         字符串
-     * @param {string}   argArray    实参表
      * @param {string}   opKey       插值关键文本 op; 默认 "${"
      * @param {string}   edKey       插值关键文本 ed; 默认 "}"
      * @param {char}     opKeyMask   插值关键文本 的屏蔽字符; 默认'\'
      * @param {char}     edKeyMask   插值关键文本 的屏蔽字符; 默认'\'
-     * @return {{renderer:renderer[],hit:string[]}}
+     * @return {{renderer:TemplateStringRenderer,hit:TemplateStringRenderer_Item[]}} 返回字符串和渲染器函数的
      */
-    function create_TemplateStringRenderer(str,argArray,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
+    function create_TemplateStringRenderer(str,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
         var renderer=[],tempstr="",hit={};
         
         var strkey="\"'`",strKP=0,strFlag=false;
@@ -554,8 +553,9 @@ globalThis.nullfnc=function nullfnc(){};
         return {renderer:renderer,hit:hit};
     }
 
-    /**
-     * 
+    /** 渲染模版字符串
+     * @param {*} 模版字符串路径引用的数据源
+     * @return {string} 返回渲染后的字符串
      */
     function render_TemplateRenderer(){
 
@@ -580,7 +580,7 @@ globalThis.nullfnc=function nullfnc(){};
 
     /** 某字符是否能作为数字的一元
      * @param {char} _char 
-     * @return {Boolean}
+     * @return {boolean}
      */
     function canBeNumberChar(_char){
         return ((_char>='1'&&_char<='9')||_char==='0'||('+-.eE'.indexOf(_char)!==-1));
@@ -590,7 +590,7 @@ globalThis.nullfnc=function nullfnc(){};
 
 export{
     inheritClass,
-    OverloadFunction as OlFunction,
+    Overload_Function,
     Delegate,
     Date_Callback,
     Stepper,

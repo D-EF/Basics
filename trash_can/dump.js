@@ -39,7 +39,7 @@ function inputSupportsTypeF(){
 
 /** 在 keydown 事件中使用 让控件仅接受数字
  * @param {Event} e 
- * @return {Boolean} 返回是否是数字
+ * @return {boolean} 返回是否是数字
  */
 function inputNumber(e){
     var event=event||e||window.event;

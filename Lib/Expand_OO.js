@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:04:40
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-12-18 23:11:07
+ * @LastEditTime: 2023-02-16 23:28:55
  * @FilePath: \site\js\import\Basics\Lib\Expand_OO.js
  * @Description: 面向对象拓展
  * 
@@ -204,7 +204,7 @@ class Iterator__Tree extends Iterator__MyVirtual{
      * @param {string[]} [_rely_on_keys] 可选参数 relyOnTGT上的key, 下标和keys要对应
      * @return {HadDependencyObject} 返回 tgt 
      */
-    function dependencyMapping(tgt,rely_on_TGT,keys,_rely_on_keys){
+    function dependency_Mapping(tgt,rely_on_TGT,keys,_rely_on_keys){
         var rely_on_keys=_rely_on_keys||keys;
         var map=tgt._dependency_mapping_notbook;
         if(!map){
@@ -295,7 +295,7 @@ export{
     Iterator__MyVirtual,
     Iterator__Tree,
 
-    dependencyMapping,
+    dependency_Mapping,
     get_Root__DependencyMapping,
     add_DependencyListener,
     remove_DependencyListener,
