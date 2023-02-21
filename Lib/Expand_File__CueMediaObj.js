@@ -2,7 +2,7 @@
  * 用于读取 cue 格式和存储到 js 的
  */
 
-import {rltToAbs,inheritClass,Overload_Function} from "../Basics.js"
+import {rltToAbs,inherit_Class,Overload_Function} from "../Basics.js"
 /**
  * 存储 cue 格式为js的obj格式
  * 参考资料来自: https://tieba.baidu.com/p/6160083867
@@ -101,7 +101,7 @@ function DEF_CUEOBJTrack(file,root,track_index){
     this.ed;
     this.index_list = [];
 }
-inheritClass(DEF_CUEOBJ,DEF_CUEOBJTrack);
+inherit_Class(DEF_CUEOBJ,DEF_CUEOBJTrack);
 
 DEF_CUEOBJTrack.prototype.getDuration=function(){
     return this.ed-this.op;

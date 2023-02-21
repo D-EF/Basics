@@ -2,12 +2,14 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-11-03 01:00:17
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2023-02-16 23:15:45
+ * @LastEditTime: 2023-02-22 01:56:46
  * @FilePath: \site\js\import\Basics\Lib\Expand_Basics.js
  * @Description: 
  * 
  * Copyright (c) 2022 by Darth_Eternalfaith darth_ef@hotmail.com, All Rights Reserved. 
  */
+
+import { CONFIG } from "../Config__Basics.js";
 
 /** @type {Function} 空函数 返回 undefiend */
 globalThis.nullfnc=function nullfnc(){};
@@ -56,15 +58,22 @@ globalThis.nullfnc=function nullfnc(){};
 // open * 对 functoin 的拓展 * open
 
     /**继承
-     * @param {function} _basics   基类
-     * @param {function} _derived  子类
+     * @param {class} _basics   基类
+     * @param {class} _derived  子类
+     * @return {*} 返回子类的 prototype 引用
+     * ```
+     * functoin Base(){ this.attribute_base=param; }
+     * Base.prototype={ fnc_Base:function(){reutrn 'base';} }
+     * function Sub(param){ Base.apply(this,arguments); this.attribute_sub=param; }
+     * Object.assign(inherit_Class(Base,Sub),{ fnc_Sub:function(){reutrn 'sub';} });
+     * ```
      */
-     function inheritClass(_basics,_derived){
+     function inherit_Class(_basics,_derived){
         // 创建一个没有实例方法的类
         var Super = function(){};
         Super.prototype = _basics.prototype;
         //将实例作为子类的原型
-        _derived.prototype = new Super();
+        return _derived.prototype = new Super();
     }
 
     /** 重载函数类 */
@@ -83,9 +92,9 @@ globalThis.nullfnc=function nullfnc(){};
         }
 
         /** 添加一个重载
-         * @param {Array} parameterType   形参的类型
-         * @param {function}    fnc             执行的函数
-         * @param {string}      codeComments    没用的属性, 作为函数的注释
+         * @param {Array<Class,Class[]>}   parameterType   指定形参的类型, 使用 class 或 class[] 作为列表项
+         * @param {function}               fnc             执行的函数
+         * @param {string}                 codeComments    没用的属性, 作为函数的注释
          */
         addOverload(parameterType,fnc,codeComments){
             this.ols.push({parameterType:parameterType,fnc:fnc,codeComments:codeComments});
@@ -96,33 +105,41 @@ globalThis.nullfnc=function nullfnc(){};
          * 用 .addOverload 添加重载
          */
         static _create(default_fnc){
-            var Overload_Function=(function(){
+            var ol_function=(function(){
                 return function(){
-                    var i,j,flag=false;
+                    var i,j,k,flag=false;
                     var length=arguments.length;
+                    var temp_param_type;
                     j=i=length-1;
                     while(j>=0&&arguments[j]===undefined){--length;--j;};
-                    for(i=Overload_Function.ols.length-1;i>=0;--i){
-                        if(length===Overload_Function.ols[i].parameterType.length){
+                    for(i=ol_function.ols.length-1;i>=0;--i){
+                        if(length===ol_function.ols[i].parameterType.length){
                             flag=true;
                             for(j=length-1;flag&&j>=0;--j){
-                                flag=(arguments[j].constructor===Overload_Function.ols[i].parameterType[j]||arguments[j] instanceof Overload_Function.ols[i].parameterType[j]);
+                                temp_param_type=ol_function.ols[i].parameterType[j];
+                                if(Array.isArray(temp_param_type)){
+                                    for(k=temp_param_type.length-1;flag&&(k>=0);--k){
+                                        flag=(arguments[j].constructor===temp_param_type[k]||arguments[j] instanceof temp_param_type[k])
+                                    }
+                                }else{
+                                    flag=(arguments[j].constructor===temp_param_type||arguments[j] instanceof temp_param_type);
+                                }
                             }
                             if(flag)break;
                         }
                     }
                     if(flag){
-                        return Overload_Function.ols[i].fnc.apply(this,arguments);
+                        return ol_function.ols[i].fnc.apply(this,arguments);
                     }
                     else{
-                        return Overload_Function.default_fnc.apply(this,arguments);
+                        return ol_function.default_fnc.apply(this,arguments);
                     }
                 }
             })();
-            Overload_Function.ols=[];
-            Overload_Function.default_fnc=default_fnc;
-            Overload_Function.addOverload=Overload_Function.prototype.addOverload;
-            return Overload_Function;
+            ol_function.ols=[];
+            ol_function.default_fnc=default_fnc;
+            ol_function.addOverload=Overload_Function.prototype.addOverload;
+            return ol_function;
         }
     }
 
@@ -212,11 +229,15 @@ globalThis.nullfnc=function nullfnc(){};
             this.timers={};
         }
 
+        /** 
+         * @callback act__Date_Callback
+         * @param {number} now   当前时间戳 Date.now();
+         */
         /** 增加 时间单位分变动回调函数
          * @param {string} key 回调函数委托与计时器的索引
          * @param {number} time_long 每次回调的间隔(步长)
          * @param {number} deviation 初始化与第一次回调的间隔 取负值将设置为当前时间戳取余步长 (now % time_long)
-         * @param {function(number)} callback 回调函数
+         * @param {act__Date_Callback} callback 回调函数
          */
         add_Callback(key,time_long,deviation,callback){
             if(!this.delegate_set[key]){
@@ -277,59 +298,65 @@ globalThis.nullfnc=function nullfnc(){};
 // end  * 对 原生对象 的拓展 * end 
 
 // open * 原有的api函数重载 * open
-    /** 将时间类型转换成字符串
+    /** 模版渲染 将Date转换成字符串
+     * @this Date 调用时需要使用call或apply
+     * @param {string} template 日期字符串的模版 用%{控制字符}{长度}控制输出字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 n-毫秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
+     * @returns {string} 返回对应格式的的日期字符串
      */
-     (function(){
-        var temp=Date.prototype.toString;
-        Date.prototype.toString=Overload_Function._create(temp);
-        /** @param {string} str 用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 n-毫秒 如果没有写长度将使用自动长度, 如果长度超出将在前面补0; 例: %Y6-%M2-%D -> 001970-01-1
-         */
-        Date.prototype.toString.addOverload([String],function(str){
-            /** @type {Date} */
-            var that=this,
-            mapping_date_time={
-                Y:that.getFullYear().toString(),
-                M:(that.getMonth()+1).toString(),
-                D:that.getDate().toString(),
-                d:that.getDay().toString(),
-                h:that.getHours().toString(),
-                m:that.getMinutes().toString(),
-                s:that.getSeconds().toString(),
-                n:that.getMilliseconds().toString()
-            }
-            var i,rtn=[],tstr;
-            for(i=0;i<str.length;++i){
-                if(str[i]==='%'){
-                    ++i;
-                    if(mapping_date_time[str[i]]!==undefined){
-                        var ti=parseInt(str[i+1]),tempstr=[];
-                        if(isNaN(ti)){
-                            tstr=mapping_date_time[str[i]];
-                        }else{
-                            ti=parseInt(str.slice(i+1))
-                            if(ti>mapping_date_time[str[i]].length){
-                                do{
-                                    tempstr.push('0');
-                                    --ti;
-                                }while(ti>mapping_date_time[str[i]].length)
-                            }
-                            tempstr.push(mapping_date_time[str[i]].slice(mapping_date_time[str[i]].length-ti));
-                            i+=ti.toString().length;
-                            tstr=tempstr.join('');
-                        }
-                    // }else if(str[i]==='%'){
-                    //     tstr='%'
+    function write_TemplateDate(template){
+        /** @type {Date} */
+        var that=this,
+        mapping_date_time={
+            Y:that.getFullYear().toString(),
+            M:(that.getMonth()+1).toString(),
+            D:that.getDate().toString(),
+            d:that.getDay().toString(),
+            h:that.getHours().toString(),
+            m:that.getMinutes().toString(),
+            s:that.getSeconds().toString(),
+            n:that.getMilliseconds().toString()
+        }
+        var i,rtn=[],tstr;
+        for(i=0;i<template.length;++i){
+            if(template[i]==='%'){
+                ++i;
+                if(mapping_date_time[template[i]]!==undefined){
+                    var ti=parseInt(template[i+1]),tempstr=[];
+                    if(isNaN(ti)){
+                        tstr=mapping_date_time[template[i]];
                     }else{
-                        tstr='%'+str[i];
+                        ti=parseInt(template.slice(i+1))
+                        if(ti>mapping_date_time[template[i]].length){
+                            do{
+                                tempstr.push('0');
+                                --ti;
+                            }while(ti>mapping_date_time[template[i]].length)
+                        }
+                        tempstr.push(mapping_date_time[template[i]].slice(mapping_date_time[template[i]].length-ti));
+                        i+=ti.toString().length;
+                        tstr=tempstr.join('');
                     }
+                // }else if(str[i]==='%'){
+                //     tstr='%'
                 }else{
-                    tstr=str[i];
+                    tstr='%'+template[i];
                 }
-                rtn.push(tstr);
+            }else{
+                tstr=template[i];
             }
-            return rtn.join('');
-        },"用%{控制字符}{长度}控制打印字符: Y-年 M-月 D-日 d-星期几 h-小时 m-分钟 s-秒 如果没有写长度将使用自动长度; 例: %Y-%M2-%D -> 1970-01-1");
-    })();
+            rtn.push(tstr);
+        }
+        return rtn.join('');
+    }
+
+    if(CONFIG.OVERLOAD_NATIVE_FUNCTOIN){
+        // 重载原生函数
+        (function(){
+            var temp=Date.prototype.toString;
+            Date.prototype.toString=Overload_Function._create(temp);
+            Date.prototype.toString.addOverload([String],write_TemplateDate);
+        })();
+    }
 // end  * 原有的api函数重载 * end 
 
 // open * 数值操作拓展 * open
@@ -435,25 +462,26 @@ globalThis.nullfnc=function nullfnc(){};
     // end  * 步进器 * end 
 
     /** 二分法查找显式查找表
-     * @param {number[]}   lut 显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
-     * @param {number}     val   值     
-     * @param {string}     [key]  如果是对象数组, 使用属性作为查找表的关键字
-     * @return {int}    返回对应下标    溢出将直接使用首或尾的值
+     * @param {number[]|*[]}   lut     显式查找表 应为正序排序的 Number 类型数组 (如路径到当前下标指令的长度)
+     * @param {number}         val     查找值                                                                       
+     * @param {string}         [key]   如果是对象数组, 使用属性作为查找表的关键字
+     * @return {int}           返回对应下标 溢出将直接使用首或尾的值
      */
     function select_Lut__Binary(lut,val,key){
-        var find = false,
-            low = 0,
+        var low = 0,
             high = lut.length-1,
             i,
             temp;
         
-        while (!find&&low <= high){
+        while (low <= high){
             i = parseInt((low+high)*0.5); 
             temp=lut[i];
             if(key){
                 temp=temp[key];
             }
-
+            if(val===temp){
+                return i;
+            }
             if (val > temp){
                 low = i + 1;
             }
@@ -471,24 +499,22 @@ globalThis.nullfnc=function nullfnc(){};
 
 // open * 字符串操作拓展 * open
 
-    /** 
-     * @typedef TemplateStringRenderer_Item
-     * @property {TemplateRenderer}    [renderer]   渲染器函数
-     * @property {string}                     [value]      缓存值
-     * @property {string}                     org          原捕获表达式字符串
+    /**
+     * @typedef char 长度为1的字符串
+     * @interface string
+     * @property {1} length
      */
-
-    /** @typedef {Array<string|TemplateStringRenderer_Item>} TemplateStringRenderer */
 
     /** 模版字符串 可以在原字符串中使用 '\\' 屏蔽 插值关键文本
      * @param {string}   str         字符串
-     * @param {string}   opKey       插值关键文本 op; 默认 "${"
-     * @param {string}   edKey       插值关键文本 ed; 默认 "}"
-     * @param {char}     opKeyMask   插值关键文本 的屏蔽字符; 默认'\'
-     * @param {char}     edKeyMask   插值关键文本 的屏蔽字符; 默认'\'
+     * @param {string}   [opKey]       插值关键文本 op; 默认 "${"
+     * @param {string}   [edKey]       插值关键文本 ed; 默认 "}"
+     * @param {char}     [opKeyMask]   插值关键文本 的屏蔽字符; 默认'\'
+     * @param {char}     [edKeyMask]   插值关键文本 的屏蔽字符; 默认'\'
+     * @param {boolean}     [edKeyMask]   插值关键文本 的屏蔽字符; 默认'\'
      * @return {{renderer:TemplateStringRenderer,hit:TemplateStringRenderer_Item[]}} 返回字符串和渲染器函数的
      */
-    function create_TemplateStringRenderer(str,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\'){
+    function create_TemplateStringRenderer(str,opKey="${",edKey="}",opKeyMask='\\',edKeyMask='\\',_fnc){
         var renderer=[],tempstr="",hit={};
         
         var strkey="\"'`",strKP=0,strFlag=false;
@@ -528,8 +554,10 @@ globalThis.nullfnc=function nullfnc(){};
                             if(footFlag){
                                 tempstr+=str.slice(q,p);
                                 if(!hit[tempstr]){
-                                    if(fnc){
+                                    if(_fnc){
                                         fnc__renderer=new Function(["tgt","expression"],"return "+tempstr);
+                                    }else{
+                                        fnc__renderer=create_ObjectPath(tempstr)
                                     }
                                     hit[tempstr]={
                                         renderer:fnc__renderer,
@@ -589,7 +617,7 @@ globalThis.nullfnc=function nullfnc(){};
 // end  * 字符串操作拓展 * end 
 
 export{
-    inheritClass,
+    inherit_Class,
     Overload_Function,
     Delegate,
     Date_Callback,
@@ -597,5 +625,6 @@ export{
     select_Lut__Binary,
     create_TemplateStringRenderer,
     strToVar,
-    canBeNumberChar
+    canBeNumberChar,
+    write_TemplateDate
 }

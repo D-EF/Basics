@@ -93,9 +93,9 @@ arrayDiff(a1,a2)
     @return {boolean}    返回是否相同   
 ---
 
-## 类继承函数 inheritClass 
+## 类继承函数 inherit_Class 
 ``` javascript
-inheritClass(_basics,_derived)
+inherit_Class(_basics,_derived)
 ``` 
 将 function 写法的类进行继承
 在派生类中不能直接使用 Class.prototype={}   
