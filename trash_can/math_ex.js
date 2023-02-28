@@ -564,7 +564,7 @@ function coefficientToPoints(coefficient){
     return rtn;
 }
 
-const deg=Math.DEG;
+const deg=Math.PI/180;
 const deg_90=90*deg;
 const deg_180=180*deg;
 globalThis.cycles=Math.PI*2;
