@@ -2,7 +2,7 @@
  * @Author: Darth_Eternalfaith darth_ef@hotmail.com
  * @Date: 2022-10-20 21:19:37
  * @LastEditors: Darth_Eternalfaith darth_ef@hotmail.com
- * @LastEditTime: 2022-10-20 23:52:50
+ * @LastEditTime: 2023-04-24 03:50:42
  * @FilePath: \site\js\import\Basics\tool\js_to_md\readme.md
  * @Description: 
  * 
@@ -17,24 +17,24 @@
 
 ## 代码规范与md生成规则
 ### 代码规范命名 (比较疏松的规范, 并不影响生成文档)
-* 类名使用大驼峰命名
+* 类名使用大写首字母+下划线命名
     ```
         如 class HashListener
     ```
-* 变量, 属性(成员变量) 使用 下划线命名 
+* 变量, 属性(成员变量) 使用小写字母+下划线命名 
     ``` 
         this.now_cache 
     ```
-* 函数(方法) 使用 动词+下划线+大驼峰命名, 如果有同名函数/类的不同算法实现或是同操作的不同情况的处理, 使用一个或两个下划线分隔再加上后缀
+* 函数(方法) 使用 动词短语+下划线+大驼峰命名, 如果有同名函数/类的不同算法实现或是同操作的不同情况的处理, 使用一个或两个下划线分隔再加上后缀
     ```
         class Matrix_3
         static create_Projection__Orthographic(normal)
     ```
-* 静态变量使用大写字母和下划线
+* 静态变量使用大写字母和下划线，全局的变量可以另外用双下划线把名字包起来
     ```
         const DEG_180
     ```
-* 私有成员 / module中不导出的变量 / 可选的函数形参 使用下划线作为首字符
+* 私有成员 使用下划线作为首字符
     ```
         static _MAPPING_SHEAR_AXIS_TO_INDEX
         var _BEZIER_MATRIXS
